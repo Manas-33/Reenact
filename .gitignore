@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# Build artifacts
+build/
+dist/
+
+# uv / virtualenv
+.venv/
+venv/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.pyright/
+.mypy_cache/
+
+# OS
+.DS_Store
+
+# Reenact local store: recordings live here by default and are never
+# auto-committed; scenarios are exported to JSONL cassettes explicitly.
+.reenact/
+*.sqlite
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+
+# Local-only docs (planning, status, notes) - never committed.
+*.local.md
