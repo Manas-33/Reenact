@@ -2,3 +2,22 @@
 trajectories and typed events. Captures verbatim request/response bodies, a
 monotonic sequence index, and the side-effect class on tool events.
 """
+
+from reenact.schema.events import (
+    Event,
+    LLMCallEvent,
+    SideEffect,
+    TokenUsage,
+    ToolCallEvent,
+)
+from reenact.schema.trajectory import SCHEMA_VERSION, Trajectory
+
+__all__ = [
+    "SCHEMA_VERSION",
+    "Event",
+    "LLMCallEvent",
+    "SideEffect",
+    "TokenUsage",
+    "ToolCallEvent",
+    "Trajectory",
+]
