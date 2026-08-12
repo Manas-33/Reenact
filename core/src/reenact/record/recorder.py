@@ -1,10 +1,16 @@
-"""Assemble captured LLM calls into a trajectory."""
+"""Assemble captured LLM and tool calls into a trajectory."""
 
 from typing import Any
 
 from reenact.record.hashing import hash_request
 from reenact.record.redaction import DEFAULT_SCRUB_KEYS, redact
-from reenact.schema import LLMCallEvent, TokenUsage, Trajectory
+from reenact.schema import (
+    LLMCallEvent,
+    SideEffect,
+    TokenUsage,
+    ToolCallEvent,
+    Trajectory,
+)
 
 
 class Recorder:
@@ -52,6 +58,36 @@ class Recorder:
             request_hash=hash_request(safe_request),
             usage=usage,
             cost_usd=cost_usd,
+            latency_ms=latency_ms,
+        )
+        self.trajectory.events.append(event)
+        return event
+
+    def record_tool_call(
+        self,
+        *,
+        name: str,
+        arguments: dict[str, Any] | None = None,
+        result: Any = None,
+        side_effect: SideEffect = SideEffect.UNKNOWN,
+        parent_seq: int | None = None,
+        latency_ms: float | None = None,
+    ) -> ToolCallEvent:
+        """Capture one tool call as an event and append it to the trajectory.
+
+        Arguments and result are redacted before storage. ``side_effect`` records
+        whether the tool is read-only or mutating, which the replay policy uses
+        to decide whether it may re-run.
+        """
+        args: dict[str, Any] = arguments if arguments is not None else {}
+        safe_args: dict[str, Any] = redact(args, self._scrub_keys)
+        event = ToolCallEvent(
+            seq=len(self.trajectory.events),
+            parent_seq=parent_seq,
+            name=name,
+            arguments=safe_args,
+            result=redact(result, self._scrub_keys),
+            side_effect=side_effect,
             latency_ms=latency_ms,
         )
         self.trajectory.events.append(event)
