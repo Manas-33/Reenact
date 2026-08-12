@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from reenact.record import hash_request
+from reenact.record import hash_request, redact
 from reenact.schema import LLMCallEvent, Trajectory
 
 
@@ -30,7 +30,7 @@ class Player:
                 "no recorded LLM call left to replay for this request"
             )
         expected = self._calls[self._cursor]
-        actual_hash = hash_request(request)
+        actual_hash = hash_request(redact(request))
         if actual_hash != expected.request_hash:
             raise DivergenceError(
                 f"LLM call at step {expected.seq} diverged: expected request "
