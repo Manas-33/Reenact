@@ -2,14 +2,20 @@
 
 from __future__ import annotations
 
+import importlib
+import importlib.util
+import os
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any, cast
 
 import typer
 
 from reenact import __version__
+from reenact.evals import EvalReport, SuiteConfigError, load_suite, run_suite
 from reenact.replay import Player, ReplayMode
-from reenact.schema import LLMCallEvent, ToolCallEvent
-from reenact.store import load_cassette
+from reenact.schema import LLMCallEvent, ToolCallEvent, Trajectory
+from reenact.store import load_cassette, save_cassette
 
 app = typer.Typer(
     name="reenact",
@@ -76,6 +82,127 @@ def replay(
             typer.echo(f"  - {divergence.message}")
         raise typer.Exit(1)
     typer.echo("clean - reproduced offline with no network, $0")
+
+
+def _judge_client() -> Any:
+    """A best-effort judge client for judge checks, or ``None`` if unavailable.
+
+    Constructs an Anthropic client from ``ANTHROPIC_API_KEY`` when the SDK is
+    installed, importing it lazily so the CLI keeps no hard dependency on it. When
+    this returns ``None`` a suite with a judge check fails to load with a clear
+    message; a suite of plain assertions never needs it.
+    """
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        return None
+    try:
+        module: Any = importlib.import_module("anthropic")
+    except ImportError:
+        return None
+    return module.Anthropic()
+
+
+def _render_report(report: EvalReport, suite_path: Path) -> None:
+    typer.echo(f"suite {suite_path} ({report.total} scenario(s))")
+    for scenario in report.scenarios:
+        passed_checks = sum(1 for check in scenario.checks if check.passed)
+        status = "PASS" if scenario.passed else "FAIL"
+        typer.echo(
+            f"  {status} {scenario.name} "
+            f"({passed_checks}/{len(scenario.checks)} checks)"
+        )
+        for check in scenario.failures:
+            typer.echo(f"    - {check.name}: {check.message}")
+    typer.echo(f"{report.passed_count}/{report.total} scenarios passed")
+
+
+@app.command("eval")
+def eval_suite(
+    suite: Path = typer.Argument(
+        ...,
+        exists=True,
+        dir_okay=False,
+        help="Path to a TOML eval suite.",
+    ),
+) -> None:
+    """Run an eval suite offline and report per-scenario pass/fail.
+
+    Each scenario replays its recorded cassette and runs its checks - assertions
+    and, where configured, a trajectory-level judge. Exits non-zero if any
+    scenario fails.
+    """
+    try:
+        scenarios = load_suite(suite, judge_client=_judge_client())
+    except SuiteConfigError as exc:
+        typer.echo(f"error: {exc}")
+        raise typer.Exit(2) from exc
+    report = run_suite(scenarios)
+    _render_report(report, suite)
+    if not report.passed:
+        raise typer.Exit(1)
+
+
+def _load_module_from_path(path: Path) -> Any:
+    if not path.is_file():
+        raise typer.BadParameter(f"no such file: {path}")
+    spec = importlib.util.spec_from_file_location(path.stem, path)
+    if spec is None or spec.loader is None:
+        raise typer.BadParameter(f"cannot import a module from {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _resolve_entrypoint(spec: str) -> Callable[[], Any]:
+    """Resolve ``module:function`` or ``path.py:function`` to a callable."""
+    module_part, sep, func_name = spec.rpartition(":")
+    if not sep or not module_part or not func_name:
+        raise typer.BadParameter(
+            "entrypoint must be 'module:function' or 'path.py:function'"
+        )
+    if module_part.endswith(".py") or "/" in module_part or os.sep in module_part:
+        module = _load_module_from_path(Path(module_part))
+    else:
+        module = importlib.import_module(module_part)
+    func = getattr(module, func_name, None)
+    if not callable(func):
+        raise typer.BadParameter(f"{func_name!r} is not a callable in {module_part!r}")
+    return cast(Callable[[], Any], func)
+
+
+def _as_trajectory(result: Any) -> Trajectory:
+    if isinstance(result, Trajectory):
+        return result
+    candidate = getattr(result, "trajectory", None)
+    if isinstance(candidate, Trajectory):
+        return candidate
+    raise typer.BadParameter(
+        "entrypoint must return a Trajectory or a Recorder (with a .trajectory)"
+    )
+
+
+@app.command()
+def record(
+    entrypoint: str = typer.Argument(
+        ...,
+        help="'module:function' or 'path.py:function' returning a Trajectory.",
+    ),
+    output: Path = typer.Argument(
+        ...,
+        dir_okay=False,
+        help="Where to write the cassette JSON.",
+    ),
+) -> None:
+    """Run a scenario entrypoint and write its trajectory as a cassette.
+
+    The entrypoint is a zero-argument callable that returns a Trajectory (or a
+    Recorder). The capture itself happens inside it via ``reenact.recording``;
+    this verb just resolves it, runs it, and writes the committable cassette.
+    """
+    func = _resolve_entrypoint(entrypoint)
+    trajectory = _as_trajectory(func())
+    output.parent.mkdir(parents=True, exist_ok=True)
+    save_cassette(trajectory, output)
+    typer.echo(f"wrote {output} ({len(trajectory.events)} event(s))")
 
 
 if __name__ == "__main__":

@@ -22,6 +22,7 @@ from reenact.evals.runner import (
     run_suite,
 )
 from reenact.evals.scenario import Scenario
+from reenact.evals.suite import SuiteConfigError, load_suite
 
 __all__ = [
     "Check",
@@ -31,11 +32,13 @@ __all__ = [
     "RunView",
     "Scenario",
     "ScenarioResult",
+    "SuiteConfigError",
     "answer_contains",
     "answer_matches",
     "called_tool",
     "did_not_call_tool",
     "judged",
+    "load_suite",
     "no_mutating_tool_reexecuted",
     "render_trajectory",
     "replays_clean",
