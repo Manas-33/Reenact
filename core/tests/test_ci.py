@@ -1,0 +1,204 @@
+"""The regression gate: baseline diff plus the `reenact ci` verb.
+
+The diff is tested directly on constructed baselines (each case isolates one kind
+of change); the CLI tests write a baseline from a suite and then re-run `ci` after
+mutating the recording to seed a regression - all offline.
+"""
+
+from pathlib import Path
+from typing import Any
+
+from typer.testing import CliRunner
+
+from reenact.cli import app
+from reenact.evals import Baseline, diff_baselines
+from reenact.evals.baseline import BaselineCheck, BaselineScenario
+from reenact.record import hash_request, redact
+from reenact.schema import LLMCallEvent, SideEffect, ToolCallEvent, Trajectory
+from reenact.store import save_cassette
+
+runner = CliRunner()
+
+
+def _check(name: str, passed: bool, score: float | None = None) -> BaselineCheck:
+    return BaselineCheck(name=name, passed=passed, score=score)
+
+
+def _scenario(name: str, *checks: BaselineCheck) -> BaselineScenario:
+    return BaselineScenario(name=name, checks=list(checks))
+
+
+def _baseline(*scenarios: BaselineScenario) -> Baseline:
+    return Baseline(scenarios=list(scenarios))
+
+
+# --- diff semantics ----------------------------------------------------------
+
+
+def test_identical_run_has_no_regression() -> None:
+    base = _baseline(_scenario("s", _check("c", True, 0.9)))
+    diff = diff_baselines(base, base)
+    assert not diff.regressed
+    assert "no regressions" in diff.summary()
+
+
+def test_pass_to_fail_is_a_regression() -> None:
+    base = _baseline(_scenario("s", _check("called_tool('x')", True)))
+    now = _baseline(_scenario("s", _check("called_tool('x')", False)))
+    diff = diff_baselines(base, now)
+    assert diff.regressed
+    assert diff.regressions[0].detail == "pass->fail"
+
+
+def test_score_drop_is_a_regression() -> None:
+    base = _baseline(_scenario("s", _check("judge", True, 0.91)))
+    now = _baseline(_scenario("s", _check("judge", False, 0.62)))
+    diff = diff_baselines(base, now)
+    assert diff.regressed
+    assert diff.regressions[0].detail == "0.91->0.62"
+
+
+def test_small_score_drop_within_tolerance_is_not_a_regression() -> None:
+    base = _baseline(_scenario("s", _check("judge", True, 0.91)))
+    now = _baseline(_scenario("s", _check("judge", True, 0.89)))
+    assert not diff_baselines(base, now, score_tolerance=0.05).regressed
+
+
+def test_improvement_is_not_a_regression() -> None:
+    base = _baseline(_scenario("s", _check("judge", False, 0.40)))
+    now = _baseline(_scenario("s", _check("judge", True, 0.85)))
+    diff = diff_baselines(base, now)
+    assert not diff.regressed
+    assert diff.improvements[0].detail == "0.40->0.85"
+
+
+def test_new_check_is_reported_but_does_not_gate() -> None:
+    base = _baseline(_scenario("s", _check("a", True)))
+    now = _baseline(_scenario("s", _check("a", True), _check("b", False)))
+    diff = diff_baselines(base, now)
+    assert not diff.regressed
+    assert [d.check for d in diff.new_checks] == ["b"]
+
+
+def test_summary_counts_regressed_scenarios() -> None:
+    base = _baseline(
+        _scenario("one", _check("c", True)),
+        _scenario("two", _check("c", True)),
+    )
+    now = _baseline(
+        _scenario("one", _check("c", False)),
+        _scenario("two", _check("c", True)),
+    )
+    diff = diff_baselines(base, now)
+    assert diff.summary().startswith("1/2 scenarios regressed:")
+    assert diff.regressed_scenarios == ["one"]
+
+
+# --- the ci CLI verb ---------------------------------------------------------
+
+
+def _weather_cassette(
+    path: Path, *, answer: str = "It is 18C and cloudy in Paris."
+) -> None:
+    question = [{"role": "user", "content": "What's the weather in Paris?"}]
+    request2: dict[str, Any] = {"messages": question, "step": 2}
+    save_cassette(
+        Trajectory(
+            name="weather",
+            events=[
+                LLMCallEvent(
+                    seq=0,
+                    provider="anthropic",
+                    model="m",
+                    request={"messages": question},
+                    response={
+                        "content": [
+                            {
+                                "type": "tool_use",
+                                "id": "t1",
+                                "name": "get_weather",
+                                "input": {"city": "Paris"},
+                            }
+                        ]
+                    },
+                    request_hash=hash_request(redact({"messages": question})),
+                ),
+                ToolCallEvent(
+                    seq=1,
+                    name="get_weather",
+                    arguments={"city": "Paris"},
+                    result="18C and cloudy",
+                    side_effect=SideEffect.READ_ONLY,
+                ),
+                LLMCallEvent(
+                    seq=2,
+                    provider="anthropic",
+                    model="m",
+                    request=request2,
+                    response={"content": [{"type": "text", "text": answer}]},
+                    request_hash=hash_request(redact(request2)),
+                ),
+            ],
+        ),
+        path,
+    )
+
+
+def _write_suite(directory: Path) -> Path:
+    suite = directory / "suite.toml"
+    suite.write_text(
+        """
+[[scenario]]
+name = "weather"
+cassette = "weather.json"
+
+  [[scenario.check]]
+  type = "called_tool"
+  name = "get_weather"
+
+  [[scenario.check]]
+  type = "answer_contains"
+  value = "cloudy"
+""",
+        encoding="utf-8",
+    )
+    return suite
+
+
+def test_write_baseline_then_ci_is_clean(tmp_path: Path) -> None:
+    _weather_cassette(tmp_path / "weather.json")
+    suite = _write_suite(tmp_path)
+    baseline = tmp_path / "baseline.json"
+    written = runner.invoke(
+        app, ["eval", str(suite), "--write-baseline", str(baseline)]
+    )
+    assert written.exit_code == 0, written.stdout
+    assert baseline.is_file()
+
+    result = runner.invoke(app, ["ci", str(suite), "--baseline", str(baseline)])
+    assert result.exit_code == 0, result.stdout
+    assert "no regressions" in result.stdout
+
+
+def test_ci_detects_a_seeded_regression(tmp_path: Path) -> None:
+    cassette = tmp_path / "weather.json"
+    _weather_cassette(cassette)
+    suite = _write_suite(tmp_path)
+    baseline = tmp_path / "baseline.json"
+    runner.invoke(app, ["eval", str(suite), "--write-baseline", str(baseline)])
+
+    # Seed a regression: the agent no longer mentions the recorded conditions.
+    _weather_cassette(cassette, answer="It is sunny in Paris.")
+    result = runner.invoke(app, ["ci", str(suite), "--baseline", str(baseline)])
+    assert result.exit_code == 1
+    assert "scenarios regressed" in result.stdout
+    assert "pass->fail" in result.stdout
+
+
+def test_ci_missing_baseline_errors(tmp_path: Path) -> None:
+    _weather_cassette(tmp_path / "weather.json")
+    suite = _write_suite(tmp_path)
+    result = runner.invoke(
+        app, ["ci", str(suite), "--baseline", str(tmp_path / "absent.json")]
+    )
+    assert result.exit_code == 2

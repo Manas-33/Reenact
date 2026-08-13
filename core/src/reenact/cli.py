@@ -12,7 +12,17 @@ from typing import Any, cast
 import typer
 
 from reenact import __version__
-from reenact.evals import EvalReport, SuiteConfigError, load_suite, run_suite
+from reenact.evals import (
+    Baseline,
+    EvalReport,
+    RegressionDiff,
+    SuiteConfigError,
+    diff_baselines,
+    load_baseline,
+    load_suite,
+    run_suite,
+    save_baseline,
+)
 from reenact.replay import Player, ReplayMode
 from reenact.schema import LLMCallEvent, ToolCallEvent, Trajectory
 from reenact.store import load_cassette, save_cassette
@@ -115,6 +125,16 @@ def _render_report(report: EvalReport, suite_path: Path) -> None:
     typer.echo(f"{report.passed_count}/{report.total} scenarios passed")
 
 
+def _load_suite_or_exit(suite: Path) -> EvalReport:
+    """Load and run a suite, exiting 2 on a config error."""
+    try:
+        scenarios = load_suite(suite, judge_client=_judge_client())
+    except SuiteConfigError as exc:
+        typer.echo(f"error: {exc}")
+        raise typer.Exit(2) from exc
+    return run_suite(scenarios)
+
+
 @app.command("eval")
 def eval_suite(
     suite: Path = typer.Argument(
@@ -123,21 +143,75 @@ def eval_suite(
         dir_okay=False,
         help="Path to a TOML eval suite.",
     ),
+    write_baseline: Path | None = typer.Option(
+        None,
+        "--write-baseline",
+        dir_okay=False,
+        help="Write this run as a baseline JSON for `reenact ci` to diff against.",
+    ),
 ) -> None:
     """Run an eval suite offline and report per-scenario pass/fail.
 
     Each scenario replays its recorded cassette and runs its checks - assertions
     and, where configured, a trajectory-level judge. Exits non-zero if any
-    scenario fails.
+    scenario fails. With ``--write-baseline`` it also records the run as the
+    last-known-good snapshot the CI gate compares against.
     """
-    try:
-        scenarios = load_suite(suite, judge_client=_judge_client())
-    except SuiteConfigError as exc:
-        typer.echo(f"error: {exc}")
-        raise typer.Exit(2) from exc
-    report = run_suite(scenarios)
+    report = _load_suite_or_exit(suite)
     _render_report(report, suite)
+    if write_baseline is not None:
+        save_baseline(Baseline.from_report(report), write_baseline)
+        typer.echo(f"wrote baseline {write_baseline}")
     if not report.passed:
+        raise typer.Exit(1)
+
+
+def _render_diff(diff: RegressionDiff) -> None:
+    typer.echo(diff.summary())
+    for delta in diff.regressions:
+        typer.echo(f"  regressed: {delta.check} {delta.detail} ({delta.scenario})")
+    for delta in diff.improvements:
+        typer.echo(f"  improved:  {delta.check} {delta.detail} ({delta.scenario})")
+    for delta in diff.new_checks:
+        typer.echo(f"  new:       {delta.check} ({delta.scenario})")
+
+
+@app.command()
+def ci(
+    suite: Path = typer.Argument(
+        ...,
+        exists=True,
+        dir_okay=False,
+        help="Path to a TOML eval suite.",
+    ),
+    baseline: Path = typer.Option(
+        ...,
+        "--baseline",
+        "-b",
+        exists=True,
+        dir_okay=False,
+        help="Committed baseline JSON to diff against (see `eval --write-baseline`).",
+    ),
+    tolerance: float = typer.Option(
+        0.05,
+        "--tolerance",
+        help="Score drop tolerated before it counts as a regression.",
+    ),
+) -> None:
+    """Run the suite and fail only if it regressed against a committed baseline.
+
+    Unlike ``eval`` (which fails on any check failure), ``ci`` fails on *drift*:
+    a check that went pass to fail, or a judge score that dropped past the
+    tolerance, relative to the baseline. Exits 1 on a regression, else 0.
+    """
+    report = _load_suite_or_exit(suite)
+    diff = diff_baselines(
+        load_baseline(baseline),
+        Baseline.from_report(report),
+        score_tolerance=tolerance,
+    )
+    _render_diff(diff)
+    if diff.regressed:
         raise typer.Exit(1)
 
 

@@ -2,6 +2,15 @@
 assertions, and a trajectory-level LLM judge that scores multi-step behavior.
 """
 
+from reenact.evals.baseline import (
+    Baseline,
+    CheckDelta,
+    DeltaKind,
+    RegressionDiff,
+    diff_baselines,
+    load_baseline,
+    save_baseline,
+)
 from reenact.evals.check import (
     Check,
     CheckResult,
@@ -25,10 +34,14 @@ from reenact.evals.scenario import Scenario
 from reenact.evals.suite import SuiteConfigError, load_suite
 
 __all__ = [
+    "Baseline",
     "Check",
+    "CheckDelta",
     "CheckResult",
+    "DeltaKind",
     "EvalReport",
     "JudgeVerdict",
+    "RegressionDiff",
     "RunView",
     "Scenario",
     "ScenarioResult",
@@ -37,12 +50,15 @@ __all__ = [
     "answer_matches",
     "called_tool",
     "did_not_call_tool",
+    "diff_baselines",
     "judged",
+    "load_baseline",
     "load_suite",
     "no_mutating_tool_reexecuted",
     "render_trajectory",
     "replays_clean",
     "run_scenario",
     "run_suite",
+    "save_baseline",
     "tool_call_count",
 ]
