@@ -9,6 +9,7 @@ collected in lenient mode - never a silently wrong answer.
 from reenact.replay.divergence import Divergence, DivergenceError, DivergenceKind
 from reenact.replay.live import replaying
 from reenact.replay.player import Player, ReplayMode
+from reenact.replay.policy import ReplayPolicy
 
 __all__ = [
     "Divergence",
@@ -16,5 +17,6 @@ __all__ = [
     "DivergenceKind",
     "Player",
     "ReplayMode",
+    "ReplayPolicy",
     "replaying",
 ]

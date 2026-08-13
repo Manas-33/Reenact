@@ -6,11 +6,13 @@ the recorded response or result with no network; a mismatch is a divergence:
 raised in strict mode, collected in lenient mode, never a silently wrong answer.
 """
 
+from collections.abc import Callable
 from enum import StrEnum
 from typing import Any
 
 from reenact.record import hash_request, redact
 from reenact.replay.divergence import Divergence, DivergenceError, DivergenceKind
+from reenact.replay.policy import ReplayPolicy
 from reenact.schema import LLMCallEvent, ToolCallEvent, Trajectory
 
 
@@ -48,9 +50,14 @@ class Player:
     """
 
     def __init__(
-        self, trajectory: Trajectory, *, mode: ReplayMode = ReplayMode.STRICT
+        self,
+        trajectory: Trajectory,
+        *,
+        mode: ReplayMode = ReplayMode.STRICT,
+        policy: ReplayPolicy | None = None,
     ) -> None:
         self.mode = mode
+        self.policy = policy if policy is not None else ReplayPolicy()
         self.divergences: list[Divergence] = []
         self._llm_calls = [e for e in trajectory.events if isinstance(e, LLMCallEvent)]
         self._tool_calls = [
@@ -87,13 +94,19 @@ class Player:
         return expected.response
 
     def replay_tool_call(
-        self, name: str, arguments: dict[str, Any] | None = None
+        self,
+        name: str,
+        arguments: dict[str, Any] | None = None,
+        *,
+        run: Callable[[], Any] | None = None,
     ) -> Any:
-        """Return the recorded result for a tool call, matched by name + arguments.
+        """Return the recorded result for a tool call - or re-run the real tool.
 
-        This is pure substitution - the recorded result is handed back and the
-        real tool is never run. Whether a read-only tool *may* be re-executed live
-        instead is the rung-2.2 side-effect policy layered on top of this.
+        By default the recorded result is substituted and ``run`` (the real tool)
+        is never called - the guarantee that replay fires no side effects. Only
+        when the policy classifies the tool ``READ_ONLY``, re-execution is opted
+        in, and ``run`` is provided does the real tool run live, its fresh result
+        returned in place of the recording.
         """
         if self._tool_cursor >= len(self._tool_calls):
             raise DivergenceError(
@@ -103,6 +116,11 @@ class Player:
                 )
             )
         expected = self._tool_calls[self._tool_cursor]
+        if run is not None and not self.policy.should_substitute(
+            name, expected.side_effect
+        ):
+            self._tool_cursor += 1
+            return run()
         args = arguments if arguments is not None else {}
         actual_hash = _tool_fingerprint(name, args)
         expected_hash = _tool_fingerprint(expected.name, expected.arguments)
