@@ -5,7 +5,8 @@ regressions in CI.
 """
 
 from reenact.record import recording
+from reenact.replay import replaying
 
 __version__ = "0.0.1"
 
-__all__ = ["__version__", "recording"]
+__all__ = ["__version__", "recording", "replaying"]

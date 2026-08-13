@@ -81,7 +81,7 @@ extend-immutable-calls = ["typer.Option", "typer.Argument"]
 
 [tool.pyright]
 include = ["src", "tests"]
-extraPaths = ["src"]
+extraPaths = ["src", "examples"]
 pythonVersion = "3.12"
 typeCheckingMode = "strict"
 venvPath = "."
