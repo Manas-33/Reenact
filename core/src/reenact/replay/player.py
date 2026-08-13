@@ -40,6 +40,27 @@ def _tool_fingerprint(name: str, arguments: dict[str, Any]) -> str:
     return hash_request(payload)
 
 
+def _group_windows(tool_calls: list[ToolCallEvent]) -> list[list[ToolCallEvent]]:
+    """Group tool calls into unordered windows of concurrent siblings.
+
+    Consecutive tool calls that share a non-``None`` ``parent_seq`` (spawned by the
+    same event, e.g. several tool_use blocks from one model turn) form one window,
+    matched unordered. A tool call with no ``parent_seq`` is its own window of one,
+    so ordinary sequential calls stay in exact order.
+    """
+    windows: list[list[ToolCallEvent]] = []
+    for event in tool_calls:
+        if (
+            windows
+            and event.parent_seq is not None
+            and event.parent_seq == windows[-1][0].parent_seq
+        ):
+            windows[-1].append(event)
+        else:
+            windows.append([event])
+    return windows
+
+
 class Player:
     """Replays a recorded trajectory's calls, matched by (call type, sequence).
 
@@ -60,11 +81,11 @@ class Player:
         self.policy = policy if policy is not None else ReplayPolicy()
         self.divergences: list[Divergence] = []
         self._llm_calls = [e for e in trajectory.events if isinstance(e, LLMCallEvent)]
-        self._tool_calls = [
-            e for e in trajectory.events if isinstance(e, ToolCallEvent)
-        ]
         self._llm_cursor = 0
-        self._tool_cursor = 0
+        tool_calls = [e for e in trajectory.events if isinstance(e, ToolCallEvent)]
+        self._tool_windows = _group_windows(tool_calls)
+        self._window_idx = 0
+        self._window_remaining: list[ToolCallEvent] = []
 
     def replay_llm_call(self, request: dict[str, Any]) -> dict[str, Any]:
         """Return the recorded response for ``request``, matched by fingerprint."""
@@ -102,43 +123,66 @@ class Player:
     ) -> Any:
         """Return the recorded result for a tool call - or re-run the real tool.
 
-        By default the recorded result is substituted and ``run`` (the real tool)
-        is never called - the guarantee that replay fires no side effects. Only
-        when the policy classifies the tool ``READ_ONLY``, re-execution is opted
-        in, and ``run`` is provided does the real tool run live, its fresh result
-        returned in place of the recording.
+        Calls are matched within a *window* of recorded tool calls that ran
+        concurrently (siblings sharing a ``parent_seq``): the incoming call is
+        matched to any unconsumed member of the current window by fingerprint, so
+        concurrent calls replayed in a different order still match. A window of one
+        (the common case) is exact-order matching. On a match the recorded result
+        is substituted and ``run`` is never called - unless the policy classifies
+        the tool read-only with re-execution opted in, when the real tool runs and
+        its fresh result is returned instead.
         """
-        if self._tool_cursor >= len(self._tool_calls):
-            raise DivergenceError(
-                Divergence(
-                    kind=DivergenceKind.EXHAUSTED,
-                    message=f"no recorded tool call left to replay for {name!r}",
-                )
-            )
-        expected = self._tool_calls[self._tool_cursor]
+        matched = self._match_tool_call(name, arguments)
         if run is not None and not self.policy.should_substitute(
-            name, expected.side_effect
+            name, matched.side_effect
         ):
-            self._tool_cursor += 1
             return run()
+        return matched.result
+
+    def _match_tool_call(
+        self, name: str, arguments: dict[str, Any] | None
+    ) -> ToolCallEvent:
+        """Consume and return the recorded tool call this live one matches.
+
+        Advances to the next window when the current one is used up; a call that
+        matches no unconsumed member of the window is a divergence (strict raises;
+        lenient records it and falls back to the first unconsumed call).
+        """
+        if not self._window_remaining:
+            if self._window_idx >= len(self._tool_windows):
+                raise DivergenceError(
+                    Divergence(
+                        kind=DivergenceKind.EXHAUSTED,
+                        message=f"no recorded tool call left to replay for {name!r}",
+                    )
+                )
+            self._window_remaining = list(self._tool_windows[self._window_idx])
+            self._window_idx += 1
         args = arguments if arguments is not None else {}
         actual_hash = _tool_fingerprint(name, args)
-        expected_hash = _tool_fingerprint(expected.name, expected.arguments)
-        if actual_hash != expected_hash:
-            self._report(
-                Divergence(
-                    kind=DivergenceKind.TOOL_CALL,
-                    seq=expected.seq,
-                    expected=expected_hash,
-                    actual=actual_hash,
-                    message=(
-                        f"tool call at step {expected.seq} diverged: expected "
-                        f"{expected.name} {expected_hash}, got {name} {actual_hash}"
-                    ),
-                )
+        for event in self._window_remaining:
+            if _tool_fingerprint(event.name, event.arguments) == actual_hash:
+                self._window_remaining.remove(event)
+                return event
+        expected = ", ".join(
+            _tool_fingerprint(e.name, e.arguments) for e in self._window_remaining
+        )
+        fallback = self._window_remaining[0]
+        names = [e.name for e in self._window_remaining]
+        self._report(
+            Divergence(
+                kind=DivergenceKind.TOOL_CALL,
+                seq=fallback.seq,
+                expected=expected,
+                actual=actual_hash,
+                message=(
+                    f"tool call {name} {actual_hash} matched no unconsumed recorded "
+                    f"call in the window at step {fallback.seq} (remaining: {names})"
+                ),
             )
-        self._tool_cursor += 1
-        return expected.result
+        )
+        self._window_remaining.remove(fallback)
+        return fallback
 
     def _report(self, divergence: Divergence) -> None:
         """Raise in strict mode, collect in lenient mode."""
