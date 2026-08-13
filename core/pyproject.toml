@@ -27,6 +27,9 @@ dependencies = [
     "typer>=0.12",
 ]
 
+[project.optional-dependencies]
+langchain = ["langchain-core>=0.3"]
+
 [project.urls]
 Homepage = "https://reenact.dev"
 
@@ -45,6 +48,7 @@ dev = [
     "pytest>=8.3",
     "ruff>=0.8",
     "pyright>=1.1.390",
+    "langchain-core>=0.3",
 ]
 
 [tool.pytest.ini_options]
