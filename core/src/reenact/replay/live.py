@@ -10,7 +10,7 @@ from collections.abc import Generator
 from contextlib import contextmanager
 from typing import Any
 
-from reenact.replay.player import Player
+from reenact.replay.player import Player, ReplayMode
 from reenact.schema import Trajectory
 
 
@@ -26,15 +26,19 @@ class _ReplayedResponse:
 
 
 @contextmanager
-def replaying(client: Any, trajectory: Trajectory) -> Generator[Player]:
+def replaying(
+    client: Any, trajectory: Trajectory, *, mode: ReplayMode = ReplayMode.STRICT
+) -> Generator[Player]:
     """Replay ``trajectory``'s LLM calls through ``client`` inside the block.
 
     Detects the client: an Anthropic client (has ``messages``) or an OpenAI
     client (has ``chat``). Each call the agent makes returns the recorded
-    response with no network; a changed request raises ``DivergenceError``. The
-    original ``create`` is restored on exit, even if the block raises.
+    response with no network. In strict mode (default) a changed request raises
+    ``DivergenceError``; in lenient mode the drift is collected on the player's
+    ``divergences`` instead. The original ``create`` is restored on exit, even if
+    the block raises.
     """
-    player = Player(trajectory)
+    player = Player(trajectory, mode=mode)
     if hasattr(client, "messages"):
         owner: Any = client.messages
     elif hasattr(client, "chat"):
