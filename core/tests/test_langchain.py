@@ -6,7 +6,7 @@ from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 from langchain_core.outputs import ChatGeneration, Generation, LLMResult
 
 from reenact.record.langchain import ReenactCallbackHandler
-from reenact.schema import LLMCallEvent, ToolCallEvent
+from reenact.schema import GraphNodeEvent, LLMCallEvent, ToolCallEvent
 
 
 def _messages(text: str) -> list[list[BaseMessage]]:
@@ -56,3 +56,37 @@ def test_llm_and_tool_calls_share_the_trajectory() -> None:
 
     types = [e.type for e in handler.recorder.trajectory.events]
     assert types == ["llm_call", "tool_call"]
+
+
+def test_records_a_langgraph_node_boundary_with_checkpoint_id() -> None:
+    handler = ReenactCallbackHandler()
+    run_id = uuid4()
+    metadata = {"langgraph_node": "agent", "checkpoint_id": "ckpt-7"}
+    handler.on_chain_start({}, {"messages": []}, run_id=run_id, metadata=metadata)
+    handler.on_chain_end({"messages": []}, run_id=run_id)
+
+    event = handler.recorder.trajectory.events[0]
+    assert isinstance(event, GraphNodeEvent)
+    assert event.node == "agent"
+    assert event.checkpoint_id == "ckpt-7"
+
+
+def test_ignores_ordinary_chains_without_a_langgraph_node() -> None:
+    handler = ReenactCallbackHandler()
+    run_id = uuid4()
+    handler.on_chain_start({}, {}, run_id=run_id, metadata={"foo": "bar"})
+    handler.on_chain_end({}, run_id=run_id)
+
+    assert handler.recorder.trajectory.events == []
+
+
+def test_node_without_checkpoint_id_records_none() -> None:
+    handler = ReenactCallbackHandler()
+    run_id = uuid4()
+    handler.on_chain_start({}, {}, run_id=run_id, metadata={"langgraph_node": "tools"})
+    handler.on_chain_end({}, run_id=run_id)
+
+    event = handler.recorder.trajectory.events[0]
+    assert isinstance(event, GraphNodeEvent)
+    assert event.node == "tools"
+    assert event.checkpoint_id is None

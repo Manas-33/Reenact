@@ -75,6 +75,18 @@ class ToolCallEvent(_EventBase):
     side_effect: SideEffect = SideEffect.UNKNOWN
 
 
+class GraphNodeEvent(_EventBase):
+    """A LangGraph node boundary crossed during a run.
+
+    Records the node name and, when the graph is checkpointed, the checkpoint id
+    active at that boundary - the anchor a later fork replays from.
+    """
+
+    type: Literal["graph_node"] = "graph_node"
+    node: str
+    checkpoint_id: str | None = None
+
+
 # Union of every event type. Pydantic selects the right model by the ``type``
 # literal that is unique to each member.
-type Event = LLMCallEvent | ToolCallEvent
+type Event = LLMCallEvent | ToolCallEvent | GraphNodeEvent

@@ -5,6 +5,7 @@ from typing import Any
 from reenact.record.hashing import hash_request
 from reenact.record.redaction import DEFAULT_SCRUB_KEYS, redact
 from reenact.schema import (
+    GraphNodeEvent,
     LLMCallEvent,
     SideEffect,
     TokenUsage,
@@ -58,6 +59,30 @@ class Recorder:
             request_hash=hash_request(safe_request),
             usage=usage,
             cost_usd=cost_usd,
+            latency_ms=latency_ms,
+        )
+        self.trajectory.events.append(event)
+        return event
+
+    def record_graph_node(
+        self,
+        *,
+        node: str,
+        checkpoint_id: str | None = None,
+        parent_seq: int | None = None,
+        latency_ms: float | None = None,
+    ) -> GraphNodeEvent:
+        """Capture a LangGraph node boundary as an event.
+
+        The node name and checkpoint id are structural, not payload, so they are
+        stored as-is. Recording the checkpoint id now is what lets a later fork
+        anchor to the point a node ran.
+        """
+        event = GraphNodeEvent(
+            seq=len(self.trajectory.events),
+            parent_seq=parent_seq,
+            node=node,
+            checkpoint_id=checkpoint_id,
             latency_ms=latency_ms,
         )
         self.trajectory.events.append(event)

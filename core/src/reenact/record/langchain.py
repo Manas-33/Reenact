@@ -40,6 +40,30 @@ def _tool_name(serialized: dict[str, Any]) -> str:
     return name if isinstance(name, str) else ""
 
 
+def _graph_node(metadata: dict[str, Any] | None) -> str | None:
+    """The LangGraph node name for this chain, or None for an ordinary chain.
+
+    LangGraph tags each node's run with ``langgraph_node`` in the callback
+    metadata; its presence is what distinguishes a graph node boundary from the
+    many ordinary Runnable chains that also fire ``on_chain_start``.
+    """
+    if not isinstance(metadata, dict):
+        return None
+    node: Any = metadata.get("langgraph_node")
+    return node if isinstance(node, str) else None
+
+
+def _checkpoint_id(metadata: dict[str, Any] | None) -> str | None:
+    """The checkpoint id active at this node, if the graph is checkpointed."""
+    if not isinstance(metadata, dict):
+        return None
+    for key in ("checkpoint_id", "langgraph_checkpoint_id"):
+        value: Any = metadata.get(key)
+        if isinstance(value, str):
+            return value
+    return None
+
+
 class ReenactCallbackHandler(BaseCallbackHandler):
     """A LangChain callback handler that records LLM and tool calls.
 
@@ -51,6 +75,7 @@ class ReenactCallbackHandler(BaseCallbackHandler):
         super().__init__()
         self.recorder = recorder if recorder is not None else Recorder()
         self._pending: dict[UUID, dict[str, Any]] = {}
+        self._pending_nodes: dict[UUID, dict[str, Any]] = {}
 
     def on_chat_model_start(
         self,
@@ -84,6 +109,41 @@ class ReenactCallbackHandler(BaseCallbackHandler):
             model=str(request.get("model", "")),
             request=request,
             response=response.model_dump(),
+        )
+
+    def on_chain_start(
+        self,
+        serialized: dict[str, Any],
+        inputs: dict[str, Any],
+        *,
+        run_id: UUID,
+        parent_run_id: UUID | None = None,
+        tags: list[str] | None = None,
+        metadata: dict[str, Any] | None = None,
+        **kwargs: Any,
+    ) -> None:
+        node = _graph_node(metadata)
+        if node is None:
+            return  # an ordinary Runnable chain, not a LangGraph node boundary
+        self._pending_nodes[run_id] = {
+            "node": node,
+            "checkpoint_id": _checkpoint_id(metadata),
+        }
+
+    def on_chain_end(
+        self,
+        outputs: dict[str, Any],
+        *,
+        run_id: UUID,
+        parent_run_id: UUID | None = None,
+        **kwargs: Any,
+    ) -> None:
+        pending = self._pending_nodes.pop(run_id, None)
+        if pending is None:
+            return  # not a node boundary we opened in on_chain_start
+        self.recorder.record_graph_node(
+            node=str(pending["node"]),
+            checkpoint_id=pending["checkpoint_id"],
         )
 
     def on_tool_start(
