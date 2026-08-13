@@ -4,7 +4,7 @@ Record an agent run once, replay it deterministically offline, and gate
 regressions in CI.
 """
 
-from reenact.record.anthropic import recording
+from reenact.record import recording
 
 __version__ = "0.0.1"
 
