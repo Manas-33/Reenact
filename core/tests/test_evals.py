@@ -159,6 +159,28 @@ def test_final_answer_openai_shape() -> None:
     assert RunView(traj).final_answer == "hello there"
 
 
+def test_final_answer_langchain_shape() -> None:
+    # LangChain LLMResult, as the LangGraph callback handler records it.
+    traj = Trajectory(
+        events=[
+            LLMCallEvent(
+                seq=0,
+                provider="langchain",
+                model="m",
+                request={"messages": []},
+                response={
+                    "generations": [
+                        [{"text": "Reset via Settings.", "type": "ChatGeneration"}]
+                    ],
+                    "type": "LLMResult",
+                },
+                request_hash="h",
+            )
+        ]
+    )
+    assert RunView(traj).final_answer == "Reset via Settings."
+
+
 # --- tool assertions ---------------------------------------------------------
 
 
