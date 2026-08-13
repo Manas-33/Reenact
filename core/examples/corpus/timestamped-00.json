@@ -1,0 +1,72 @@
+{
+  "schema_version": 0,
+  "id": "timestamped-00",
+  "name": "timestamped",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1319.3438751623034,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "system": "The current time is 2026-08-13T09:41:19.115383+00:00.",
+        "messages": [
+          {
+            "role": "user",
+            "content": "What day of the week is it, roughly?"
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXaMqSRo7x5mt3Xk7VN",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Based on the current time of 2026-08-13T09:41:19.115383+00:00, today is **Thursday, August 13th, 2026**.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 42,
+          "output_tokens": 44,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:159eb023684eec5068e7cee13750ead554e53df9b3c7753b4d2761d79854cb1b",
+      "usage": {
+        "input_tokens": 42,
+        "output_tokens": 44
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {
+    "entropy": {
+      "clock": [
+        1786614079.1153831
+      ]
+    }
+  }
+}

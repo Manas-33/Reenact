@@ -1,0 +1,240 @@
+{
+  "schema_version": 0,
+  "id": "parallel-12",
+  "name": "parallel",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1580.6163330562413,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "Report the current weather for each of these cities: Lima, Tokyo. Call get_weather once for every city."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXNEmT9qSx1MeruzvAi",
+        "container": null,
+        "content": [
+          {
+            "id": "toolu_01PeMhyLcunHRRCfdzerxY2r",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "Lima"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          },
+          {
+            "id": "toolu_014xpXe6JGwwVg6fDpMw2LZi",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "Tokyo"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 582,
+          "output_tokens": 89,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:f22b71ca04a2a4f0fbcd3743446fa5b4792c67e773dcc29e0e73f500808ef85a",
+      "usage": {
+        "input_tokens": 582,
+        "output_tokens": 89
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "Lima"
+      },
+      "result": "20C and foggy",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 2,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "Tokyo"
+      },
+      "result": "24C and clear",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 3,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 3513.453416991979,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "Report the current weather for each of these cities: Lima, Tokyo. Call get_weather once for every city."
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "id": "toolu_01PeMhyLcunHRRCfdzerxY2r",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "Lima"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              },
+              {
+                "id": "toolu_014xpXe6JGwwVg6fDpMw2LZi",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "Tokyo"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_01PeMhyLcunHRRCfdzerxY2r",
+                "content": "20C and foggy"
+              },
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_014xpXe6JGwwVg6fDpMw2LZi",
+                "content": "24C and clear"
+              }
+            ]
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXNMggMDrovnhbRsJtS",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Here's the current weather for each city:\n\n- **Lima**: 20°C and foggy\n- **Tokyo**: 24°C and clear",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 744,
+          "output_tokens": 35,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:e2d3b122ec9898e41dd49846e1f3b78e07ba2299775055ea9ad8721af88fdd8e",
+      "usage": {
+        "input_tokens": 744,
+        "output_tokens": 35
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

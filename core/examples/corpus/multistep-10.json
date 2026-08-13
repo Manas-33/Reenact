@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-10",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 3411.8277919478714,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of gravity."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXVR2nan4KuBm7jHUvH",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Here are two key aspects of gravity:\n\n1. **Universal Attraction**: Gravity is a fundamental force that causes all objects with mass to attract each other. The strength of this attraction depends on the masses of the objects and the distance between them.\n\n2. **Weight and Acceleration**: Gravity gives objects weight and causes them to accelerate when falling. On Earth, this acceleration is approximately 9.8 m/s², meaning falling objects increase their speed by about 9.8 meters per second every second (in the absence of air resistance).",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 14,
+          "output_tokens": 119,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:d3922468fdb3ae974a9d39fbb43c0a05febb6bd27a1d7bccb547957321fdd73b",
+      "usage": {
+        "input_tokens": 14,
+        "output_tokens": 119
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2025.376542005688,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\nHere are two key aspects of gravity:\n\n1. **Universal Attraction**: Gravity is a fundamental force that causes all objects with mass to attract each other. The strength of this attraction depends on the masses of the objects and the distance between them.\n\n2. **Weight and Acceleration**: Gravity gives objects weight and causes them to accelerate when falling. On Earth, this acceleration is approximately 9.8 m/s², meaning falling objects increase their speed by about 9.8 meters per second every second (in the absence of air resistance).\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXVeqVwow1wnzS9RVr1",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The universal attraction between Earth's mass and an object's mass not only creates the force we experience as the object's weight but also causes it to accelerate toward Earth at 9.8 m/s² when falling freely.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 135,
+          "output_tokens": 50,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:bb5482ad3e80ffcf8986a31fe9e64412cd7505ef54ea46e763825e446d41f46d",
+      "usage": {
+        "input_tokens": 135,
+        "output_tokens": 50
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1431.550667155534,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: The universal attraction between Earth's mass and an object's mass not only creates the force we experience as the object's weight but also causes it to accelerate toward Earth at 9.8 m/s² when falling freely."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXVoYNyfggZQTSx2rMS",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Gravity pulls objects toward Earth with a force (weight) that causes them to accelerate downward at 9.8 m/s² when in free fall.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 61,
+          "output_tokens": 38,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:38606b29bf1c18f03d5b9dfe13a73f3fc0e0bbd3b04bf573c94b93d7101b9394",
+      "usage": {
+        "input_tokens": 61,
+        "output_tokens": 38
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

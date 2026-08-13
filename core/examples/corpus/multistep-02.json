@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-02",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 3968.790957937017,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of the water cycle."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXRS2hyFxMwFrvje8yN",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Two Key Aspects of the Water Cycle\n\n1. **Evaporation and Condensation**\n   - Water evaporates from oceans, lakes, and land surfaces due to solar heating, turning from liquid to water vapor\n   - The vapor rises, cools, and condenses into clouds (tiny water droplets or ice crystals)\n\n2. **Precipitation and Collection**\n   - Water falls back to Earth as rain, snow, sleet, or hail\n   - It collects in bodies of water (oceans, rivers, lakes) or soaks into the ground, eventually returning to the atmosphere or flowing back to the oceans\n\nThese processes continuously circulate Earth's water between the atmosphere, land, and oceans.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 16,
+          "output_tokens": 162,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:2bcb8165fa5bb7bdd4cf4885ece03c99126b22b4ac15795cf4aafb205f64f701",
+      "usage": {
+        "input_tokens": 16,
+        "output_tokens": 162
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1964.378124801442,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\n# Two Key Aspects of the Water Cycle\n\n1. **Evaporation and Condensation**\n   - Water evaporates from oceans, lakes, and land surfaces due to solar heating, turning from liquid to water vapor\n   - The vapor rises, cools, and condenses into clouds (tiny water droplets or ice crystals)\n\n2. **Precipitation and Collection**\n   - Water falls back to Earth as rain, snow, sleet, or hail\n   - It collects in bodies of water (oceans, rivers, lakes) or soaks into the ground, eventually returning to the atmosphere or flowing back to the oceans\n\nThese processes continuously circulate Earth's water between the atmosphere, land, and oceans.\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXRixC5Aufcf4jFJ1CW",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "These two aspects work together in a continuous loop: water that evaporates and condenses in the atmosphere eventually falls back to Earth through precipitation, where it collects and becomes available to evaporate again, perpetuating the cycle.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 178,
+          "output_tokens": 51,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:15425191803941a41b229deefc2255c64af625692092954b6bfdb6290743f3b5",
+      "usage": {
+        "input_tokens": 178,
+        "output_tokens": 51
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1810.798500198871,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: These two aspects work together in a continuous loop: water that evaporates and condenses in the atmosphere eventually falls back to Earth through precipitation, where it collects and becomes available to evaporate again, perpetuating the cycle."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXRsSB14uAF2bZpJJPF",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The water cycle is a continuous loop where water evaporates, condenses, falls as precipitation, and collects to evaporate again.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 62,
+          "output_tokens": 32,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:292158b4f074fec8778036932cc8e9c7faaae024e9ba9eae92aa7ea7a3b28583",
+      "usage": {
+        "input_tokens": 62,
+        "output_tokens": 32
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

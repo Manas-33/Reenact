@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-12",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2711.8702500592917,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of inflation."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXWMtZ3qKSpJxZcV8Fi",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Two Key Aspects of Inflation\n\n1. **Purchasing Power Decline**\n   - Money loses value over time as prices rise\n   - The same amount of currency buys fewer goods and services than before\n\n2. **General Price Level Increase**\n   - Broad rise in prices across the economy (not just individual items)\n   - Measured by indices like CPI (Consumer Price Index) or PPI (Producer Price Index)",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 14,
+          "output_tokens": 98,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:3cffcff062450b7d5fe5453900ac0244fdf5b05dd3d5eeea7e5e43fbbb769b57",
+      "usage": {
+        "input_tokens": 14,
+        "output_tokens": 98
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1588.2106248755008,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\n# Two Key Aspects of Inflation\n\n1. **Purchasing Power Decline**\n   - Money loses value over time as prices rise\n   - The same amount of currency buys fewer goods and services than before\n\n2. **General Price Level Increase**\n   - Broad rise in prices across the economy (not just individual items)\n   - Measured by indices like CPI (Consumer Price Index) or PPI (Producer Price Index)\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXWZhhwwEhYX67LXww2",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Inflation occurs when the general price level across the economy rises, which directly causes the purchasing power of money to decline as each dollar buys fewer goods and services than before.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 114,
+          "output_tokens": 38,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:1166be476b8825bbe1b2eac0efac7b7d698cdb602d4fa39fe7bf504503389498",
+      "usage": {
+        "input_tokens": 114,
+        "output_tokens": 38
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1533.0040839035064,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: Inflation occurs when the general price level across the economy rises, which directly causes the purchasing power of money to decline as each dollar buys fewer goods and services than before."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXWgRXcb16pVA3Q1pn4",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Inflation is the rise in overall prices that reduces the purchasing power of money.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 49,
+          "output_tokens": 19,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:793ce0c92911accee29f655805c911704b998054f081a959d7b38e0ff724ee87",
+      "usage": {
+        "input_tokens": 49,
+        "output_tokens": 19
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

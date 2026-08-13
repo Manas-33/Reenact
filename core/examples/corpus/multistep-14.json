@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-14",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 3753.4699169918895,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of the immune system."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXXH9L5N7SzUT99VWRn",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Two Key Aspects of the Immune System\n\n## 1. **Innate Immunity**\nThe body's first line of defense that responds quickly and non-specifically to pathogens. This includes physical barriers (like skin), chemical defenses (like stomach acid), and immune cells (like macrophages and neutrophils) that attack invaders immediately.\n\n## 2. **Adaptive Immunity**\nA specialized defense system that develops targeted responses to specific pathogens. It involves lymphocytes (T cells and B cells) that \"remember\" previous infections, providing long-lasting protection and forming the basis for vaccination effectiveness.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 16,
+          "output_tokens": 138,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:cb763d5c8cf8d7569bb3596c0e37758b6eae74ae18b5ddc0d54c44e938dee93d",
+      "usage": {
+        "input_tokens": 16,
+        "output_tokens": 138
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2057.59424995631,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\n# Two Key Aspects of the Immune System\n\n## 1. **Innate Immunity**\nThe body's first line of defense that responds quickly and non-specifically to pathogens. This includes physical barriers (like skin), chemical defenses (like stomach acid), and immune cells (like macrophages and neutrophils) that attack invaders immediately.\n\n## 2. **Adaptive Immunity**\nA specialized defense system that develops targeted responses to specific pathogens. It involves lymphocytes (T cells and B cells) that \"remember\" previous infections, providing long-lasting protection and forming the basis for vaccination effectiveness.\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXXZRNZdYddqyHaNxTt",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The innate immune system acts as the body's immediate first responder that also activates and guides the adaptive immune system to develop its more precise, long-lasting defenses against specific pathogens.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 154,
+          "output_tokens": 44,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:8df6ecc2cea0a7e37a710313abd378bcb27b8f263d9ab9bdf3f621cc15a8af55",
+      "usage": {
+        "input_tokens": 154,
+        "output_tokens": 44
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1398.384999949485,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: The innate immune system acts as the body's immediate first responder that also activates and guides the adaptive immune system to develop its more precise, long-lasting defenses against specific pathogens."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXXiV5Lzrk2ixpzpLEU",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The innate immune system provides immediate defense while activating and directing the adaptive immune system to create targeted, long-term protection.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 55,
+          "output_tokens": 29,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:ce08b531e64275fc01b3341aff1d7acb66931c09aff0bec390647e2601a92ba2",
+      "usage": {
+        "input_tokens": 55,
+        "output_tokens": 29
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": 0,
+  "id": "timestamped-14",
+  "name": "timestamped",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 4098.675000015646,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "system": "The current time is 2026-08-13T09:42:04.571307+00:00.",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Is the sun likely up right now?"
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXdiHb4h3kSaoWUBPcT",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Based on the current time of **09:42 UTC on August 13, 2026**, whether the sun is up depends on your location:\n\n- **In Europe, Africa, and Asia**: Yes, it's daytime (mid-morning to afternoon)\n- **In the Americas**: No, it's nighttime (early morning hours, still dark)\n- **In Australia/Pacific**: It's evening/night\n\nSince I don't know your specific location, I can't give a definitive answer. If you're in the Eastern Hemisphere (roughly UTC-4 to UTC+12), the sun is likely up. If you're in the Western Hemisphere (Americas), it's probably still dark.\n\nWhere are you located?",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 40,
+          "output_tokens": 159,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:42c864d01514efe21856b6570fab5ad48cf4fb3f168551efb688efbd5c70ae73",
+      "usage": {
+        "input_tokens": 40,
+        "output_tokens": 159
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {
+    "entropy": {
+      "clock": [
+        1786614124.571307
+      ]
+    }
+  }
+}

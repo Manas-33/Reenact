@@ -1,0 +1,280 @@
+{
+  "schema_version": 0,
+  "id": "parallel-10",
+  "name": "parallel",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1944.3745829630643,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "Report the current weather for each of these cities: London, Cairo, Tokyo. Call get_weather once for every city."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXMkPtqetQFG9mLRmaR",
+        "container": null,
+        "content": [
+          {
+            "id": "toolu_01Naa4VMyuUiysYSuesuczNK",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "London"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          },
+          {
+            "id": "toolu_016cteJ4yPzFw95Z6fbp7rZp",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "Cairo"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          },
+          {
+            "id": "toolu_01U1FbaJq1tgwPB5rrL1zPV2",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "Tokyo"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 584,
+          "output_tokens": 125,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:cbcfdb9e8c9a5755b8c8dfc1f0d9f50f8cb707958b84c8afb70c0412c89f1863",
+      "usage": {
+        "input_tokens": 584,
+        "output_tokens": 125
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "London"
+      },
+      "result": "12C and rainy",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 2,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "Cairo"
+      },
+      "result": "33C and sunny",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 3,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "Tokyo"
+      },
+      "result": "24C and clear",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 4,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1360.6637918855995,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "Report the current weather for each of these cities: London, Cairo, Tokyo. Call get_weather once for every city."
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "id": "toolu_01Naa4VMyuUiysYSuesuczNK",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "London"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              },
+              {
+                "id": "toolu_016cteJ4yPzFw95Z6fbp7rZp",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "Cairo"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              },
+              {
+                "id": "toolu_01U1FbaJq1tgwPB5rrL1zPV2",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "Tokyo"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_01Naa4VMyuUiysYSuesuczNK",
+                "content": "12C and rainy"
+              },
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_016cteJ4yPzFw95Z6fbp7rZp",
+                "content": "33C and sunny"
+              },
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_01U1FbaJq1tgwPB5rrL1zPV2",
+                "content": "24C and clear"
+              }
+            ]
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXMtvMbsWJFgDwew49w",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Here's the current weather for each city:\n\n- **London**: 12°C and rainy\n- **Cairo**: 33°C and sunny\n- **Tokyo**: 24°C and clear",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 811,
+          "output_tokens": 46,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:0b0902f18d957065d842ce5e1b50db75b34fc56da5d8575411e69d9cadd650c0",
+      "usage": {
+        "input_tokens": 811,
+        "output_tokens": 46
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

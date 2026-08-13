@@ -1,0 +1,65 @@
+{
+  "schema_version": 0,
+  "id": "qa-07",
+  "name": "qa",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1035.3590419981629,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "What is the freezing point of water in Celsius?"
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXDm3rtgNC1aGByWnXC",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The freezing point of water is **0°C** (zero degrees Celsius) at standard atmospheric pressure.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 19,
+          "output_tokens": 26,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:97e1086b2a09943b1752d77a3b6ab38aefe84959b489156e3717ac7682e6b2e7",
+      "usage": {
+        "input_tokens": 19,
+        "output_tokens": 26
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

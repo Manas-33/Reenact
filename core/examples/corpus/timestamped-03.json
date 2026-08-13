@@ -1,0 +1,72 @@
+{
+  "schema_version": 0,
+  "id": "timestamped-03",
+  "name": "timestamped",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2888.7616670690477,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "system": "The current time is 2026-08-13T09:41:24.090315+00:00.",
+        "messages": [
+          {
+            "role": "user",
+            "content": "What season is it likely to be?"
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXajDoqrrGy3GzoH9ya",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Based on the date **August 13, 2026**, it is likely **summer** in the Northern Hemisphere (which includes North America, Europe, and most of Asia) and **winter** in the Southern Hemisphere (which includes Australia, South America south of the equator, and southern Africa).\n\nSince most of the world's population lives in the Northern Hemisphere, if no specific location was mentioned, summer would be the most common assumption.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 40,
+          "output_tokens": 96,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:689449f02fc12938064d155191b96189c7c9b89aac99d2f4b751f4765420c69f",
+      "usage": {
+        "input_tokens": 40,
+        "output_tokens": 96
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {
+    "entropy": {
+      "clock": [
+        1786614084.090315
+      ]
+    }
+  }
+}

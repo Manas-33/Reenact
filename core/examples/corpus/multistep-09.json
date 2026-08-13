@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-09",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 3303.9933750405908,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of democracy."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXUw8Fo5bCSgnyoATp7",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Two Key Aspects of Democracy\n\n1. **Popular Sovereignty / Rule by the People**\n   - Citizens have the ultimate authority in government through voting and participation\n   - Political power derives from the consent of the governed\n\n2. **Protection of Individual Rights and Freedoms**\n   - Guaranteed civil liberties such as freedom of speech, assembly, and religion\n   - Equal protection under the law and safeguards against tyranny of the majority\n\nThese two elements work together: the people govern themselves while respecting fundamental rights that cannot be violated even by majority rule.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 14,
+          "output_tokens": 123,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:69dc71a3c1646b5cb64331ed18f86cd9a90ed9f98c36e233cc320bf3275632d8",
+      "usage": {
+        "input_tokens": 14,
+        "output_tokens": 123
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1750.7872078567743,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\n# Two Key Aspects of Democracy\n\n1. **Popular Sovereignty / Rule by the People**\n   - Citizens have the ultimate authority in government through voting and participation\n   - Political power derives from the consent of the governed\n\n2. **Protection of Individual Rights and Freedoms**\n   - Guaranteed civil liberties such as freedom of speech, assembly, and religion\n   - Equal protection under the law and safeguards against tyranny of the majority\n\nThese two elements work together: the people govern themselves while respecting fundamental rights that cannot be violated even by majority rule.\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXVBN1dW2S16w165pBp",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Democracy balances the will of the majority with the protection of individual rights, ensuring that while the people govern themselves, no vote can strip away the fundamental freedoms that belong to every citizen.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 139,
+          "output_tokens": 41,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:5e3193dc7fe5b49aa147da90efbe7105d9143c8057063ad185120b69fb67ed17",
+      "usage": {
+        "input_tokens": 139,
+        "output_tokens": 41
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1311.2461250275373,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: Democracy balances the will of the majority with the protection of individual rights, ensuring that while the people govern themselves, no vote can strip away the fundamental freedoms that belong to every citizen."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXVJtT1s4E13E2FoQ3W",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Democracy protects both majority rule and minority rights by ensuring fundamental freedoms cannot be voted away.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 52,
+          "output_tokens": 22,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:7557e1c92f342d6ec11afad3adc192c92a3a2a200a2f8020196da99bc864acb0",
+      "usage": {
+        "input_tokens": 52,
+        "output_tokens": 22
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

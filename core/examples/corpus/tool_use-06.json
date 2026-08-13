@@ -1,0 +1,200 @@
+{
+  "schema_version": 0,
+  "id": "tool_use-06",
+  "name": "tool_use",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1310.129040852189,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "What's the weather in Nairobi? Use the get_weather tool."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXGUcUqkT9zczwnizYk",
+        "container": null,
+        "content": [
+          {
+            "id": "toolu_01TmYZDpDzFa1KciZkfgeBMp",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "Nairobi"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 576,
+          "output_tokens": 56,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:4fc8923620e1bdaa6942894fe00ff04ff70fd2c9fcc0822923d2685ce7dc570e",
+      "usage": {
+        "input_tokens": 576,
+        "output_tokens": 56
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "Nairobi"
+      },
+      "result": "26C and humid",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 997.0939590130001,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "What's the weather in Nairobi? Use the get_weather tool."
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "id": "toolu_01TmYZDpDzFa1KciZkfgeBMp",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "Nairobi"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_01TmYZDpDzFa1KciZkfgeBMp",
+                "content": "26C and humid"
+              }
+            ]
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXGa97QomGdVgcApwzR",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The current weather in Nairobi is 26°C and humid.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 649,
+          "output_tokens": 19,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:3fa2c8faa5c5f35ce426a6952b59811a9da6c66363b0faff4ba2ddae538048a0",
+      "usage": {
+        "input_tokens": 649,
+        "output_tokens": 19
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

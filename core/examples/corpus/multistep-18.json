@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-18",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 3327.143750153482,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of antibiotics."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXZJh9oZHFQVERArBV8",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Two Key Aspects of Antibiotics\n\n1. **Selective Toxicity**\n   - Antibiotics target bacterial cells while minimizing harm to human cells\n   - They exploit differences between bacterial and human cell structures (e.g., targeting bacterial cell walls, which human cells lack)\n\n2. **Spectrum of Activity**\n   - Antibiotics vary in their range of effectiveness against different bacteria\n   - **Narrow-spectrum**: target specific types of bacteria (e.g., only Gram-positive)\n   - **Broad-spectrum**: effective against a wide range of bacterial species",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 15,
+          "output_tokens": 131,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:643c479a19a17907ffbad4e20d87b333f9eaa1f7053a040fe6be96174f123caf",
+      "usage": {
+        "input_tokens": 15,
+        "output_tokens": 131
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2008.1632500514388,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\n# Two Key Aspects of Antibiotics\n\n1. **Selective Toxicity**\n   - Antibiotics target bacterial cells while minimizing harm to human cells\n   - They exploit differences between bacterial and human cell structures (e.g., targeting bacterial cell walls, which human cells lack)\n\n2. **Spectrum of Activity**\n   - Antibiotics vary in their range of effectiveness against different bacteria\n   - **Narrow-spectrum**: target specific types of bacteria (e.g., only Gram-positive)\n   - **Broad-spectrum**: effective against a wide range of bacterial species\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXZYrwjvHSUYUYVdVSw",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Selective toxicity enables antibiotics to exploit unique bacterial structures, and the specific structures they target determine whether they will have a narrow or broad spectrum of activity against different bacterial species.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 147,
+          "output_tokens": 39,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:f48e42ede0af04a7b182e076646372225e956567a2dce2da6b449c79df3d09fe",
+      "usage": {
+        "input_tokens": 147,
+        "output_tokens": 39
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2116.1348749883473,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: Selective toxicity enables antibiotics to exploit unique bacterial structures, and the specific structures they target determine whether they will have a narrow or broad spectrum of activity against different bacterial species."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXZhLRux3QCTqFHhDC9",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Antibiotics work by targeting bacterial structures unique from human cells, with their effectiveness against specific bacteria depending on which structures they attack.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 50,
+          "output_tokens": 29,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:b6ef9a54a9b230e40d92c3b9fe99b3ce9d855123f15325a1da6f50e10ceae490",
+      "usage": {
+        "input_tokens": 50,
+        "output_tokens": 29
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

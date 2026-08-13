@@ -1,0 +1,72 @@
+{
+  "schema_version": 0,
+  "id": "timestamped-05",
+  "name": "timestamped",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2662.193625001237,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "system": "The current time is 2026-08-13T09:41:32.042923+00:00.",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Is it a workday or weekend, probably?"
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXbK816QEsnfEwGcw3b",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Based on the current time being **Thursday, August 13, 2026**, this is a **workday** for most people.\n\nThursday is a typical weekday in the middle of the work week, so unless it's a public holiday in your specific location (which I don't have information about), it would be a regular workday.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 42,
+          "output_tokens": 74,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:55c057dcfee2d745d94a0b80a8b6614932d2d067c66ad8e2c866a74cd7497d41",
+      "usage": {
+        "input_tokens": 42,
+        "output_tokens": 74
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {
+    "entropy": {
+      "clock": [
+        1786614092.042923
+      ]
+    }
+  }
+}

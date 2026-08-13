@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-05",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 3690.571208950132,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of compound interest."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXT4HZWyKysDz8gndS4",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Two Key Aspects of Compound Interest\n\n1. **Interest Earns Interest**\n   - Unlike simple interest, compound interest calculates earnings on both the original principal AND on previously accumulated interest\n   - This creates a snowball effect where your money grows exponentially over time\n\n2. **Time is Critical**\n   - The longer money remains invested, the more powerful compounding becomes\n   - Starting early makes a dramatic difference—even small amounts can grow substantially with extended time horizons due to the exponential growth curve",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 15,
+          "output_tokens": 112,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:5ea8908539c00b1cffb496efc06f7ee54156b1eef84cbc4043c854d53edc173e",
+      "usage": {
+        "input_tokens": 15,
+        "output_tokens": 112
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1919.6031671017408,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\n# Two Key Aspects of Compound Interest\n\n1. **Interest Earns Interest**\n   - Unlike simple interest, compound interest calculates earnings on both the original principal AND on previously accumulated interest\n   - This creates a snowball effect where your money grows exponentially over time\n\n2. **Time is Critical**\n   - The longer money remains invested, the more powerful compounding becomes\n   - Starting early makes a dramatic difference—even small amounts can grow substantially with extended time horizons due to the exponential growth curve\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXTKuuRqUDoe2rT8fsb",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The exponential snowball effect of interest earning interest becomes dramatically more powerful with time, which is why starting early—even with small amounts—allows your money to compound upon itself repeatedly and grow substantially over extended periods.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 128,
+          "output_tokens": 46,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:43c0f24d7f602c07f1e2345b66a60abe31c12ba8003eed39f229e49217584ad1",
+      "usage": {
+        "input_tokens": 128,
+        "output_tokens": 46
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1380.7544999290258,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: The exponential snowball effect of interest earning interest becomes dramatically more powerful with time, which is why starting early—even with small amounts—allows your money to compound upon itself repeatedly and grow substantially over extended periods."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXTTsPhHpH596B9SaNn",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Starting early allows even small amounts of money to grow substantially through the compound interest snowball effect over time.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 57,
+          "output_tokens": 24,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:228041a3953c7e3db72709af3a794644ea1d5abb7d54f24663893dbddb4ae99c",
+      "usage": {
+        "input_tokens": 57,
+        "output_tokens": 24
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

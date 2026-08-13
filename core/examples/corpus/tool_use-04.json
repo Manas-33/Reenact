@@ -1,0 +1,200 @@
+{
+  "schema_version": 0,
+  "id": "tool_use-04",
+  "name": "tool_use",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1332.134166965261,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "What's the weather in Oslo? Use the get_weather tool."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXG8gAz12gQPJJv9pKD",
+        "container": null,
+        "content": [
+          {
+            "id": "toolu_0145Ru5Ybr5tXzxREbTUPgqB",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "Oslo"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 573,
+          "output_tokens": 53,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:d553c35cbf093ba83a5ad14d189cd8bd1c63525c5ea33bb6ba0ea97467102578",
+      "usage": {
+        "input_tokens": 573,
+        "output_tokens": 53
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "Oslo"
+      },
+      "result": "5C and snowy",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 947.4592918995768,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "What's the weather in Oslo? Use the get_weather tool."
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "id": "toolu_0145Ru5Ybr5tXzxREbTUPgqB",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "Oslo"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_0145Ru5Ybr5tXzxREbTUPgqB",
+                "content": "5C and snowy"
+              }
+            ]
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXGEPxh1y2BFkNpXG7D",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The weather in Oslo is currently 5°C and snowy.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 644,
+          "output_tokens": 17,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:1443ffdad4ad532b21773706e38bed1695a2bf6974ebeb7d17247af4cc7ec32e",
+      "usage": {
+        "input_tokens": 644,
+        "output_tokens": 17
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

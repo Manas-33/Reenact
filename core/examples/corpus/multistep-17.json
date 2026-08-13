@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-17",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 3202.2897091228515,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of the stock market."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXYkf5HVuXqXJVttL8t",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Two Key Aspects of the Stock Market\n\n## 1. **Supply and Demand**\nStock prices are fundamentally driven by supply and demand. When more investors want to buy a stock (demand) than sell it (supply), the price rises. Conversely, when more want to sell than buy, the price falls.\n\n## 2. **Risk and Return**\nThe stock market involves a tradeoff between risk and potential returns. Generally, higher potential returns come with higher risk. Investors must balance their desire for profit against their tolerance for volatility and potential losses.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 16,
+          "output_tokens": 125,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:07ca2c98ff2b3576fb78e2e4534b9dc09bce11bb58ff2726beb1e3217da7de47",
+      "usage": {
+        "input_tokens": 16,
+        "output_tokens": 125
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2589.093334041536,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\n# Two Key Aspects of the Stock Market\n\n## 1. **Supply and Demand**\nStock prices are fundamentally driven by supply and demand. When more investors want to buy a stock (demand) than sell it (supply), the price rises. Conversely, when more want to sell than buy, the price falls.\n\n## 2. **Risk and Return**\nThe stock market involves a tradeoff between risk and potential returns. Generally, higher potential returns come with higher risk. Investors must balance their desire for profit against their tolerance for volatility and potential losses.\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXZ2EwcWr3jhnxyAh67",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The interplay between supply and demand directly reflects investors' collective assessment of a stock's risk-return profile, as higher perceived returns attract more buyers while greater risk concerns increase selling pressure.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 141,
+          "output_tokens": 40,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:0c1cd8f1b0d6460ce66a5b5dcc4e63507b4bc95f056f9db8ae71fa56298839c5",
+      "usage": {
+        "input_tokens": 141,
+        "output_tokens": 40
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1660.1444580592215,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: The interplay between supply and demand directly reflects investors' collective assessment of a stock's risk-return profile, as higher perceived returns attract more buyers while greater risk concerns increase selling pressure."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXZBVZmVM8d11h9c65r",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Market prices reflect investors' collective view of a stock's risk versus reward, with higher expected returns attracting buyers and higher perceived risk driving sellers.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 51,
+          "output_tokens": 32,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:4300e815d0d2c9efd62985f2243786ac17ea31971b7802302a264d2ce974f942",
+      "usage": {
+        "input_tokens": 51,
+        "output_tokens": 32
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

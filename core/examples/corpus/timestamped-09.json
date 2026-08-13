@@ -1,0 +1,72 @@
+{
+  "schema_version": 0,
+  "id": "timestamped-09",
+  "name": "timestamped",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 3536.73395793885,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "system": "The current time is 2026-08-13T09:41:45.190055+00:00.",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Recommend a drink for this time."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXcHQbPTszBBrFycrf8",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Good morning! ☕\n\nFor 9:41 AM, I'd recommend a **nice cup of coffee** or a **matcha latte**. \n\nAt this mid-morning hour, you might want something that provides a gentle energy boost without being too heavy. If you've already had your morning coffee, consider:\n\n- **Green tea** - lighter caffeine, refreshing\n- **Fresh orange juice** - vitamin C boost\n- **Sparkling water with lemon** - hydrating and crisp\n\nWhat sounds good to you?",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 40,
+          "output_tokens": 120,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:59f7179703d68cf3beba70caa091b9ae21d6ef67d62340099a04e89e69c8021e",
+      "usage": {
+        "input_tokens": 40,
+        "output_tokens": 120
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {
+    "entropy": {
+      "clock": [
+        1786614105.190055
+      ]
+    }
+  }
+}

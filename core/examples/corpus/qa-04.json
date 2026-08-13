@@ -1,0 +1,65 @@
+{
+  "schema_version": 0,
+  "id": "qa-04",
+  "name": "qa",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2138.4531250223517,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "What gas do plants absorb?"
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXDJALxUwmbBbHGJ3FE",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Plants absorb **carbon dioxide (CO₂)** from the air during photosynthesis. They use it along with water and sunlight to produce glucose (sugar) for energy and release oxygen as a byproduct.\n\nPlants also absorb small amounts of other gases like oxygen (which they use for respiration, just like animals do).",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 14,
+          "output_tokens": 75,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:52109a1de7307635b20f99fa84613997a0d763432b10a7c15e4ced44206f085d",
+      "usage": {
+        "input_tokens": 14,
+        "output_tokens": 75
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

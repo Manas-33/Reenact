@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-08",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2743.456957861781,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of climate change."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXUVQCD2cLUQbcqe5Bb",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Two Key Aspects of Climate Change\n\n1. **Rising Global Temperatures**\n   - Earth's average temperature has increased approximately 1.1°C (2°F) since pre-industrial times\n   - Caused primarily by greenhouse gas emissions from burning fossil fuels\n\n2. **Extreme Weather Events**\n   - Increased frequency and intensity of hurricanes, droughts, floods, and heatwaves\n   - These events threaten ecosystems, agriculture, infrastructure, and human safety",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 15,
+          "output_tokens": 109,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:c899e039edeee365ff85604279d05c05bd154ae3ef423bd454e69559c866c2ea",
+      "usage": {
+        "input_tokens": 15,
+        "output_tokens": 109
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1975.9923331439495,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\n# Two Key Aspects of Climate Change\n\n1. **Rising Global Temperatures**\n   - Earth's average temperature has increased approximately 1.1°C (2°F) since pre-industrial times\n   - Caused primarily by greenhouse gas emissions from burning fossil fuels\n\n2. **Extreme Weather Events**\n   - Increased frequency and intensity of hurricanes, droughts, floods, and heatwaves\n   - These events threaten ecosystems, agriculture, infrastructure, and human safety\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXUhs3BAbuLdLHnBLLk",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Rising global temperatures intensify extreme weather events by adding more energy to atmospheric systems, creating stronger hurricanes, longer droughts, and more severe floods that increasingly endanger communities worldwide.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 125,
+          "output_tokens": 39,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:696539f5823c3687c28e2f7944d80c7c52234114861dcad2cbb667f3911c7fc9",
+      "usage": {
+        "input_tokens": 125,
+        "output_tokens": 39
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1302.1452918183059,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: Rising global temperatures intensify extreme weather events by adding more energy to atmospheric systems, creating stronger hurricanes, longer droughts, and more severe floods that increasingly endanger communities worldwide."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXUqRi3oNwbVyp6ewDN",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Climate change fuels more intense hurricanes, droughts, and floods by adding energy to atmospheric systems, threatening communities globally.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 50,
+          "output_tokens": 28,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:f581ad4d7c0cb489cc194739562a2ca0d873f314b27c57f932fc944133c384da",
+      "usage": {
+        "input_tokens": 50,
+        "output_tokens": 28
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

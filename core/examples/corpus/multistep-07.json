@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-07",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 3090.984124923125,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of the internet."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXTzjWxQ8huWpqhi5ZQ",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Two Key Aspects of the Internet\n\n1. **Connectivity and Communication**\n   - The internet connects billions of devices and people worldwide, enabling instant communication through email, messaging, video calls, and social media across vast distances.\n\n2. **Information Access and Sharing**\n   - The internet provides unprecedented access to vast amounts of information and knowledge, allowing users to search, retrieve, and share data, documents, media, and resources globally.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 15,
+          "output_tokens": 96,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:be8ef25f8e47f1d448f2d36d068734b7dc030a2844921d94915f357a99de72df",
+      "usage": {
+        "input_tokens": 15,
+        "output_tokens": 96
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2389.591374900192,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\n# Two Key Aspects of the Internet\n\n1. **Connectivity and Communication**\n   - The internet connects billions of devices and people worldwide, enabling instant communication through email, messaging, video calls, and social media across vast distances.\n\n2. **Information Access and Sharing**\n   - The internet provides unprecedented access to vast amounts of information and knowledge, allowing users to search, retrieve, and share data, documents, media, and resources globally.\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXUETmRgftfJNsKHzMi",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The internet's global connectivity infrastructure enables seamless information sharing and communication, allowing billions of users to instantly exchange knowledge, ideas, and media across any distance.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 112,
+          "output_tokens": 34,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:b88d214c165142c541b2e434bd23637c16d077b9cdf826f8dbea59296e56c2f0",
+      "usage": {
+        "input_tokens": 112,
+        "output_tokens": 34
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1183.8866667822003,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: The internet's global connectivity infrastructure enables seamless information sharing and communication, allowing billions of users to instantly exchange knowledge, ideas, and media across any distance."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXUQEt9iWgf6or6Tumb",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The internet connects billions of people worldwide to instantly share information, ideas, and media regardless of distance.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 45,
+          "output_tokens": 23,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:15cece6b9f95fa5a1a20778fa3349b44af8931cee7d44712fe6541b0d33489a6",
+      "usage": {
+        "input_tokens": 45,
+        "output_tokens": 23
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

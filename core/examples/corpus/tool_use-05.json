@@ -1,0 +1,200 @@
+{
+  "schema_version": 0,
+  "id": "tool_use-05",
+  "name": "tool_use",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1298.424458829686,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "What's the weather in Lima? Use the get_weather tool."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXGJUXqcPJjphxU1ZZW",
+        "container": null,
+        "content": [
+          {
+            "id": "toolu_01UEZkZjrTLz9MH5XygbPSf1",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "Lima"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 573,
+          "output_tokens": 53,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:6f036644494b56d07a22f784d6217e00ea5e6992120747c4694fe4c79c12cc92",
+      "usage": {
+        "input_tokens": 573,
+        "output_tokens": 53
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "Lima"
+      },
+      "result": "20C and foggy",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1044.8474171571434,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "What's the weather in Lima? Use the get_weather tool."
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "id": "toolu_01UEZkZjrTLz9MH5XygbPSf1",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "Lima"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_01UEZkZjrTLz9MH5XygbPSf1",
+                "content": "20C and foggy"
+              }
+            ]
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXGQbsx9wtkSCQDVHzV",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The weather in Lima is currently 20°C and foggy.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 644,
+          "output_tokens": 17,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:769cf5adb1730e0c9821e59089ad04f91ae4f90514986c22d29cb1974bd1438d",
+      "usage": {
+        "input_tokens": 644,
+        "output_tokens": 17
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-13",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 3823.013166896999,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of black holes."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXWoTSj88u7bLr7v4BL",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Two Key Aspects of Black Holes\n\n1. **Event Horizon** - The boundary of no return surrounding a black hole. Once anything (including light) crosses this threshold, it cannot escape the black hole's gravitational pull.\n\n2. **Extreme Gravity** - Black holes have incredibly intense gravitational fields created by a massive amount of matter compressed into an extremely small space, warping spacetime to an extreme degree.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 15,
+          "output_tokens": 93,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:fb764c23d2ff4ea2da9722632901abcde6fe0b4b9e5faf11a38bf36ae466e0af",
+      "usage": {
+        "input_tokens": 15,
+        "output_tokens": 93
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1541.0997080616653,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\n# Two Key Aspects of Black Holes\n\n1. **Event Horizon** - The boundary of no return surrounding a black hole. Once anything (including light) crosses this threshold, it cannot escape the black hole's gravitational pull.\n\n2. **Extreme Gravity** - Black holes have incredibly intense gravitational fields created by a massive amount of matter compressed into an extremely small space, warping spacetime to an extreme degree.\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXX5HhNKzxkBQr4Hhsi",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The event horizon marks the precise boundary where a black hole's extreme gravity becomes so overwhelming that not even light can achieve the escape velocity needed to cross back out.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 109,
+          "output_tokens": 35,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:24b930005c810ec8a93782b85ebe5ab2f21e84d43afd5b6b850d4afbd3044d65",
+      "usage": {
+        "input_tokens": 109,
+        "output_tokens": 35
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1221.7791250441223,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: The event horizon marks the precise boundary where a black hole's extreme gravity becomes so overwhelming that not even light can achieve the escape velocity needed to cross back out."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXXCzJMypFvNChytbuM",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The event horizon is the boundary around a black hole beyond which nothing, not even light, can escape.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 46,
+          "output_tokens": 24,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:4b32e18705cc6ba90a3aeebc703f3e7e5cfac81c2bebe2d0d9be26139082379e",
+      "usage": {
+        "input_tokens": 46,
+        "output_tokens": 24
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

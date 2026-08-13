@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-16",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 3483.4409579634666,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of encryption."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXYDdXJ1TswyQaiDPip",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Two Key Aspects of Encryption\n\n1. **Confidentiality**\n   - Encryption transforms readable data (plaintext) into an unreadable format (ciphertext) to protect sensitive information from unauthorized access\n   - Ensures that only parties with the correct decryption key can access the original data\n\n2. **Authentication/Integrity**\n   - Encryption can verify the identity of the sender and ensure data hasn't been tampered with during transmission\n   - Uses cryptographic keys to confirm that messages come from legitimate sources and remain unchanged",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 14,
+          "output_tokens": 120,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:f538e89d278d87d8b55a75e8349aec468dc31113ea31994c75a83d0b081fef7e",
+      "usage": {
+        "input_tokens": 14,
+        "output_tokens": 120
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2346.939417067915,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\n# Two Key Aspects of Encryption\n\n1. **Confidentiality**\n   - Encryption transforms readable data (plaintext) into an unreadable format (ciphertext) to protect sensitive information from unauthorized access\n   - Ensures that only parties with the correct decryption key can access the original data\n\n2. **Authentication/Integrity**\n   - Encryption can verify the identity of the sender and ensure data hasn't been tampered with during transmission\n   - Uses cryptographic keys to confirm that messages come from legitimate sources and remain unchanged\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXYV8gWCC2YphGgSZLw",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Encryption provides both confidentiality by concealing data from unauthorized viewers and authentication by ensuring the data originates from a verified source and remains unaltered during transmission.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 136,
+          "output_tokens": 37,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:52b5910c5eb63aef80c727dbde47dc2c191b8bc5803c874b673d73c0de0b9fca",
+      "usage": {
+        "input_tokens": 136,
+        "output_tokens": 37
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1426.9863748922944,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: Encryption provides both confidentiality by concealing data from unauthorized viewers and authentication by ensuring the data originates from a verified source and remains unaltered during transmission."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXYedgM2WVWy7TSPgKK",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Encryption ensures data confidentiality and authentication by concealing information from unauthorized access and verifying its source and integrity.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 48,
+          "output_tokens": 27,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:f625a486791ea2ec89def03ab44d4837340c032e9509976fb6810cf6b76a611e",
+      "usage": {
+        "input_tokens": 48,
+        "output_tokens": 27
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

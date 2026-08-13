@@ -1,0 +1,200 @@
+{
+  "schema_version": 0,
+  "id": "tool_use-07",
+  "name": "tool_use",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1435.7197089120746,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "What's the weather in Reykjavik? Use the get_weather tool."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXGf6278YduEhzg2bmw",
+        "container": null,
+        "content": [
+          {
+            "id": "toolu_01WrX5LV7HixKquohTLBgLSi",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "Reykjavik"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 577,
+          "output_tokens": 57,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:ed6729c6c3176c683dd74de05fdaa44c0754f070616cdf7ee4c4ffc791634a87",
+      "usage": {
+        "input_tokens": 577,
+        "output_tokens": 57
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "Reykjavik"
+      },
+      "result": "3C and windy",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1353.2129579689354,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "What's the weather in Reykjavik? Use the get_weather tool."
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "id": "toolu_01WrX5LV7HixKquohTLBgLSi",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "Reykjavik"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_01WrX5LV7HixKquohTLBgLSi",
+                "content": "3C and windy"
+              }
+            ]
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXGkoZdMF58kr68CyVA",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The weather in Reykjavik is currently 3°C and windy.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 652,
+          "output_tokens": 21,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:182bb8d29afbf7d010552141bca9a16323c4d299b883e81f6fe8e3bffc333787",
+      "usage": {
+        "input_tokens": 652,
+        "output_tokens": 21
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

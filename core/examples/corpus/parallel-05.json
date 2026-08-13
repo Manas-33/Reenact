@@ -1,0 +1,240 @@
+{
+  "schema_version": 0,
+  "id": "parallel-05",
+  "name": "parallel",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1873.5965411178768,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "Report the current weather for each of these cities: Nairobi, Lima. Call get_weather once for every city."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXLXrZPf1C3UGWdJqhj",
+        "container": null,
+        "content": [
+          {
+            "id": "toolu_01D6d9Rv46yRSaYWS9eJQd8n",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "Nairobi"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          },
+          {
+            "id": "toolu_01EDHd2eCopW4XJPrcaGDis8",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "Lima"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 585,
+          "output_tokens": 92,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:55ce945fa2c8f2037c7f009297d81b4a58ccf701a0bd1ef64d28685168cf3ea2",
+      "usage": {
+        "input_tokens": 585,
+        "output_tokens": 92
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "Nairobi"
+      },
+      "result": "26C and humid",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 2,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "Lima"
+      },
+      "result": "20C and foggy",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 3,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2042.2873748466372,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "Report the current weather for each of these cities: Nairobi, Lima. Call get_weather once for every city."
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "id": "toolu_01D6d9Rv46yRSaYWS9eJQd8n",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "Nairobi"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              },
+              {
+                "id": "toolu_01EDHd2eCopW4XJPrcaGDis8",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "Lima"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_01D6d9Rv46yRSaYWS9eJQd8n",
+                "content": "26C and humid"
+              },
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_01EDHd2eCopW4XJPrcaGDis8",
+                "content": "20C and foggy"
+              }
+            ]
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXLefL4iRViM556VyrE",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Here's the current weather for each city:\n\n- **Nairobi**: 26°C and humid\n- **Lima**: 20°C and foggy",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 750,
+          "output_tokens": 38,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:c8e8d1a742997dca0c4e953b42a7a87814b21a4b3dc0432c13450693647d1779",
+      "usage": {
+        "input_tokens": 750,
+        "output_tokens": 38
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

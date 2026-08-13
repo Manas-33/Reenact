@@ -1,0 +1,65 @@
+{
+  "schema_version": 0,
+  "id": "qa-12",
+  "name": "qa",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2022.3677908070385,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "What metal is liquid at room temperature?"
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXEMjvx5fZbPAJNyvtb",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Mercury is the metal that is liquid at room temperature.\n\nIt has a melting point of -38.83°C (-37.89°F), which means it remains liquid across a wide range of temperatures that humans typically experience.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 15,
+          "output_tokens": 51,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:15dfb80acf5d492cacea94206653fd7ff201c76fc13d46c44e153954520b62d3",
+      "usage": {
+        "input_tokens": 15,
+        "output_tokens": 51
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

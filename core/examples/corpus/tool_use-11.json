@@ -1,0 +1,200 @@
+{
+  "schema_version": 0,
+  "id": "tool_use-11",
+  "name": "tool_use",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2212.538708001375,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "What's the weather in Cairo? Use the get_weather tool."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXHW4Kha1bJDAKhdhnW",
+        "container": null,
+        "content": [
+          {
+            "id": "toolu_01JzBcGqFxxrQB1zrBLbKfp6",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "Cairo"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 573,
+          "output_tokens": 53,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:a97e0a9316c67019d7eeb317ca4c6ab64d335c44dd1020d1ec6544e9ca02e1a0",
+      "usage": {
+        "input_tokens": 573,
+        "output_tokens": 53
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "Cairo"
+      },
+      "result": "33C and sunny",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1180.5690829642117,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "What's the weather in Cairo? Use the get_weather tool."
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "id": "toolu_01JzBcGqFxxrQB1zrBLbKfp6",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "Cairo"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_01JzBcGqFxxrQB1zrBLbKfp6",
+                "content": "33C and sunny"
+              }
+            ]
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXHegz3sxDNncTivoaK",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The current weather in Cairo is 33°C and sunny.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 643,
+          "output_tokens": 16,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:5f688ca8424fa128b33375a26ff54b91ba0cbc5b2a548938635151b0b9fd119a",
+      "usage": {
+        "input_tokens": 643,
+        "output_tokens": 16
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

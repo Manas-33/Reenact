@@ -1,0 +1,72 @@
+{
+  "schema_version": 0,
+  "id": "timestamped-13",
+  "name": "timestamped",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1377.1999168675393,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "system": "The current time is 2026-08-13T09:42:03.192940+00:00.",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Give a time-appropriate farewell."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXdcLuFjtdGaWYrDzkD",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Good morning! Have a wonderful day ahead!",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 40,
+          "output_tokens": 12,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:827db284935946b84c9f458efd1836088dee379c4eb922aa2213a4fa6c69618c",
+      "usage": {
+        "input_tokens": 40,
+        "output_tokens": 12
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {
+    "entropy": {
+      "clock": [
+        1786614123.19294
+      ]
+    }
+  }
+}

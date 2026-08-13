@@ -1,0 +1,65 @@
+{
+  "schema_version": 0,
+  "id": "qa-08",
+  "name": "qa",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1917.3992078285664,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Name the closest star to Earth."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXDswbjzFvrnSfcLukK",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The closest star to Earth is **the Sun**.\n\nIf you're asking about the closest star *other than* the Sun, that would be **Proxima Centauri**, which is about 4.24 light-years away.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 14,
+          "output_tokens": 54,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:c37d8cb7a40c7cdde61ddd6286dc03eff396ca2e8b2d2e7e5697da4016f55c59",
+      "usage": {
+        "input_tokens": 14,
+        "output_tokens": 54
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

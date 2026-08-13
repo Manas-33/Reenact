@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-00",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2814.316916046664,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of photosynthesis."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXQU2Ugh4soKqN1dUZc",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Two Key Aspects of Photosynthesis\n\n1. **Light-dependent reactions (Light Reactions)**\n   - Occur in the thylakoid membranes of chloroplasts\n   - Capture light energy and convert it into chemical energy (ATP and NADPH)\n   - Produce oxygen as a byproduct from splitting water molecules\n\n2. **Light-independent reactions (Calvin Cycle)**\n   - Occur in the stroma of chloroplasts\n   - Use ATP and NADPH from light reactions to convert carbon dioxide into glucose\n   - Also called carbon fixation or the \"dark reactions\" (though they don't require darkness)",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 17,
+          "output_tokens": 146,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:8d2f0187ea4507550ff8f1c13b184ae66127ee1bfe941ced865d784218415baf",
+      "usage": {
+        "input_tokens": 17,
+        "output_tokens": 146
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1373.648124979809,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\n# Two Key Aspects of Photosynthesis\n\n1. **Light-dependent reactions (Light Reactions)**\n   - Occur in the thylakoid membranes of chloroplasts\n   - Capture light energy and convert it into chemical energy (ATP and NADPH)\n   - Produce oxygen as a byproduct from splitting water molecules\n\n2. **Light-independent reactions (Calvin Cycle)**\n   - Occur in the stroma of chloroplasts\n   - Use ATP and NADPH from light reactions to convert carbon dioxide into glucose\n   - Also called carbon fixation or the \"dark reactions\" (though they don't require darkness)\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXQg4HB29nSvZDo1AxF",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The light-dependent reactions provide the ATP and NADPH energy carriers that power the Calvin cycle to build glucose from carbon dioxide.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 162,
+          "output_tokens": 29,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:3981e92a40a9858ef189c1b7d56246ca3740d1e1aa9579e13d103624a1673fba",
+      "usage": {
+        "input_tokens": 162,
+        "output_tokens": 29
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1623.7764998804778,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: The light-dependent reactions provide the ATP and NADPH energy carriers that power the Calvin cycle to build glucose from carbon dioxide."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXQmyjM5HLNSq76LoyQ",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The light-dependent reactions produce ATP and NADPH that fuel the Calvin cycle to synthesize glucose from CO₂.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 40,
+          "output_tokens": 28,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:3ec97d452e73e3ac8fa662b887e7cac9b0d92ab5d18813ad57afdf3e612ef0f3",
+      "usage": {
+        "input_tokens": 40,
+        "output_tokens": 28
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

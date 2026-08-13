@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-11",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 3229.326708940789,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of vaccination."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXVumBLtrBvW6LFw7tv",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Two Key Aspects of Vaccination\n\n1. **Individual Protection (Immunity)**\n   - Vaccines train the immune system to recognize and fight specific pathogens without causing the actual disease\n   - They provide personal protection by creating antibodies and immune memory cells\n\n2. **Community Protection (Herd Immunity)**\n   - When a high percentage of the population is vaccinated, disease spread is significantly reduced\n   - This protects vulnerable individuals who cannot be vaccinated (such as infants, immunocompromised people, or those with allergies to vaccine components)",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 14,
+          "output_tokens": 125,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:a156a41f0212fc7f4ab12efbf34f11f6117e4fb1504e0dc9eef781329650714f",
+      "usage": {
+        "input_tokens": 14,
+        "output_tokens": 125
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1635.3662500623614,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\n# Two Key Aspects of Vaccination\n\n1. **Individual Protection (Immunity)**\n   - Vaccines train the immune system to recognize and fight specific pathogens without causing the actual disease\n   - They provide personal protection by creating antibodies and immune memory cells\n\n2. **Community Protection (Herd Immunity)**\n   - When a high percentage of the population is vaccinated, disease spread is significantly reduced\n   - This protects vulnerable individuals who cannot be vaccinated (such as infants, immunocompromised people, or those with allergies to vaccine components)\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXW9UBbKMJ8kkH2VDVy",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "When enough individuals gain immunity through vaccination, their collective protection creates a shield that safeguards the entire community, including those too vulnerable to be vaccinated themselves.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 141,
+          "output_tokens": 35,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:101b0d534c26d8c822f140d3110b6dadffd4882cf7d787238052f747e25e4913",
+      "usage": {
+        "input_tokens": 141,
+        "output_tokens": 35
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1321.2083340622485,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: When enough individuals gain immunity through vaccination, their collective protection creates a shield that safeguards the entire community, including those too vulnerable to be vaccinated themselves."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXWGV7fHVN1AL2Q5WXv",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Herd immunity from vaccination protects vulnerable unvaccinated individuals by creating community-wide disease resistance.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 46,
+          "output_tokens": 25,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:2efaf3fb5e7a9db0053c738024bb83de6dd5b1d12325a13812492837ff3a7771",
+      "usage": {
+        "input_tokens": 46,
+        "output_tokens": 25
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

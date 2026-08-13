@@ -1,0 +1,280 @@
+{
+  "schema_version": 0,
+  "id": "parallel-19",
+  "name": "parallel",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2490.618749987334,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "Report the current weather for each of these cities: Oslo, London, Lima. Call get_weather once for every city."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXQBnRMh7bkJAjDsDVu",
+        "container": null,
+        "content": [
+          {
+            "id": "toolu_017wKT5GKhEerQz744KhcBdh",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "Oslo"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          },
+          {
+            "id": "toolu_01NiMdnM9zsUevN5pp9qbRHN",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "London"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          },
+          {
+            "id": "toolu_012m1HXYxWKq4Kt9CftRBenG",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "city": "Lima"
+            },
+            "name": "get_weather",
+            "type": "tool_use"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 584,
+          "output_tokens": 125,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:bddc31de9e3752d870da3277c7bd65ec32521364e53d1605fa172728f672cda3",
+      "usage": {
+        "input_tokens": 584,
+        "output_tokens": 125
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "Oslo"
+      },
+      "result": "5C and snowy",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 2,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "London"
+      },
+      "result": "12C and rainy",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 3,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "get_weather",
+      "arguments": {
+        "city": "Lima"
+      },
+      "result": "20C and foggy",
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 4,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1329.8096670769155,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "tools": [
+          {
+            "name": "get_weather",
+            "description": "Look up the current weather for a city.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "Report the current weather for each of these cities: Oslo, London, Lima. Call get_weather once for every city."
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "id": "toolu_017wKT5GKhEerQz744KhcBdh",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "Oslo"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              },
+              {
+                "id": "toolu_01NiMdnM9zsUevN5pp9qbRHN",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "London"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              },
+              {
+                "id": "toolu_012m1HXYxWKq4Kt9CftRBenG",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "city": "Lima"
+                },
+                "name": "get_weather",
+                "type": "tool_use"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_017wKT5GKhEerQz744KhcBdh",
+                "content": "5C and snowy"
+              },
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_01NiMdnM9zsUevN5pp9qbRHN",
+                "content": "12C and rainy"
+              },
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_012m1HXYxWKq4Kt9CftRBenG",
+                "content": "20C and foggy"
+              }
+            ]
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXQNGxAhbGRpfhEQryJ",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Here's the current weather for each city:\n\n- **Oslo**: 5°C and snowy\n- **London**: 12°C and rainy\n- **Lima**: 20°C and foggy",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 813,
+          "output_tokens": 48,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:00a1d9d92fbbb51307d02d2cd9ba1b2deb5c12bb53f1a65a730f980e2c30bd45",
+      "usage": {
+        "input_tokens": 813,
+        "output_tokens": 48
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

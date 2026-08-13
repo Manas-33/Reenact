@@ -1,0 +1,72 @@
+{
+  "schema_version": 0,
+  "id": "timestamped-19",
+  "name": "timestamped",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 4978.599916910753,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "system": "The current time is 2026-08-13T09:42:24.861650+00:00.",
+        "messages": [
+          {
+            "role": "user",
+            "content": "What is a sensible next hour to plan?"
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXfD5UjquadSA2sBVPn",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "I'd be happy to help you plan the next hour, but I need a bit more context! A sensible next hour depends on several factors:\n\n**Could you tell me:**\n- What time is it for you right now?\n- What have you been doing today so far?\n- What are your priorities or goals for today?\n- Do you have any commitments, deadlines, or appointments coming up?\n- How are you feeling energy-wise (alert, tired, hungry, etc.)?\n\n**Some general frameworks for the next hour:**\n\n- **If it's morning:** Focus work, important tasks, exercise\n- **If it's midday:** Wrap up morning tasks, lunch, lighter work\n- **If it's afternoon:** Deep work session, meetings, or administrative tasks\n- **If it's evening:** Wind down, meal prep, personal time, planning tomorrow\n\nLet me know your situation and I can suggest a more specific plan!",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 42,
+          "output_tokens": 204,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:54a43a3fe16c7b45f6b46c69d3fbf1014565e0da31b8ca4456d2ca5b49a8e2ff",
+      "usage": {
+        "input_tokens": 42,
+        "output_tokens": 204
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {
+    "entropy": {
+      "clock": [
+        1786614144.86165
+      ]
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 0,
+  "id": "qa-00",
+  "name": "qa",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1350.3395000007004,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "What is the capital of France?"
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXCwm1RWEojnfWMP4uo",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "The capital of France is Paris.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 14,
+          "output_tokens": 10,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:282dc3d2fe186166ae5f00ed053631b95c054a4bfe1e4a8421c78b63b142443c",
+      "usage": {
+        "input_tokens": 14,
+        "output_tokens": 10
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

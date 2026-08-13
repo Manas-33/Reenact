@@ -1,0 +1,72 @@
+{
+  "schema_version": 0,
+  "id": "timestamped-06",
+  "name": "timestamped",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 6153.86158390902,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "system": "The current time is 2026-08-13T09:41:34.706521+00:00.",
+        "messages": [
+          {
+            "role": "user",
+            "content": "What is a good activity for right now?"
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXbXi3G3FLzHczmH65h",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Looking at the current time (August 13, 2026, around 9:41 AM), here are some good activity suggestions:\n\n**Morning energizers:**\n- **Go for a walk or jog** - great time before it gets too hot\n- **Have a proper breakfast** - fuel up for the day if you haven't already\n- **Tackle a priority task** - your mind is likely fresh and focused\n- **Do some stretching or yoga** - gentle way to wake up your body\n\n**Productive options:**\n- **Plan your day** - spend 10 minutes organizing priorities\n- **Start a creative project** - morning clarity is great for creative work\n- **Learn something new** - read, take an online course, or practice a skill\n\n**If you need something lighter:**\n- **Call a friend or family member** - catch up with someone\n- **Tend to plants or do light tidying** - satisfying and grounding\n- **Enjoy coffee/tea outside** - if weather permits\n\nWhat kind of mood are you in? I can give more specific suggestions!",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 41,
+          "output_tokens": 239,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:26c553491ccac5531922203ed9807f44c9c4b745900e9741988e6eaabd18ae11",
+      "usage": {
+        "input_tokens": 41,
+        "output_tokens": 239
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {
+    "entropy": {
+      "clock": [
+        1786614094.706521
+      ]
+    }
+  }
+}

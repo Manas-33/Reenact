@@ -1,0 +1,72 @@
+{
+  "schema_version": 0,
+  "id": "timestamped-02",
+  "name": "timestamped",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1181.3598331063986,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "system": "The current time is 2026-08-13T09:41:22.907907+00:00.",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Give a one-line greeting for the current time."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXaeCwQowZ5BnKcz7qJ",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Good morning! It's Thursday, August 13th, 2026.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 43,
+          "output_tokens": 19,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:ec58b0ff796af569cad2b2bd8fbb43c871de99b4dcba9055ce25d7886a0685a4",
+      "usage": {
+        "input_tokens": 43,
+        "output_tokens": 19
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {
+    "entropy": {
+      "clock": [
+        1786614082.907907
+      ]
+    }
+  }
+}

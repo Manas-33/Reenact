@@ -1,0 +1,177 @@
+{
+  "schema_version": 0,
+  "id": "multistep-06",
+  "name": "multistep",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 3069.5343750994653,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "List two key aspects of natural selection."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXTZyk2qcL4JCysW98M",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Two Key Aspects of Natural Selection\n\n1. **Variation and Heredity**\n   - Individuals within a population have different traits (variation)\n   - These traits must be heritable (passed from parents to offspring through genes)\n\n2. **Differential Survival and Reproduction**\n   - Individuals with traits better suited to their environment are more likely to survive and reproduce\n   - This leads to advantageous traits becoming more common in the population over time\n\nThese aspects work together: heritable variation provides the raw material, while differential reproductive success determines which traits become more prevalent across generations.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 15,
+          "output_tokens": 130,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:8686e5173f07622c360cf2ff2bd1b047ca2caeb7e32504d7071ec561e54d89e5",
+      "usage": {
+        "input_tokens": 15,
+        "output_tokens": 130
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1693.2024999987334,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Given these aspects:\n# Two Key Aspects of Natural Selection\n\n1. **Variation and Heredity**\n   - Individuals within a population have different traits (variation)\n   - These traits must be heritable (passed from parents to offspring through genes)\n\n2. **Differential Survival and Reproduction**\n   - Individuals with traits better suited to their environment are more likely to survive and reproduce\n   - This leads to advantageous traits becoming more common in the population over time\n\nThese aspects work together: heritable variation provides the raw material, while differential reproductive success determines which traits become more prevalent across generations.\nWrite one sentence connecting them."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXTnquA8ck9WkvF1AwA",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Heritable variation among individuals provides the raw material upon which differential survival and reproduction can act, allowing advantageous traits to accumulate in populations over generations.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 146,
+          "output_tokens": 35,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:d075d4cacdc60774e3866d2ddfd4144b9dc122155a766e53b58fd4199cc4b2ad",
+      "usage": {
+        "input_tokens": 146,
+        "output_tokens": 35
+      },
+      "cost_usd": null
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 1105.6418749503791,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize in one line: Heritable variation among individuals provides the raw material upon which differential survival and reproduction can act, allowing advantageous traits to accumulate in populations over generations."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXTv4EQKuUHmUfu84rU",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Natural selection acts on heritable variation to increase the frequency of advantageous traits across generations.",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 46,
+          "output_tokens": 22,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:86da1ef3adb442766c849772b3bc0f2c1cc524729934b95f36cc57305bd4dc3a",
+      "usage": {
+        "input_tokens": 46,
+        "output_tokens": 22
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {}
+}

@@ -106,10 +106,19 @@ class Recorder:
 
         Arguments and result are redacted before storage. ``side_effect`` records
         whether the tool is read-only or mutating, which the replay policy uses
-        to decide whether it may re-run.
+        to decide whether it may re-run. When ``parent_seq`` is not given it
+        defaults to the most recent LLM call, so tool calls a model fires in one
+        turn share a parent and replay matches them as an unordered window.
         """
         args: dict[str, Any] = arguments if arguments is not None else {}
         safe_args: dict[str, Any] = redact(args, self._scrub_keys)
+        if parent_seq is None:
+            llm_seqs = (
+                e.seq
+                for e in reversed(self.trajectory.events)
+                if isinstance(e, LLMCallEvent)
+            )
+            parent_seq = next(llm_seqs, None)
         event = ToolCallEvent(
             seq=len(self.trajectory.events),
             parent_seq=parent_seq,

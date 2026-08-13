@@ -1,0 +1,72 @@
+{
+  "schema_version": 0,
+  "id": "timestamped-16",
+  "name": "timestamped",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 6962.37004105933,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "system": "The current time is 2026-08-13T09:42:13.299034+00:00.",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Suggest music for this time of day."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXeMnaCr4qSdWHB368c",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "# Morning Music Suggestions ☀️\n\nGiven that it's **9:42 AM** on a Thursday morning, here are some great music options:\n\n## ☕ **Coffee & Focus**\n- **Lo-fi Hip Hop** - Perfect background music for work or study\n- **Acoustic/Indie Folk** (Iron & Wine, Bon Iver) - Gentle and uplifting\n- **Classical Piano** (Ludovico Einaudi, Ólafur Arnalds) - Calm and concentrating\n\n## ⚡ **Energy Boost**\n- **Upbeat Indie Pop** (COIN, Fitz and the Tantrums) - Get motivated\n- **Funk/Soul** (Vulfpeck, Tom Misch) - Groovy morning vibes\n- **Classic Rock** (Fleetwood Mac, Eagles) - Timeless feel-good energy\n\n## 🎵 **Genre-Specific Playlists**\n- **Jazz Brunch** - Smooth jazz standards\n- **Sunny Day Playlist** - Feel-good summer hits\n- **Productive Morning** - Instrumental beats without lyrics\n\n**What mood are you in?** I can refine these suggestions based on whether you need focus music, energizing tunes, or something relaxing!",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 41,
+          "output_tokens": 305,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:4e3670b46dd645c135849e0a28a23441c58a45d5a3d51337945c696fb037bb8e",
+      "usage": {
+        "input_tokens": 41,
+        "output_tokens": 305
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {
+    "entropy": {
+      "clock": [
+        1786614133.299034
+      ]
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": 0,
+  "id": "timestamped-17",
+  "name": "timestamped",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 2998.2392091769725,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "system": "The current time is 2026-08-13T09:42:20.265059+00:00.",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Is it close to lunchtime?"
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXesP4R1uQdAsacaKWX",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Looking at the current time (9:42 AM), it's mid-morning - still a couple of hours before typical lunchtime. Most people eat lunch around 11:30 AM to 1:00 PM, so you've got about 1.5 to 3 hours to go depending on when you usually eat.\n\nAre you getting hungry already, or just planning ahead? 😊",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 40,
+          "output_tokens": 90,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:bda0aba80e9b63134270e4e081d4855daea3bf6617984107c8c89ceaa9fab038",
+      "usage": {
+        "input_tokens": 40,
+        "output_tokens": 90
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {
+    "entropy": {
+      "clock": [
+        1786614140.265059
+      ]
+    }
+  }
+}

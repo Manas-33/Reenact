@@ -1,0 +1,72 @@
+{
+  "schema_version": 0,
+  "id": "timestamped-12",
+  "name": "timestamped",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": 6232.58704203181,
+      "type": "llm_call",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 512,
+        "system": "The current time is 2026-08-13T09:41:56.959066+00:00.",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Name a task suited to this time."
+          }
+        ]
+      },
+      "response": {
+        "id": "msg_011CdzXd9hGsdYuvjKq2LTcS",
+        "container": null,
+        "content": [
+          {
+            "citations": null,
+            "text": "Given that it's mid-morning (9:41 AM) on a Thursday in August, here are some well-suited tasks:\n\n**Professional tasks:**\n- Tackle a challenging work project while your mind is fresh\n- Attend or schedule important meetings or video calls\n- Do focused, deep work that requires concentration\n\n**Personal tasks:**\n- Go for a morning workout or jog\n- Run errands (banks, post office, stores are open and less crowded than lunch)\n- Have a mid-morning coffee break and plan your day\n- Schedule appointments (doctor, dentist, etc.)\n\n**Most optimal:** This is prime time for **focused, cognitively demanding work** - your mental energy is typically at its peak in mid-morning, making it ideal for tasks requiring problem-solving, creativity, or strategic thinking.\n\nWhat type of activity are you looking to do - work-related or personal?",
+            "type": "text"
+          }
+        ],
+        "model": "claude-sonnet-4-5-20250929",
+        "role": "assistant",
+        "stop_details": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "type": "message",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "not_available",
+          "input_tokens": 40,
+          "output_tokens": 197,
+          "output_tokens_details": null,
+          "server_tool_use": null,
+          "service_tier": "standard"
+        }
+      },
+      "request_hash": "sha256:bb8b346576a233c6844fd732a5b2808b57e3180a567135dfc33045c74b6630a0",
+      "usage": {
+        "input_tokens": 40,
+        "output_tokens": 197
+      },
+      "cost_usd": null
+    }
+  ],
+  "metadata": {
+    "entropy": {
+      "clock": [
+        1786614116.9590662
+      ]
+    }
+  }
+}
