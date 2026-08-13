@@ -68,21 +68,25 @@ class Recorder:
         self,
         *,
         node: str,
-        checkpoint_id: str | None = None,
+        step: int | None = None,
+        thread_id: str | None = None,
+        checkpoint_ns: str | None = None,
         parent_seq: int | None = None,
         latency_ms: float | None = None,
     ) -> GraphNodeEvent:
         """Capture a LangGraph node boundary as an event.
 
-        The node name and checkpoint id are structural, not payload, so they are
-        stored as-is. Recording the checkpoint id now is what lets a later fork
-        anchor to the point a node ran.
+        The node name and checkpoint coordinates are structural, not payload, so
+        they are stored as-is. Recording ``(thread_id, step, checkpoint_ns)`` now
+        is what lets a later fork resolve the checkpoint the node ran at.
         """
         event = GraphNodeEvent(
             seq=len(self.trajectory.events),
             parent_seq=parent_seq,
             node=node,
-            checkpoint_id=checkpoint_id,
+            step=step,
+            thread_id=thread_id,
+            checkpoint_ns=checkpoint_ns,
             latency_ms=latency_ms,
         )
         self.trajectory.events.append(event)

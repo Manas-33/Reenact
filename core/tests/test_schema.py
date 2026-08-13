@@ -36,7 +36,9 @@ def _sample_trajectory() -> Trajectory:
                 result={"hits": 3},
                 side_effect=SideEffect.READ_ONLY,
             ),
-            GraphNodeEvent(seq=2, node="agent", checkpoint_id="ckpt-7"),
+            GraphNodeEvent(
+                seq=2, node="agent", step=1, thread_id="t1", checkpoint_ns="agent:abc"
+            ),
         ],
     )
 
@@ -56,7 +58,8 @@ def test_events_form_a_discriminated_union() -> None:
     assert isinstance(node, GraphNodeEvent)
     assert llm.request_hash == "abc123"
     assert tool.side_effect is SideEffect.READ_ONLY
-    assert node.checkpoint_id == "ckpt-7"
+    assert node.step == 1
+    assert node.checkpoint_ns == "agent:abc"
 
 
 def test_json_round_trip_rebuilds_event_types() -> None:

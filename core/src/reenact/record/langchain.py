@@ -53,14 +53,21 @@ def _graph_node(metadata: dict[str, Any] | None) -> str | None:
     return node if isinstance(node, str) else None
 
 
-def _checkpoint_id(metadata: dict[str, Any] | None) -> str | None:
-    """The checkpoint id active at this node, if the graph is checkpointed."""
-    if not isinstance(metadata, dict):
-        return None
-    for key in ("checkpoint_id", "langgraph_checkpoint_id"):
-        value: Any = metadata.get(key)
-        if isinstance(value, str):
-            return value
+def _str_field(metadata: dict[str, Any], key: str) -> str | None:
+    value: Any = metadata.get(key)
+    return value if isinstance(value, str) else None
+
+
+def _step(metadata: dict[str, Any]) -> int | None:
+    """The superstep number, which LangGraph reports as a string."""
+    value: Any = metadata.get("langgraph_step")
+    if isinstance(value, int):
+        return value
+    if isinstance(value, str):
+        try:
+            return int(value)
+        except ValueError:
+            return None
     return None
 
 
@@ -123,11 +130,13 @@ class ReenactCallbackHandler(BaseCallbackHandler):
         **kwargs: Any,
     ) -> None:
         node = _graph_node(metadata)
-        if node is None:
+        if node is None or metadata is None:
             return  # an ordinary Runnable chain, not a LangGraph node boundary
         self._pending_nodes[run_id] = {
             "node": node,
-            "checkpoint_id": _checkpoint_id(metadata),
+            "step": _step(metadata),
+            "thread_id": _str_field(metadata, "thread_id"),
+            "checkpoint_ns": _str_field(metadata, "langgraph_checkpoint_ns"),
         }
 
     def on_chain_end(
@@ -143,7 +152,9 @@ class ReenactCallbackHandler(BaseCallbackHandler):
             return  # not a node boundary we opened in on_chain_start
         self.recorder.record_graph_node(
             node=str(pending["node"]),
-            checkpoint_id=pending["checkpoint_id"],
+            step=pending["step"],
+            thread_id=pending["thread_id"],
+            checkpoint_ns=pending["checkpoint_ns"],
         )
 
     def on_tool_start(
