@@ -1,0 +1,785 @@
+{
+  "schema_version": 0,
+  "id": "demo-model-swap-42",
+  "name": "triage-42",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "llm_call",
+      "provider": "langchain",
+      "model": "claude-haiku-4-5-20251001",
+      "request": {
+        "model": "claude-haiku-4-5-20251001",
+        "messages": [
+          {
+            "content": "You are an issue-triage assistant for a software product. For the issue you are given: search the docs for relevant guidance, apply exactly one category label (one of: bug, billing, api), post a short helpful reply to the user, and finish with a one-sentence summary of what you did.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "system",
+            "name": null,
+            "id": "c077cd0f-ece9-4d22-8521-6a2fafbec538"
+          },
+          {
+            "content": "Issue #42: Password reset link doesn't work\n\nI click the reset link in my email but it just shows an error page.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "human",
+            "name": null,
+            "id": "fc4b9da2-752d-4a0e-8ca4-fa288c3ac78e"
+          }
+        ]
+      },
+      "response": {
+        "generations": [
+          [
+            {
+              "text": "I'll help you triage this issue. Let me search the documentation for information about password reset functionality.",
+              "generation_info": null,
+              "type": "ChatGeneration",
+              "message": {
+                "content": [
+                  {
+                    "text": "I'll help you triage this issue. Let me search the documentation for information about password reset functionality.",
+                    "type": "text"
+                  },
+                  {
+                    "id": "toolu_01N3jZDPG7xKDiWV9ZDnk9Wq",
+                    "caller": {
+                      "type": "direct"
+                    },
+                    "input": {
+                      "query": "password reset link email"
+                    },
+                    "name": "search_docs",
+                    "type": "tool_use"
+                  }
+                ],
+                "additional_kwargs": {},
+                "response_metadata": {
+                  "id": "msg_011Ce1fiym5m1H14mktMxHW8",
+                  "container": null,
+                  "model": "claude-haiku-4-5-20251001",
+                  "stop_details": null,
+                  "stop_reason": "tool_use",
+                  "stop_sequence": null,
+                  "usage": {
+                    "cache_creation": {
+                      "ephemeral_1h_input_tokens": 0,
+                      "ephemeral_5m_input_tokens": 0
+                    },
+                    "cache_creation_input_tokens": 0,
+                    "cache_read_input_tokens": 0,
+                    "inference_geo": "not_available",
+                    "input_tokens": 872,
+                    "output_tokens": 78,
+                    "output_tokens_details": null,
+                    "server_tool_use": null,
+                    "service_tier": "standard"
+                  },
+                  "model_name": "claude-haiku-4-5-20251001",
+                  "model_provider": "anthropic"
+                },
+                "type": "ai",
+                "name": null,
+                "id": "lc_run--019ffd99-8b81-7f62-8632-abfd3f4e2668-0"
+              }
+            }
+          ]
+        ],
+        "llm_output": {
+          "id": "msg_011Ce1fiym5m1H14mktMxHW8",
+          "container": null,
+          "model": "claude-haiku-4-5-20251001",
+          "stop_details": null,
+          "stop_reason": "tool_use",
+          "stop_sequence": null,
+          "usage": {
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 0,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "inference_geo": "not_available",
+            "input_tokens": 872,
+            "output_tokens": 78,
+            "output_tokens_details": null,
+            "server_tool_use": null,
+            "service_tier": "standard"
+          },
+          "model_name": "claude-haiku-4-5-20251001"
+        },
+        "run": null,
+        "type": "LLMResult"
+      },
+      "request_hash": "sha256:b33b5682371f8d226e726c2c353c3845d8de36a8eba3cb3800fa37cb7f27301a",
+      "usage": null,
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 1,
+      "thread_id": null,
+      "checkpoint_ns": "agent:992e7c5e-01b6-9be7-0bda-2291435cd05c"
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 1,
+      "thread_id": null,
+      "checkpoint_ns": "agent:992e7c5e-01b6-9be7-0bda-2291435cd05c"
+    },
+    {
+      "seq": 3,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "search_docs",
+      "arguments": {
+        "input": "{'query': 'password reset link email'}"
+      },
+      "result": {
+        "content": "Password reset: open Settings > Security and click Reset Password. A reset link is emailed and expires in one hour. If the link errors, it has usually expired - request a fresh one.",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "tool",
+        "name": "search_docs",
+        "id": null,
+        "tool_call_id": "toolu_01N3jZDPG7xKDiWV9ZDnk9Wq",
+        "artifact": null,
+        "status": "success"
+      },
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 4,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "tools",
+      "step": 2,
+      "thread_id": null,
+      "checkpoint_ns": "tools:f54c848c-002e-3a4b-fa15-6176990ca4b7"
+    },
+    {
+      "seq": 5,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "llm_call",
+      "provider": "langchain",
+      "model": "claude-haiku-4-5-20251001",
+      "request": {
+        "model": "claude-haiku-4-5-20251001",
+        "messages": [
+          {
+            "content": "You are an issue-triage assistant for a software product. For the issue you are given: search the docs for relevant guidance, apply exactly one category label (one of: bug, billing, api), post a short helpful reply to the user, and finish with a one-sentence summary of what you did.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "system",
+            "name": null,
+            "id": "c077cd0f-ece9-4d22-8521-6a2fafbec538"
+          },
+          {
+            "content": "Issue #42: Password reset link doesn't work\n\nI click the reset link in my email but it just shows an error page.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "human",
+            "name": null,
+            "id": "fc4b9da2-752d-4a0e-8ca4-fa288c3ac78e"
+          },
+          {
+            "content": [
+              {
+                "text": "I'll help you triage this issue. Let me search the documentation for information about password reset functionality.",
+                "type": "text"
+              },
+              {
+                "id": "toolu_01N3jZDPG7xKDiWV9ZDnk9Wq",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "query": "password reset link email"
+                },
+                "name": "search_docs",
+                "type": "tool_use"
+              }
+            ],
+            "additional_kwargs": {},
+            "response_metadata": {
+              "id": "msg_011Ce1fiym5m1H14mktMxHW8",
+              "container": null,
+              "model": "claude-haiku-4-5-20251001",
+              "stop_details": null,
+              "stop_reason": "tool_use",
+              "stop_sequence": null,
+              "usage": {
+                "cache_creation": {
+                  "ephemeral_1h_input_tokens": 0,
+                  "ephemeral_5m_input_tokens": 0
+                },
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "inference_geo": "not_available",
+                "input_tokens": 872,
+                "output_tokens": 78,
+                "output_tokens_details": null,
+                "server_tool_use": null,
+                "service_tier": "standard"
+              },
+              "model_name": "claude-haiku-4-5-20251001",
+              "model_provider": "anthropic"
+            },
+            "type": "ai",
+            "name": null,
+            "id": "lc_run--019ffd99-8b81-7f62-8632-abfd3f4e2668-0",
+            "tool_calls": [
+              {
+                "name": "search_docs",
+                "args": {
+                  "query": "password reset link email"
+                },
+                "id": "toolu_01N3jZDPG7xKDiWV9ZDnk9Wq",
+                "type": "tool_call"
+              }
+            ],
+            "invalid_tool_calls": [],
+            "usage_metadata": {
+              "input_tokens": 872,
+              "output_tokens": 78,
+              "total_tokens": 950,
+              "input_token_details": {
+                "cache_read": 0,
+                "cache_creation": 0,
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 0
+              }
+            }
+          },
+          {
+            "content": "Password reset: open Settings > Security and click Reset Password. A reset link is emailed and expires in one hour. If the link errors, it has usually expired - request a fresh one.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "search_docs",
+            "id": "0c6c984a-2201-458e-97e0-1f3996ec154a",
+            "tool_call_id": "toolu_01N3jZDPG7xKDiWV9ZDnk9Wq",
+            "artifact": null,
+            "status": "success"
+          }
+        ]
+      },
+      "response": {
+        "generations": [
+          [
+            {
+              "text": "Now let me label this issue and post a helpful reply:",
+              "generation_info": null,
+              "type": "ChatGeneration",
+              "message": {
+                "content": [
+                  {
+                    "text": "Now let me label this issue and post a helpful reply:",
+                    "type": "text"
+                  },
+                  {
+                    "id": "toolu_01Udfu7NS8sSdjvz3Gv2xBPw",
+                    "caller": {
+                      "type": "direct"
+                    },
+                    "input": {
+                      "issue_id": "42",
+                      "label": "bug"
+                    },
+                    "name": "label_issue",
+                    "type": "tool_use"
+                  },
+                  {
+                    "id": "toolu_015gc6R1NakKh76YEibbNDcm",
+                    "caller": {
+                      "type": "direct"
+                    },
+                    "input": {
+                      "issue_id": "42",
+                      "body": "Thanks for reporting this! Password reset links expire after one hour. If you're seeing an error page, the link has likely expired. Please try requesting a fresh reset link by going to Settings > Security and clicking Reset Password again. If you continue to experience issues, please let us know and we can investigate further."
+                    },
+                    "name": "post_reply",
+                    "type": "tool_use"
+                  }
+                ],
+                "additional_kwargs": {},
+                "response_metadata": {
+                  "id": "msg_011Ce1fj4wdXtPX3xXXoCjRA",
+                  "container": null,
+                  "model": "claude-haiku-4-5-20251001",
+                  "stop_details": null,
+                  "stop_reason": "tool_use",
+                  "stop_sequence": null,
+                  "usage": {
+                    "cache_creation": {
+                      "ephemeral_1h_input_tokens": 0,
+                      "ephemeral_5m_input_tokens": 0
+                    },
+                    "cache_creation_input_tokens": 0,
+                    "cache_read_input_tokens": 0,
+                    "inference_geo": "not_available",
+                    "input_tokens": 1000,
+                    "output_tokens": 201,
+                    "output_tokens_details": null,
+                    "server_tool_use": null,
+                    "service_tier": "standard"
+                  },
+                  "model_name": "claude-haiku-4-5-20251001",
+                  "model_provider": "anthropic"
+                },
+                "type": "ai",
+                "name": null,
+                "id": "lc_run--019ffd99-9025-7521-8aa9-0f04b27674be-0"
+              }
+            }
+          ]
+        ],
+        "llm_output": {
+          "id": "msg_011Ce1fj4wdXtPX3xXXoCjRA",
+          "container": null,
+          "model": "claude-haiku-4-5-20251001",
+          "stop_details": null,
+          "stop_reason": "tool_use",
+          "stop_sequence": null,
+          "usage": {
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 0,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "inference_geo": "not_available",
+            "input_tokens": 1000,
+            "output_tokens": 201,
+            "output_tokens_details": null,
+            "server_tool_use": null,
+            "service_tier": "standard"
+          },
+          "model_name": "claude-haiku-4-5-20251001"
+        },
+        "run": null,
+        "type": "LLMResult"
+      },
+      "request_hash": "sha256:e754e2256b5cb0735e4f66a1742dc697db4c5c4a4d0f665a78b20880f179d855",
+      "usage": null,
+      "cost_usd": null
+    },
+    {
+      "seq": 6,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 3,
+      "thread_id": null,
+      "checkpoint_ns": "agent:abc2e5b8-a662-e4ae-ea6a-05acea26f129"
+    },
+    {
+      "seq": 7,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 3,
+      "thread_id": null,
+      "checkpoint_ns": "agent:abc2e5b8-a662-e4ae-ea6a-05acea26f129"
+    },
+    {
+      "seq": 8,
+      "parent_seq": 5,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "label_issue",
+      "arguments": {
+        "input": "{'issue_id': '42', 'label': 'bug'}"
+      },
+      "result": {
+        "content": "labeled issue #42 as bug",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "tool",
+        "name": "label_issue",
+        "id": null,
+        "tool_call_id": "toolu_01Udfu7NS8sSdjvz3Gv2xBPw",
+        "artifact": null,
+        "status": "success"
+      },
+      "side_effect": "mutating"
+    },
+    {
+      "seq": 9,
+      "parent_seq": 5,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "post_reply",
+      "arguments": {
+        "input": "{'issue_id': '42', 'body': \"Thanks for reporting this! Password reset links expire after one hour. If you're seeing an error page, the link has likely expired. Please try requesting a fresh reset link by going to Settings > Security and clicking Reset Password again. If you continue to experience issues, please let us know and we can investigate further.\"}"
+      },
+      "result": {
+        "content": "posted reply to issue #42",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "tool",
+        "name": "post_reply",
+        "id": null,
+        "tool_call_id": "toolu_015gc6R1NakKh76YEibbNDcm",
+        "artifact": null,
+        "status": "success"
+      },
+      "side_effect": "mutating"
+    },
+    {
+      "seq": 10,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "tools",
+      "step": 4,
+      "thread_id": null,
+      "checkpoint_ns": "tools:c316d6a7-c35c-8121-facb-15d443e3b671"
+    },
+    {
+      "seq": 11,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "llm_call",
+      "provider": "langchain",
+      "model": "claude-haiku-4-5-20251001",
+      "request": {
+        "model": "claude-haiku-4-5-20251001",
+        "messages": [
+          {
+            "content": "You are an issue-triage assistant for a software product. For the issue you are given: search the docs for relevant guidance, apply exactly one category label (one of: bug, billing, api), post a short helpful reply to the user, and finish with a one-sentence summary of what you did.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "system",
+            "name": null,
+            "id": "c077cd0f-ece9-4d22-8521-6a2fafbec538"
+          },
+          {
+            "content": "Issue #42: Password reset link doesn't work\n\nI click the reset link in my email but it just shows an error page.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "human",
+            "name": null,
+            "id": "fc4b9da2-752d-4a0e-8ca4-fa288c3ac78e"
+          },
+          {
+            "content": [
+              {
+                "text": "I'll help you triage this issue. Let me search the documentation for information about password reset functionality.",
+                "type": "text"
+              },
+              {
+                "id": "toolu_01N3jZDPG7xKDiWV9ZDnk9Wq",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "query": "password reset link email"
+                },
+                "name": "search_docs",
+                "type": "tool_use"
+              }
+            ],
+            "additional_kwargs": {},
+            "response_metadata": {
+              "id": "msg_011Ce1fiym5m1H14mktMxHW8",
+              "container": null,
+              "model": "claude-haiku-4-5-20251001",
+              "stop_details": null,
+              "stop_reason": "tool_use",
+              "stop_sequence": null,
+              "usage": {
+                "cache_creation": {
+                  "ephemeral_1h_input_tokens": 0,
+                  "ephemeral_5m_input_tokens": 0
+                },
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "inference_geo": "not_available",
+                "input_tokens": 872,
+                "output_tokens": 78,
+                "output_tokens_details": null,
+                "server_tool_use": null,
+                "service_tier": "standard"
+              },
+              "model_name": "claude-haiku-4-5-20251001",
+              "model_provider": "anthropic"
+            },
+            "type": "ai",
+            "name": null,
+            "id": "lc_run--019ffd99-8b81-7f62-8632-abfd3f4e2668-0",
+            "tool_calls": [
+              {
+                "name": "search_docs",
+                "args": {
+                  "query": "password reset link email"
+                },
+                "id": "toolu_01N3jZDPG7xKDiWV9ZDnk9Wq",
+                "type": "tool_call"
+              }
+            ],
+            "invalid_tool_calls": [],
+            "usage_metadata": {
+              "input_tokens": 872,
+              "output_tokens": 78,
+              "total_tokens": 950,
+              "input_token_details": {
+                "cache_read": 0,
+                "cache_creation": 0,
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 0
+              }
+            }
+          },
+          {
+            "content": "Password reset: open Settings > Security and click Reset Password. A reset link is emailed and expires in one hour. If the link errors, it has usually expired - request a fresh one.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "search_docs",
+            "id": "0c6c984a-2201-458e-97e0-1f3996ec154a",
+            "tool_call_id": "toolu_01N3jZDPG7xKDiWV9ZDnk9Wq",
+            "artifact": null,
+            "status": "success"
+          },
+          {
+            "content": [
+              {
+                "text": "Now let me label this issue and post a helpful reply:",
+                "type": "text"
+              },
+              {
+                "id": "toolu_01Udfu7NS8sSdjvz3Gv2xBPw",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "issue_id": "42",
+                  "label": "bug"
+                },
+                "name": "label_issue",
+                "type": "tool_use"
+              },
+              {
+                "id": "toolu_015gc6R1NakKh76YEibbNDcm",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "issue_id": "42",
+                  "body": "Thanks for reporting this! Password reset links expire after one hour. If you're seeing an error page, the link has likely expired. Please try requesting a fresh reset link by going to Settings > Security and clicking Reset Password again. If you continue to experience issues, please let us know and we can investigate further."
+                },
+                "name": "post_reply",
+                "type": "tool_use"
+              }
+            ],
+            "additional_kwargs": {},
+            "response_metadata": {
+              "id": "msg_011Ce1fj4wdXtPX3xXXoCjRA",
+              "container": null,
+              "model": "claude-haiku-4-5-20251001",
+              "stop_details": null,
+              "stop_reason": "tool_use",
+              "stop_sequence": null,
+              "usage": {
+                "cache_creation": {
+                  "ephemeral_1h_input_tokens": 0,
+                  "ephemeral_5m_input_tokens": 0
+                },
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "inference_geo": "not_available",
+                "input_tokens": 1000,
+                "output_tokens": 201,
+                "output_tokens_details": null,
+                "server_tool_use": null,
+                "service_tier": "standard"
+              },
+              "model_name": "claude-haiku-4-5-20251001",
+              "model_provider": "anthropic"
+            },
+            "type": "ai",
+            "name": null,
+            "id": "lc_run--019ffd99-9025-7521-8aa9-0f04b27674be-0",
+            "tool_calls": [
+              {
+                "name": "label_issue",
+                "args": {
+                  "issue_id": "42",
+                  "label": "bug"
+                },
+                "id": "toolu_01Udfu7NS8sSdjvz3Gv2xBPw",
+                "type": "tool_call"
+              },
+              {
+                "name": "post_reply",
+                "args": {
+                  "issue_id": "42",
+                  "body": "Thanks for reporting this! Password reset links expire after one hour. If you're seeing an error page, the link has likely expired. Please try requesting a fresh reset link by going to Settings > Security and clicking Reset Password again. If you continue to experience issues, please let us know and we can investigate further."
+                },
+                "id": "toolu_015gc6R1NakKh76YEibbNDcm",
+                "type": "tool_call"
+              }
+            ],
+            "invalid_tool_calls": [],
+            "usage_metadata": {
+              "input_tokens": 1000,
+              "output_tokens": 201,
+              "total_tokens": 1201,
+              "input_token_details": {
+                "cache_read": 0,
+                "cache_creation": 0,
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 0
+              }
+            }
+          },
+          {
+            "content": "labeled issue #42 as bug",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "label_issue",
+            "id": "63d77f7e-9ca7-43e2-8bb3-65b0177d0c74",
+            "tool_call_id": "toolu_01Udfu7NS8sSdjvz3Gv2xBPw",
+            "artifact": null,
+            "status": "success"
+          },
+          {
+            "content": "posted reply to issue #42",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "post_reply",
+            "id": "8da5d5cc-76e1-47dd-9dcb-f9edb48b206f",
+            "tool_call_id": "toolu_015gc6R1NakKh76YEibbNDcm",
+            "artifact": null,
+            "status": "success"
+          }
+        ]
+      },
+      "response": {
+        "generations": [
+          [
+            {
+              "text": "I've labeled issue #42 as a bug, searched the documentation for password reset guidance, and posted a reply suggesting the user request a fresh reset link since they typically expire after one hour.",
+              "generation_info": null,
+              "type": "ChatGeneration",
+              "message": {
+                "content": "I've labeled issue #42 as a bug, searched the documentation for password reset guidance, and posted a reply suggesting the user request a fresh reset link since they typically expire after one hour.",
+                "additional_kwargs": {},
+                "response_metadata": {
+                  "id": "msg_011Ce1fjESdZHUPUWjL1EvbJ",
+                  "container": null,
+                  "model": "claude-haiku-4-5-20251001",
+                  "stop_details": null,
+                  "stop_reason": "end_turn",
+                  "stop_sequence": null,
+                  "usage": {
+                    "cache_creation": {
+                      "ephemeral_1h_input_tokens": 0,
+                      "ephemeral_5m_input_tokens": 0
+                    },
+                    "cache_creation_input_tokens": 0,
+                    "cache_read_input_tokens": 0,
+                    "inference_geo": "not_available",
+                    "input_tokens": 1277,
+                    "output_tokens": 42,
+                    "output_tokens_details": null,
+                    "server_tool_use": null,
+                    "service_tier": "standard"
+                  },
+                  "model_name": "claude-haiku-4-5-20251001",
+                  "model_provider": "anthropic"
+                },
+                "type": "ai",
+                "name": null,
+                "id": "lc_run--019ffd99-991b-7240-8a5d-4d59b8cd1337-0"
+              }
+            }
+          ]
+        ],
+        "llm_output": {
+          "id": "msg_011Ce1fjESdZHUPUWjL1EvbJ",
+          "container": null,
+          "model": "claude-haiku-4-5-20251001",
+          "stop_details": null,
+          "stop_reason": "end_turn",
+          "stop_sequence": null,
+          "usage": {
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 0,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "inference_geo": "not_available",
+            "input_tokens": 1277,
+            "output_tokens": 42,
+            "output_tokens_details": null,
+            "server_tool_use": null,
+            "service_tier": "standard"
+          },
+          "model_name": "claude-haiku-4-5-20251001"
+        },
+        "run": null,
+        "type": "LLMResult"
+      },
+      "request_hash": "sha256:9afff3053f5881d5535bbb8ab73ea1fa0eba89403693c965da1c9f35aeec4b4b",
+      "usage": null,
+      "cost_usd": null
+    },
+    {
+      "seq": 12,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 5,
+      "thread_id": null,
+      "checkpoint_ns": "agent:3aaff69d-74ba-0695-429d-f7414a4a1e73"
+    },
+    {
+      "seq": 13,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 5,
+      "thread_id": null,
+      "checkpoint_ns": "agent:3aaff69d-74ba-0695-429d-f7414a4a1e73"
+    }
+  ],
+  "metadata": {}
+}

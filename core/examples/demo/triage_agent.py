@@ -70,8 +70,9 @@ class _State(TypedDict):
     messages: Annotated[list[BaseMessage], add_messages]
 
 
-def build_triage_graph(model: Any) -> Any:
+def build_triage_graph(model: Any, tools: list[Any] | None = None) -> Any:
     """Compile the triage graph around ``model`` (already tool-bound, or a fake)."""
+    active_tools = tools if tools is not None else TOOLS
 
     def agent(state: _State) -> dict[str, Any]:
         return {"messages": [model.invoke(state["messages"])]}
@@ -82,7 +83,7 @@ def build_triage_graph(model: Any) -> Any:
 
     builder = StateGraph(_State)
     builder.add_node("agent", agent)
-    builder.add_node("tools", ToolNode(TOOLS))
+    builder.add_node("tools", ToolNode(active_tools))
     builder.add_edge(START, "agent")
     builder.add_conditional_edges("agent", route, {"tools": "tools", END: END})
     builder.add_edge("tools", "agent")
@@ -105,14 +106,25 @@ def label_side_effects(trajectory: Trajectory) -> Trajectory:
     return trajectory
 
 
-def triage_trajectory(model: Any, issue: str, *, name: str | None = None) -> Trajectory:
-    """Run the triage agent on ``issue`` and return the recorded trajectory."""
+def triage_trajectory(
+    model: Any,
+    issue: str,
+    *,
+    tools: list[Any] | None = None,
+    system: str | None = None,
+    name: str | None = None,
+) -> Trajectory:
+    """Run the triage agent on ``issue`` and return the recorded trajectory.
+
+    ``tools`` and ``system`` default to the shipped set; the break-me variants
+    pass a degraded prompt or a renamed tool to seed a regression.
+    """
     handler = ReenactCallbackHandler()
-    graph = build_triage_graph(model)
+    graph = build_triage_graph(model, tools)
     graph.invoke(
         {
             "messages": [
-                SystemMessage(content=TRIAGE_SYSTEM),
+                SystemMessage(content=system if system is not None else TRIAGE_SYSTEM),
                 HumanMessage(content=issue),
             ]
         },

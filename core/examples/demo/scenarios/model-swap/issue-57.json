@@ -1,0 +1,817 @@
+{
+  "schema_version": 0,
+  "id": "demo-model-swap-57",
+  "name": "triage-57",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "llm_call",
+      "provider": "langchain",
+      "model": "claude-haiku-4-5-20251001",
+      "request": {
+        "model": "claude-haiku-4-5-20251001",
+        "messages": [
+          {
+            "content": "You are an issue-triage assistant for a software product. For the issue you are given: search the docs for relevant guidance, apply exactly one category label (one of: bug, billing, api), post a short helpful reply to the user, and finish with a one-sentence summary of what you did.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "system",
+            "name": null,
+            "id": "f92a22e7-5654-489d-8535-e7d5a78827d6"
+          },
+          {
+            "content": "Issue #57: Charged twice this month\n\nMy card was billed two times for a single subscription this month.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "human",
+            "name": null,
+            "id": "0f5324c2-ad74-4dcc-904b-cd1c1525c96e"
+          }
+        ]
+      },
+      "response": {
+        "generations": [
+          [
+            {
+              "text": "I'll help you with this billing issue. Let me search the documentation for relevant information and then assist you.",
+              "generation_info": null,
+              "type": "ChatGeneration",
+              "message": {
+                "content": [
+                  {
+                    "text": "I'll help you with this billing issue. Let me search the documentation for relevant information and then assist you.",
+                    "type": "text"
+                  },
+                  {
+                    "id": "toolu_01U2H3DdUZKiip3GmsqUbZKs",
+                    "caller": {
+                      "type": "direct"
+                    },
+                    "input": {
+                      "query": "double charge billing duplicate subscription"
+                    },
+                    "name": "search_docs",
+                    "type": "tool_use"
+                  },
+                  {
+                    "id": "toolu_01Lros3Lh1nghP9Z3mk2q2KM",
+                    "caller": {
+                      "type": "direct"
+                    },
+                    "input": {
+                      "issue_id": "57",
+                      "label": "billing"
+                    },
+                    "name": "label_issue",
+                    "type": "tool_use"
+                  }
+                ],
+                "additional_kwargs": {},
+                "response_metadata": {
+                  "id": "msg_011Ce1fjJZBd3KpcpEGeVW8v",
+                  "container": null,
+                  "model": "claude-haiku-4-5-20251001",
+                  "stop_details": null,
+                  "stop_reason": "tool_use",
+                  "stop_sequence": null,
+                  "usage": {
+                    "cache_creation": {
+                      "ephemeral_1h_input_tokens": 0,
+                      "ephemeral_5m_input_tokens": 0
+                    },
+                    "cache_creation_input_tokens": 0,
+                    "cache_read_input_tokens": 0,
+                    "inference_geo": "not_available",
+                    "input_tokens": 869,
+                    "output_tokens": 135,
+                    "output_tokens_details": null,
+                    "server_tool_use": null,
+                    "service_tier": "standard"
+                  },
+                  "model_name": "claude-haiku-4-5-20251001",
+                  "model_provider": "anthropic"
+                },
+                "type": "ai",
+                "name": null,
+                "id": "lc_run--019ffd99-9cee-7f80-a937-c1b31b464eb6-0"
+              }
+            }
+          ]
+        ],
+        "llm_output": {
+          "id": "msg_011Ce1fjJZBd3KpcpEGeVW8v",
+          "container": null,
+          "model": "claude-haiku-4-5-20251001",
+          "stop_details": null,
+          "stop_reason": "tool_use",
+          "stop_sequence": null,
+          "usage": {
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 0,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "inference_geo": "not_available",
+            "input_tokens": 869,
+            "output_tokens": 135,
+            "output_tokens_details": null,
+            "server_tool_use": null,
+            "service_tier": "standard"
+          },
+          "model_name": "claude-haiku-4-5-20251001"
+        },
+        "run": null,
+        "type": "LLMResult"
+      },
+      "request_hash": "sha256:fe658b0b0689827430fedbb3ed322edb5de41497ff4abf1eb396662dbdc88e5e",
+      "usage": null,
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 1,
+      "thread_id": null,
+      "checkpoint_ns": "agent:a9f22e8f-5134-7c47-9a7b-2ab3b7339477"
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 1,
+      "thread_id": null,
+      "checkpoint_ns": "agent:a9f22e8f-5134-7c47-9a7b-2ab3b7339477"
+    },
+    {
+      "seq": 3,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "search_docs",
+      "arguments": {
+        "input": "{'query': 'double charge billing duplicate subscription'}"
+      },
+      "result": {
+        "content": "Billing: invoices are issued monthly. A duplicate charge is refunded within five business days to the original payment method. Ask the user for the invoice id before escalating.",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "tool",
+        "name": "search_docs",
+        "id": null,
+        "tool_call_id": "toolu_01U2H3DdUZKiip3GmsqUbZKs",
+        "artifact": null,
+        "status": "success"
+      },
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 4,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "label_issue",
+      "arguments": {
+        "input": "{'issue_id': '57', 'label': 'billing'}"
+      },
+      "result": {
+        "content": "labeled issue #57 as billing",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "tool",
+        "name": "label_issue",
+        "id": null,
+        "tool_call_id": "toolu_01Lros3Lh1nghP9Z3mk2q2KM",
+        "artifact": null,
+        "status": "success"
+      },
+      "side_effect": "mutating"
+    },
+    {
+      "seq": 5,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "tools",
+      "step": 2,
+      "thread_id": null,
+      "checkpoint_ns": "tools:560f3e6e-3633-aaa9-cca7-48e5687d96c4"
+    },
+    {
+      "seq": 6,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "llm_call",
+      "provider": "langchain",
+      "model": "claude-haiku-4-5-20251001",
+      "request": {
+        "model": "claude-haiku-4-5-20251001",
+        "messages": [
+          {
+            "content": "You are an issue-triage assistant for a software product. For the issue you are given: search the docs for relevant guidance, apply exactly one category label (one of: bug, billing, api), post a short helpful reply to the user, and finish with a one-sentence summary of what you did.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "system",
+            "name": null,
+            "id": "f92a22e7-5654-489d-8535-e7d5a78827d6"
+          },
+          {
+            "content": "Issue #57: Charged twice this month\n\nMy card was billed two times for a single subscription this month.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "human",
+            "name": null,
+            "id": "0f5324c2-ad74-4dcc-904b-cd1c1525c96e"
+          },
+          {
+            "content": [
+              {
+                "text": "I'll help you with this billing issue. Let me search the documentation for relevant information and then assist you.",
+                "type": "text"
+              },
+              {
+                "id": "toolu_01U2H3DdUZKiip3GmsqUbZKs",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "query": "double charge billing duplicate subscription"
+                },
+                "name": "search_docs",
+                "type": "tool_use"
+              },
+              {
+                "id": "toolu_01Lros3Lh1nghP9Z3mk2q2KM",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "issue_id": "57",
+                  "label": "billing"
+                },
+                "name": "label_issue",
+                "type": "tool_use"
+              }
+            ],
+            "additional_kwargs": {},
+            "response_metadata": {
+              "id": "msg_011Ce1fjJZBd3KpcpEGeVW8v",
+              "container": null,
+              "model": "claude-haiku-4-5-20251001",
+              "stop_details": null,
+              "stop_reason": "tool_use",
+              "stop_sequence": null,
+              "usage": {
+                "cache_creation": {
+                  "ephemeral_1h_input_tokens": 0,
+                  "ephemeral_5m_input_tokens": 0
+                },
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "inference_geo": "not_available",
+                "input_tokens": 869,
+                "output_tokens": 135,
+                "output_tokens_details": null,
+                "server_tool_use": null,
+                "service_tier": "standard"
+              },
+              "model_name": "claude-haiku-4-5-20251001",
+              "model_provider": "anthropic"
+            },
+            "type": "ai",
+            "name": null,
+            "id": "lc_run--019ffd99-9cee-7f80-a937-c1b31b464eb6-0",
+            "tool_calls": [
+              {
+                "name": "search_docs",
+                "args": {
+                  "query": "double charge billing duplicate subscription"
+                },
+                "id": "toolu_01U2H3DdUZKiip3GmsqUbZKs",
+                "type": "tool_call"
+              },
+              {
+                "name": "label_issue",
+                "args": {
+                  "issue_id": "57",
+                  "label": "billing"
+                },
+                "id": "toolu_01Lros3Lh1nghP9Z3mk2q2KM",
+                "type": "tool_call"
+              }
+            ],
+            "invalid_tool_calls": [],
+            "usage_metadata": {
+              "input_tokens": 869,
+              "output_tokens": 135,
+              "total_tokens": 1004,
+              "input_token_details": {
+                "cache_read": 0,
+                "cache_creation": 0,
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 0
+              }
+            }
+          },
+          {
+            "content": "Billing: invoices are issued monthly. A duplicate charge is refunded within five business days to the original payment method. Ask the user for the invoice id before escalating.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "search_docs",
+            "id": "222f96d2-be5c-422b-96ae-38b0097b750b",
+            "tool_call_id": "toolu_01U2H3DdUZKiip3GmsqUbZKs",
+            "artifact": null,
+            "status": "success"
+          },
+          {
+            "content": "labeled issue #57 as billing",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "label_issue",
+            "id": "1314519d-7714-4cf0-b22f-ba6e4461bfab",
+            "tool_call_id": "toolu_01Lros3Lh1nghP9Z3mk2q2KM",
+            "artifact": null,
+            "status": "success"
+          }
+        ]
+      },
+      "response": {
+        "generations": [
+          [
+            {
+              "text": "Now let me post a helpful reply to the user:",
+              "generation_info": null,
+              "type": "ChatGeneration",
+              "message": {
+                "content": [
+                  {
+                    "text": "Now let me post a helpful reply to the user:",
+                    "type": "text"
+                  },
+                  {
+                    "id": "toolu_01HLCeFidZ43iWnS7phegkDw",
+                    "caller": {
+                      "type": "direct"
+                    },
+                    "input": {
+                      "issue_id": "57",
+                      "body": "Thank you for reporting this issue. We're sorry you were charged twice for your subscription this month.\n\nAccording to our billing policy, duplicate charges are automatically refunded within five business days to your original payment method. \n\nTo help us investigate this further, could you please provide your invoice ID(s) for the duplicate charges? This will help us verify the issue and ensure your refund is processed correctly.\n\nWe appreciate your patience!"
+                    },
+                    "name": "post_reply",
+                    "type": "tool_use"
+                  }
+                ],
+                "additional_kwargs": {},
+                "response_metadata": {
+                  "id": "msg_011Ce1fjPNtmGbLrrXwCzFYq",
+                  "container": null,
+                  "model": "claude-haiku-4-5-20251001",
+                  "stop_details": null,
+                  "stop_reason": "tool_use",
+                  "stop_sequence": null,
+                  "usage": {
+                    "cache_creation": {
+                      "ephemeral_1h_input_tokens": 0,
+                      "ephemeral_5m_input_tokens": 0
+                    },
+                    "cache_creation_input_tokens": 0,
+                    "cache_read_input_tokens": 0,
+                    "inference_geo": "not_available",
+                    "input_tokens": 1109,
+                    "output_tokens": 171,
+                    "output_tokens_details": null,
+                    "server_tool_use": null,
+                    "service_tier": "standard"
+                  },
+                  "model_name": "claude-haiku-4-5-20251001",
+                  "model_provider": "anthropic"
+                },
+                "type": "ai",
+                "name": null,
+                "id": "lc_run--019ffd99-a155-79e1-9a8c-1f07b93f7987-0"
+              }
+            }
+          ]
+        ],
+        "llm_output": {
+          "id": "msg_011Ce1fjPNtmGbLrrXwCzFYq",
+          "container": null,
+          "model": "claude-haiku-4-5-20251001",
+          "stop_details": null,
+          "stop_reason": "tool_use",
+          "stop_sequence": null,
+          "usage": {
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 0,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "inference_geo": "not_available",
+            "input_tokens": 1109,
+            "output_tokens": 171,
+            "output_tokens_details": null,
+            "server_tool_use": null,
+            "service_tier": "standard"
+          },
+          "model_name": "claude-haiku-4-5-20251001"
+        },
+        "run": null,
+        "type": "LLMResult"
+      },
+      "request_hash": "sha256:b6bb91cdb822af7cf5e9a3200b2065425a854eec5294a12e589e9f44f70d1e3c",
+      "usage": null,
+      "cost_usd": null
+    },
+    {
+      "seq": 7,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 3,
+      "thread_id": null,
+      "checkpoint_ns": "agent:da745338-fe17-1647-d609-da79f28bd136"
+    },
+    {
+      "seq": 8,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 3,
+      "thread_id": null,
+      "checkpoint_ns": "agent:da745338-fe17-1647-d609-da79f28bd136"
+    },
+    {
+      "seq": 9,
+      "parent_seq": 6,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "post_reply",
+      "arguments": {
+        "input": "{'issue_id': '57', 'body': \"Thank you for reporting this issue. We're sorry you were charged twice for your subscription this month.\\n\\nAccording to our billing policy, duplicate charges are automatically refunded within five business days to your original payment method. \\n\\nTo help us investigate this further, could you please provide your invoice ID(s) for the duplicate charges? This will help us verify the issue and ensure your refund is processed correctly.\\n\\nWe appreciate your patience!\"}"
+      },
+      "result": {
+        "content": "posted reply to issue #57",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "tool",
+        "name": "post_reply",
+        "id": null,
+        "tool_call_id": "toolu_01HLCeFidZ43iWnS7phegkDw",
+        "artifact": null,
+        "status": "success"
+      },
+      "side_effect": "mutating"
+    },
+    {
+      "seq": 10,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "tools",
+      "step": 4,
+      "thread_id": null,
+      "checkpoint_ns": "tools:872ffe57-dd17-f4e9-fa06-9bf3bbb5bee5"
+    },
+    {
+      "seq": 11,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "llm_call",
+      "provider": "langchain",
+      "model": "claude-haiku-4-5-20251001",
+      "request": {
+        "model": "claude-haiku-4-5-20251001",
+        "messages": [
+          {
+            "content": "You are an issue-triage assistant for a software product. For the issue you are given: search the docs for relevant guidance, apply exactly one category label (one of: bug, billing, api), post a short helpful reply to the user, and finish with a one-sentence summary of what you did.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "system",
+            "name": null,
+            "id": "f92a22e7-5654-489d-8535-e7d5a78827d6"
+          },
+          {
+            "content": "Issue #57: Charged twice this month\n\nMy card was billed two times for a single subscription this month.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "human",
+            "name": null,
+            "id": "0f5324c2-ad74-4dcc-904b-cd1c1525c96e"
+          },
+          {
+            "content": [
+              {
+                "text": "I'll help you with this billing issue. Let me search the documentation for relevant information and then assist you.",
+                "type": "text"
+              },
+              {
+                "id": "toolu_01U2H3DdUZKiip3GmsqUbZKs",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "query": "double charge billing duplicate subscription"
+                },
+                "name": "search_docs",
+                "type": "tool_use"
+              },
+              {
+                "id": "toolu_01Lros3Lh1nghP9Z3mk2q2KM",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "issue_id": "57",
+                  "label": "billing"
+                },
+                "name": "label_issue",
+                "type": "tool_use"
+              }
+            ],
+            "additional_kwargs": {},
+            "response_metadata": {
+              "id": "msg_011Ce1fjJZBd3KpcpEGeVW8v",
+              "container": null,
+              "model": "claude-haiku-4-5-20251001",
+              "stop_details": null,
+              "stop_reason": "tool_use",
+              "stop_sequence": null,
+              "usage": {
+                "cache_creation": {
+                  "ephemeral_1h_input_tokens": 0,
+                  "ephemeral_5m_input_tokens": 0
+                },
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "inference_geo": "not_available",
+                "input_tokens": 869,
+                "output_tokens": 135,
+                "output_tokens_details": null,
+                "server_tool_use": null,
+                "service_tier": "standard"
+              },
+              "model_name": "claude-haiku-4-5-20251001",
+              "model_provider": "anthropic"
+            },
+            "type": "ai",
+            "name": null,
+            "id": "lc_run--019ffd99-9cee-7f80-a937-c1b31b464eb6-0",
+            "tool_calls": [
+              {
+                "name": "search_docs",
+                "args": {
+                  "query": "double charge billing duplicate subscription"
+                },
+                "id": "toolu_01U2H3DdUZKiip3GmsqUbZKs",
+                "type": "tool_call"
+              },
+              {
+                "name": "label_issue",
+                "args": {
+                  "issue_id": "57",
+                  "label": "billing"
+                },
+                "id": "toolu_01Lros3Lh1nghP9Z3mk2q2KM",
+                "type": "tool_call"
+              }
+            ],
+            "invalid_tool_calls": [],
+            "usage_metadata": {
+              "input_tokens": 869,
+              "output_tokens": 135,
+              "total_tokens": 1004,
+              "input_token_details": {
+                "cache_read": 0,
+                "cache_creation": 0,
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 0
+              }
+            }
+          },
+          {
+            "content": "Billing: invoices are issued monthly. A duplicate charge is refunded within five business days to the original payment method. Ask the user for the invoice id before escalating.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "search_docs",
+            "id": "222f96d2-be5c-422b-96ae-38b0097b750b",
+            "tool_call_id": "toolu_01U2H3DdUZKiip3GmsqUbZKs",
+            "artifact": null,
+            "status": "success"
+          },
+          {
+            "content": "labeled issue #57 as billing",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "label_issue",
+            "id": "1314519d-7714-4cf0-b22f-ba6e4461bfab",
+            "tool_call_id": "toolu_01Lros3Lh1nghP9Z3mk2q2KM",
+            "artifact": null,
+            "status": "success"
+          },
+          {
+            "content": [
+              {
+                "text": "Now let me post a helpful reply to the user:",
+                "type": "text"
+              },
+              {
+                "id": "toolu_01HLCeFidZ43iWnS7phegkDw",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "issue_id": "57",
+                  "body": "Thank you for reporting this issue. We're sorry you were charged twice for your subscription this month.\n\nAccording to our billing policy, duplicate charges are automatically refunded within five business days to your original payment method. \n\nTo help us investigate this further, could you please provide your invoice ID(s) for the duplicate charges? This will help us verify the issue and ensure your refund is processed correctly.\n\nWe appreciate your patience!"
+                },
+                "name": "post_reply",
+                "type": "tool_use"
+              }
+            ],
+            "additional_kwargs": {},
+            "response_metadata": {
+              "id": "msg_011Ce1fjPNtmGbLrrXwCzFYq",
+              "container": null,
+              "model": "claude-haiku-4-5-20251001",
+              "stop_details": null,
+              "stop_reason": "tool_use",
+              "stop_sequence": null,
+              "usage": {
+                "cache_creation": {
+                  "ephemeral_1h_input_tokens": 0,
+                  "ephemeral_5m_input_tokens": 0
+                },
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "inference_geo": "not_available",
+                "input_tokens": 1109,
+                "output_tokens": 171,
+                "output_tokens_details": null,
+                "server_tool_use": null,
+                "service_tier": "standard"
+              },
+              "model_name": "claude-haiku-4-5-20251001",
+              "model_provider": "anthropic"
+            },
+            "type": "ai",
+            "name": null,
+            "id": "lc_run--019ffd99-a155-79e1-9a8c-1f07b93f7987-0",
+            "tool_calls": [
+              {
+                "name": "post_reply",
+                "args": {
+                  "issue_id": "57",
+                  "body": "Thank you for reporting this issue. We're sorry you were charged twice for your subscription this month.\n\nAccording to our billing policy, duplicate charges are automatically refunded within five business days to your original payment method. \n\nTo help us investigate this further, could you please provide your invoice ID(s) for the duplicate charges? This will help us verify the issue and ensure your refund is processed correctly.\n\nWe appreciate your patience!"
+                },
+                "id": "toolu_01HLCeFidZ43iWnS7phegkDw",
+                "type": "tool_call"
+              }
+            ],
+            "invalid_tool_calls": [],
+            "usage_metadata": {
+              "input_tokens": 1109,
+              "output_tokens": 171,
+              "total_tokens": 1280,
+              "input_token_details": {
+                "cache_read": 0,
+                "cache_creation": 0,
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 0
+              }
+            }
+          },
+          {
+            "content": "posted reply to issue #57",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "post_reply",
+            "id": "6cc67b2f-5283-4c6c-a021-b85d21a8033c",
+            "tool_call_id": "toolu_01HLCeFidZ43iWnS7phegkDw",
+            "artifact": null,
+            "status": "success"
+          }
+        ]
+      },
+      "response": {
+        "generations": [
+          [
+            {
+              "text": "I've labeled issue #57 as a billing issue, searched the documentation for guidance on duplicate charges, and posted a helpful reply requesting the invoice ID to help resolve the double billing problem.",
+              "generation_info": null,
+              "type": "ChatGeneration",
+              "message": {
+                "content": "I've labeled issue #57 as a billing issue, searched the documentation for guidance on duplicate charges, and posted a helpful reply requesting the invoice ID to help resolve the double billing problem.",
+                "additional_kwargs": {},
+                "response_metadata": {
+                  "id": "msg_011Ce1fjYte4P87y2gpc1JP5",
+                  "container": null,
+                  "model": "claude-haiku-4-5-20251001",
+                  "stop_details": null,
+                  "stop_reason": "end_turn",
+                  "stop_sequence": null,
+                  "usage": {
+                    "cache_creation": {
+                      "ephemeral_1h_input_tokens": 0,
+                      "ephemeral_5m_input_tokens": 0
+                    },
+                    "cache_creation_input_tokens": 0,
+                    "cache_read_input_tokens": 0,
+                    "inference_geo": "not_available",
+                    "input_tokens": 1298,
+                    "output_tokens": 41,
+                    "output_tokens_details": null,
+                    "server_tool_use": null,
+                    "service_tier": "standard"
+                  },
+                  "model_name": "claude-haiku-4-5-20251001",
+                  "model_provider": "anthropic"
+                },
+                "type": "ai",
+                "name": null,
+                "id": "lc_run--019ffd99-aa01-72a1-aab0-525146e7096c-0"
+              }
+            }
+          ]
+        ],
+        "llm_output": {
+          "id": "msg_011Ce1fjYte4P87y2gpc1JP5",
+          "container": null,
+          "model": "claude-haiku-4-5-20251001",
+          "stop_details": null,
+          "stop_reason": "end_turn",
+          "stop_sequence": null,
+          "usage": {
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 0,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "inference_geo": "not_available",
+            "input_tokens": 1298,
+            "output_tokens": 41,
+            "output_tokens_details": null,
+            "server_tool_use": null,
+            "service_tier": "standard"
+          },
+          "model_name": "claude-haiku-4-5-20251001"
+        },
+        "run": null,
+        "type": "LLMResult"
+      },
+      "request_hash": "sha256:076572bf38980907f7ddd9d3e5983bca744adf3ead831d11ca36b42cd2d91b58",
+      "usage": null,
+      "cost_usd": null
+    },
+    {
+      "seq": 12,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 5,
+      "thread_id": null,
+      "checkpoint_ns": "agent:86e79487-563f-0a02-efdf-6bd3a2a0fb1a"
+    },
+    {
+      "seq": 13,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 5,
+      "thread_id": null,
+      "checkpoint_ns": "agent:86e79487-563f-0a02-efdf-6bd3a2a0fb1a"
+    }
+  ],
+  "metadata": {}
+}

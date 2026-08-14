@@ -1,0 +1,1185 @@
+{
+  "schema_version": 0,
+  "id": "demo-baseline-57",
+  "name": "triage-57",
+  "created_at": "2024-01-01T00:00:00Z",
+  "events": [
+    {
+      "seq": 0,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "llm_call",
+      "provider": "langchain",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "messages": [
+          {
+            "content": "You are an issue-triage assistant for a software product. For the issue you are given: search the docs for relevant guidance, apply exactly one category label (one of: bug, billing, api), post a short helpful reply to the user, and finish with a one-sentence summary of what you did.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "system",
+            "name": null,
+            "id": "69581076-976d-434a-b354-e6ee29cc4469"
+          },
+          {
+            "content": "Issue #57: Charged twice this month\n\nMy card was billed two times for a single subscription this month.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "human",
+            "name": null,
+            "id": "8279c669-9dba-48d2-add0-ee9f4f70a46f"
+          }
+        ]
+      },
+      "response": {
+        "generations": [
+          [
+            {
+              "text": "I'll help you with this billing issue. Let me search for relevant documentation and then respond appropriately.",
+              "generation_info": null,
+              "type": "ChatGeneration",
+              "message": {
+                "content": [
+                  {
+                    "text": "I'll help you with this billing issue. Let me search for relevant documentation and then respond appropriately.",
+                    "type": "text"
+                  },
+                  {
+                    "id": "toolu_01VZsJamtpLpi77kdo5xjZeR",
+                    "caller": {
+                      "type": "direct"
+                    },
+                    "input": {
+                      "query": "charged twice double billing subscription"
+                    },
+                    "name": "search_docs",
+                    "type": "tool_use"
+                  }
+                ],
+                "additional_kwargs": {},
+                "response_metadata": {
+                  "id": "msg_011Ce1ffk3VqKJNirkvdt8Xv",
+                  "container": null,
+                  "model": "claude-sonnet-4-5-20250929",
+                  "stop_details": null,
+                  "stop_reason": "tool_use",
+                  "stop_sequence": null,
+                  "usage": {
+                    "cache_creation": {
+                      "ephemeral_1h_input_tokens": 0,
+                      "ephemeral_5m_input_tokens": 0
+                    },
+                    "cache_creation_input_tokens": 0,
+                    "cache_read_input_tokens": 0,
+                    "inference_geo": "not_available",
+                    "input_tokens": 869,
+                    "output_tokens": 79,
+                    "output_tokens_details": null,
+                    "server_tool_use": null,
+                    "service_tier": "standard"
+                  },
+                  "model_name": "claude-sonnet-4-5-20250929",
+                  "model_provider": "anthropic"
+                },
+                "type": "ai",
+                "name": null,
+                "id": "lc_run--019ffd98-dff7-7c73-972c-43b21a292c35-0"
+              }
+            }
+          ]
+        ],
+        "llm_output": {
+          "id": "msg_011Ce1ffk3VqKJNirkvdt8Xv",
+          "container": null,
+          "model": "claude-sonnet-4-5-20250929",
+          "stop_details": null,
+          "stop_reason": "tool_use",
+          "stop_sequence": null,
+          "usage": {
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 0,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "inference_geo": "not_available",
+            "input_tokens": 869,
+            "output_tokens": 79,
+            "output_tokens_details": null,
+            "server_tool_use": null,
+            "service_tier": "standard"
+          },
+          "model_name": "claude-sonnet-4-5-20250929"
+        },
+        "run": null,
+        "type": "LLMResult"
+      },
+      "request_hash": "sha256:b6b9c5c4f2201f29f90d001f46fd5230bbb8d0d8991eef19b6b56f889d1c654e",
+      "usage": null,
+      "cost_usd": null
+    },
+    {
+      "seq": 1,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 1,
+      "thread_id": null,
+      "checkpoint_ns": "agent:f89367e0-77b0-4f60-2924-770237d34d51"
+    },
+    {
+      "seq": 2,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 1,
+      "thread_id": null,
+      "checkpoint_ns": "agent:f89367e0-77b0-4f60-2924-770237d34d51"
+    },
+    {
+      "seq": 3,
+      "parent_seq": 0,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "search_docs",
+      "arguments": {
+        "input": "{'query': 'charged twice double billing subscription'}"
+      },
+      "result": {
+        "content": "Password reset: open Settings > Security and click Reset Password. A reset link is emailed and expires in one hour. If the link errors, it has usually expired - request a fresh one.",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "tool",
+        "name": "search_docs",
+        "id": null,
+        "tool_call_id": "toolu_01VZsJamtpLpi77kdo5xjZeR",
+        "artifact": null,
+        "status": "success"
+      },
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 4,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "tools",
+      "step": 2,
+      "thread_id": null,
+      "checkpoint_ns": "tools:c79fb4d1-8d63-accc-ee59-9aca7ed8f7a6"
+    },
+    {
+      "seq": 5,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "llm_call",
+      "provider": "langchain",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "messages": [
+          {
+            "content": "You are an issue-triage assistant for a software product. For the issue you are given: search the docs for relevant guidance, apply exactly one category label (one of: bug, billing, api), post a short helpful reply to the user, and finish with a one-sentence summary of what you did.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "system",
+            "name": null,
+            "id": "69581076-976d-434a-b354-e6ee29cc4469"
+          },
+          {
+            "content": "Issue #57: Charged twice this month\n\nMy card was billed two times for a single subscription this month.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "human",
+            "name": null,
+            "id": "8279c669-9dba-48d2-add0-ee9f4f70a46f"
+          },
+          {
+            "content": [
+              {
+                "text": "I'll help you with this billing issue. Let me search for relevant documentation and then respond appropriately.",
+                "type": "text"
+              },
+              {
+                "id": "toolu_01VZsJamtpLpi77kdo5xjZeR",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "query": "charged twice double billing subscription"
+                },
+                "name": "search_docs",
+                "type": "tool_use"
+              }
+            ],
+            "additional_kwargs": {},
+            "response_metadata": {
+              "id": "msg_011Ce1ffk3VqKJNirkvdt8Xv",
+              "container": null,
+              "model": "claude-sonnet-4-5-20250929",
+              "stop_details": null,
+              "stop_reason": "tool_use",
+              "stop_sequence": null,
+              "usage": {
+                "cache_creation": {
+                  "ephemeral_1h_input_tokens": 0,
+                  "ephemeral_5m_input_tokens": 0
+                },
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "inference_geo": "not_available",
+                "input_tokens": 869,
+                "output_tokens": 79,
+                "output_tokens_details": null,
+                "server_tool_use": null,
+                "service_tier": "standard"
+              },
+              "model_name": "claude-sonnet-4-5-20250929",
+              "model_provider": "anthropic"
+            },
+            "type": "ai",
+            "name": null,
+            "id": "lc_run--019ffd98-dff7-7c73-972c-43b21a292c35-0",
+            "tool_calls": [
+              {
+                "name": "search_docs",
+                "args": {
+                  "query": "charged twice double billing subscription"
+                },
+                "id": "toolu_01VZsJamtpLpi77kdo5xjZeR",
+                "type": "tool_call"
+              }
+            ],
+            "invalid_tool_calls": [],
+            "usage_metadata": {
+              "input_tokens": 869,
+              "output_tokens": 79,
+              "total_tokens": 948,
+              "input_token_details": {
+                "cache_read": 0,
+                "cache_creation": 0,
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 0
+              }
+            }
+          },
+          {
+            "content": "Password reset: open Settings > Security and click Reset Password. A reset link is emailed and expires in one hour. If the link errors, it has usually expired - request a fresh one.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "search_docs",
+            "id": "8c17dff7-bb61-4f06-b8c9-f9d56010f11e",
+            "tool_call_id": "toolu_01VZsJamtpLpi77kdo5xjZeR",
+            "artifact": null,
+            "status": "success"
+          }
+        ]
+      },
+      "response": {
+        "generations": [
+          [
+            {
+              "text": "",
+              "generation_info": null,
+              "type": "ChatGeneration",
+              "message": {
+                "content": [
+                  {
+                    "id": "toolu_01ENqKnxzi2EEKcHBpY2it48",
+                    "caller": {
+                      "type": "direct"
+                    },
+                    "input": {
+                      "query": "billing duplicate charge refund"
+                    },
+                    "name": "search_docs",
+                    "type": "tool_use"
+                  }
+                ],
+                "additional_kwargs": {},
+                "response_metadata": {
+                  "id": "msg_011Ce1ffu8h1bhg9KGKhbaJ2",
+                  "container": null,
+                  "model": "claude-sonnet-4-5-20250929",
+                  "stop_details": null,
+                  "stop_reason": "tool_use",
+                  "stop_sequence": null,
+                  "usage": {
+                    "cache_creation": {
+                      "ephemeral_1h_input_tokens": 0,
+                      "ephemeral_5m_input_tokens": 0
+                    },
+                    "cache_creation_input_tokens": 0,
+                    "cache_read_input_tokens": 0,
+                    "inference_geo": "not_available",
+                    "input_tokens": 998,
+                    "output_tokens": 57,
+                    "output_tokens_details": null,
+                    "server_tool_use": null,
+                    "service_tier": "standard"
+                  },
+                  "model_name": "claude-sonnet-4-5-20250929",
+                  "model_provider": "anthropic"
+                },
+                "type": "ai",
+                "name": null,
+                "id": "lc_run--019ffd98-e892-7d71-81ea-db2ff9a1d0e3-0"
+              }
+            }
+          ]
+        ],
+        "llm_output": {
+          "id": "msg_011Ce1ffu8h1bhg9KGKhbaJ2",
+          "container": null,
+          "model": "claude-sonnet-4-5-20250929",
+          "stop_details": null,
+          "stop_reason": "tool_use",
+          "stop_sequence": null,
+          "usage": {
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 0,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "inference_geo": "not_available",
+            "input_tokens": 998,
+            "output_tokens": 57,
+            "output_tokens_details": null,
+            "server_tool_use": null,
+            "service_tier": "standard"
+          },
+          "model_name": "claude-sonnet-4-5-20250929"
+        },
+        "run": null,
+        "type": "LLMResult"
+      },
+      "request_hash": "sha256:e8324731c7cc86327e594755ac2782807d039cddf6c1fe2598d2f058b2490fa8",
+      "usage": null,
+      "cost_usd": null
+    },
+    {
+      "seq": 6,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 3,
+      "thread_id": null,
+      "checkpoint_ns": "agent:126898b5-f205-06c9-4c7a-a048c8a1d75d"
+    },
+    {
+      "seq": 7,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 3,
+      "thread_id": null,
+      "checkpoint_ns": "agent:126898b5-f205-06c9-4c7a-a048c8a1d75d"
+    },
+    {
+      "seq": 8,
+      "parent_seq": 5,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "search_docs",
+      "arguments": {
+        "input": "{'query': 'billing duplicate charge refund'}"
+      },
+      "result": {
+        "content": "Billing: invoices are issued monthly. A duplicate charge is refunded within five business days to the original payment method. Ask the user for the invoice id before escalating.",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "tool",
+        "name": "search_docs",
+        "id": null,
+        "tool_call_id": "toolu_01ENqKnxzi2EEKcHBpY2it48",
+        "artifact": null,
+        "status": "success"
+      },
+      "side_effect": "read_only"
+    },
+    {
+      "seq": 9,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "tools",
+      "step": 4,
+      "thread_id": null,
+      "checkpoint_ns": "tools:1d66c1ca-1a09-efb7-1644-02ab86361775"
+    },
+    {
+      "seq": 10,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "llm_call",
+      "provider": "langchain",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "messages": [
+          {
+            "content": "You are an issue-triage assistant for a software product. For the issue you are given: search the docs for relevant guidance, apply exactly one category label (one of: bug, billing, api), post a short helpful reply to the user, and finish with a one-sentence summary of what you did.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "system",
+            "name": null,
+            "id": "69581076-976d-434a-b354-e6ee29cc4469"
+          },
+          {
+            "content": "Issue #57: Charged twice this month\n\nMy card was billed two times for a single subscription this month.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "human",
+            "name": null,
+            "id": "8279c669-9dba-48d2-add0-ee9f4f70a46f"
+          },
+          {
+            "content": [
+              {
+                "text": "I'll help you with this billing issue. Let me search for relevant documentation and then respond appropriately.",
+                "type": "text"
+              },
+              {
+                "id": "toolu_01VZsJamtpLpi77kdo5xjZeR",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "query": "charged twice double billing subscription"
+                },
+                "name": "search_docs",
+                "type": "tool_use"
+              }
+            ],
+            "additional_kwargs": {},
+            "response_metadata": {
+              "id": "msg_011Ce1ffk3VqKJNirkvdt8Xv",
+              "container": null,
+              "model": "claude-sonnet-4-5-20250929",
+              "stop_details": null,
+              "stop_reason": "tool_use",
+              "stop_sequence": null,
+              "usage": {
+                "cache_creation": {
+                  "ephemeral_1h_input_tokens": 0,
+                  "ephemeral_5m_input_tokens": 0
+                },
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "inference_geo": "not_available",
+                "input_tokens": 869,
+                "output_tokens": 79,
+                "output_tokens_details": null,
+                "server_tool_use": null,
+                "service_tier": "standard"
+              },
+              "model_name": "claude-sonnet-4-5-20250929",
+              "model_provider": "anthropic"
+            },
+            "type": "ai",
+            "name": null,
+            "id": "lc_run--019ffd98-dff7-7c73-972c-43b21a292c35-0",
+            "tool_calls": [
+              {
+                "name": "search_docs",
+                "args": {
+                  "query": "charged twice double billing subscription"
+                },
+                "id": "toolu_01VZsJamtpLpi77kdo5xjZeR",
+                "type": "tool_call"
+              }
+            ],
+            "invalid_tool_calls": [],
+            "usage_metadata": {
+              "input_tokens": 869,
+              "output_tokens": 79,
+              "total_tokens": 948,
+              "input_token_details": {
+                "cache_read": 0,
+                "cache_creation": 0,
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 0
+              }
+            }
+          },
+          {
+            "content": "Password reset: open Settings > Security and click Reset Password. A reset link is emailed and expires in one hour. If the link errors, it has usually expired - request a fresh one.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "search_docs",
+            "id": "8c17dff7-bb61-4f06-b8c9-f9d56010f11e",
+            "tool_call_id": "toolu_01VZsJamtpLpi77kdo5xjZeR",
+            "artifact": null,
+            "status": "success"
+          },
+          {
+            "content": [
+              {
+                "id": "toolu_01ENqKnxzi2EEKcHBpY2it48",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "query": "billing duplicate charge refund"
+                },
+                "name": "search_docs",
+                "type": "tool_use"
+              }
+            ],
+            "additional_kwargs": {},
+            "response_metadata": {
+              "id": "msg_011Ce1ffu8h1bhg9KGKhbaJ2",
+              "container": null,
+              "model": "claude-sonnet-4-5-20250929",
+              "stop_details": null,
+              "stop_reason": "tool_use",
+              "stop_sequence": null,
+              "usage": {
+                "cache_creation": {
+                  "ephemeral_1h_input_tokens": 0,
+                  "ephemeral_5m_input_tokens": 0
+                },
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "inference_geo": "not_available",
+                "input_tokens": 998,
+                "output_tokens": 57,
+                "output_tokens_details": null,
+                "server_tool_use": null,
+                "service_tier": "standard"
+              },
+              "model_name": "claude-sonnet-4-5-20250929",
+              "model_provider": "anthropic"
+            },
+            "type": "ai",
+            "name": null,
+            "id": "lc_run--019ffd98-e892-7d71-81ea-db2ff9a1d0e3-0",
+            "tool_calls": [
+              {
+                "name": "search_docs",
+                "args": {
+                  "query": "billing duplicate charge refund"
+                },
+                "id": "toolu_01ENqKnxzi2EEKcHBpY2it48",
+                "type": "tool_call"
+              }
+            ],
+            "invalid_tool_calls": [],
+            "usage_metadata": {
+              "input_tokens": 998,
+              "output_tokens": 57,
+              "total_tokens": 1055,
+              "input_token_details": {
+                "cache_read": 0,
+                "cache_creation": 0,
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 0
+              }
+            }
+          },
+          {
+            "content": "Billing: invoices are issued monthly. A duplicate charge is refunded within five business days to the original payment method. Ask the user for the invoice id before escalating.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "search_docs",
+            "id": "16486b72-8c2a-4553-ae99-031a57524088",
+            "tool_call_id": "toolu_01ENqKnxzi2EEKcHBpY2it48",
+            "artifact": null,
+            "status": "success"
+          }
+        ]
+      },
+      "response": {
+        "generations": [
+          [
+            {
+              "text": "Perfect! Now I'll label this issue and post a helpful reply.",
+              "generation_info": null,
+              "type": "ChatGeneration",
+              "message": {
+                "content": [
+                  {
+                    "text": "Perfect! Now I'll label this issue and post a helpful reply.",
+                    "type": "text"
+                  },
+                  {
+                    "id": "toolu_015YbFQNbLNjgLcMqDMajLuq",
+                    "caller": {
+                      "type": "direct"
+                    },
+                    "input": {
+                      "issue_id": "57",
+                      "label": "billing"
+                    },
+                    "name": "label_issue",
+                    "type": "tool_use"
+                  },
+                  {
+                    "id": "toolu_012NCxtcQkXugbnJQQdXpPVf",
+                    "caller": {
+                      "type": "direct"
+                    },
+                    "input": {
+                      "issue_id": "57",
+                      "body": "Thank you for reporting this duplicate charge issue. We apologize for the inconvenience.\n\nTo help resolve this quickly, could you please provide your invoice ID? Once we have that information, we can process a refund to your original payment method within five business days.\n\nWe'll escalate this to our billing team right away."
+                    },
+                    "name": "post_reply",
+                    "type": "tool_use"
+                  }
+                ],
+                "additional_kwargs": {},
+                "response_metadata": {
+                  "id": "msg_011Ce1fg1ST7nLPi6DTZksDw",
+                  "container": null,
+                  "model": "claude-sonnet-4-5-20250929",
+                  "stop_details": null,
+                  "stop_reason": "tool_use",
+                  "stop_sequence": null,
+                  "usage": {
+                    "cache_creation": {
+                      "ephemeral_1h_input_tokens": 0,
+                      "ephemeral_5m_input_tokens": 0
+                    },
+                    "cache_creation_input_tokens": 0,
+                    "cache_read_input_tokens": 0,
+                    "inference_geo": "not_available",
+                    "input_tokens": 1102,
+                    "output_tokens": 208,
+                    "output_tokens_details": null,
+                    "server_tool_use": null,
+                    "service_tier": "standard"
+                  },
+                  "model_name": "claude-sonnet-4-5-20250929",
+                  "model_provider": "anthropic"
+                },
+                "type": "ai",
+                "name": null,
+                "id": "lc_run--019ffd98-ee14-7763-b687-9d0bbb5a99b7-0"
+              }
+            }
+          ]
+        ],
+        "llm_output": {
+          "id": "msg_011Ce1fg1ST7nLPi6DTZksDw",
+          "container": null,
+          "model": "claude-sonnet-4-5-20250929",
+          "stop_details": null,
+          "stop_reason": "tool_use",
+          "stop_sequence": null,
+          "usage": {
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 0,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "inference_geo": "not_available",
+            "input_tokens": 1102,
+            "output_tokens": 208,
+            "output_tokens_details": null,
+            "server_tool_use": null,
+            "service_tier": "standard"
+          },
+          "model_name": "claude-sonnet-4-5-20250929"
+        },
+        "run": null,
+        "type": "LLMResult"
+      },
+      "request_hash": "sha256:8828af71ab194454e0b4c3b4fc01c3ced87e85d7527dd701f2baba2046362740",
+      "usage": null,
+      "cost_usd": null
+    },
+    {
+      "seq": 11,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 5,
+      "thread_id": null,
+      "checkpoint_ns": "agent:9ef5841b-7ab8-7848-8c51-10cf361ca7fe"
+    },
+    {
+      "seq": 12,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 5,
+      "thread_id": null,
+      "checkpoint_ns": "agent:9ef5841b-7ab8-7848-8c51-10cf361ca7fe"
+    },
+    {
+      "seq": 13,
+      "parent_seq": 10,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "label_issue",
+      "arguments": {
+        "input": "{'issue_id': '57', 'label': 'billing'}"
+      },
+      "result": {
+        "content": "labeled issue #57 as billing",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "tool",
+        "name": "label_issue",
+        "id": null,
+        "tool_call_id": "toolu_015YbFQNbLNjgLcMqDMajLuq",
+        "artifact": null,
+        "status": "success"
+      },
+      "side_effect": "mutating"
+    },
+    {
+      "seq": 14,
+      "parent_seq": 10,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "tool_call",
+      "name": "post_reply",
+      "arguments": {
+        "input": "{'issue_id': '57', 'body': \"Thank you for reporting this duplicate charge issue. We apologize for the inconvenience.\\n\\nTo help resolve this quickly, could you please provide your invoice ID? Once we have that information, we can process a refund to your original payment method within five business days.\\n\\nWe'll escalate this to our billing team right away.\"}"
+      },
+      "result": {
+        "content": "posted reply to issue #57",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "tool",
+        "name": "post_reply",
+        "id": null,
+        "tool_call_id": "toolu_012NCxtcQkXugbnJQQdXpPVf",
+        "artifact": null,
+        "status": "success"
+      },
+      "side_effect": "mutating"
+    },
+    {
+      "seq": 15,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "tools",
+      "step": 6,
+      "thread_id": null,
+      "checkpoint_ns": "tools:be864d22-c1ad-a6d5-1a9e-1e57cb8de8e4"
+    },
+    {
+      "seq": 16,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "llm_call",
+      "provider": "langchain",
+      "model": "claude-sonnet-4-5",
+      "request": {
+        "model": "claude-sonnet-4-5",
+        "messages": [
+          {
+            "content": "You are an issue-triage assistant for a software product. For the issue you are given: search the docs for relevant guidance, apply exactly one category label (one of: bug, billing, api), post a short helpful reply to the user, and finish with a one-sentence summary of what you did.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "system",
+            "name": null,
+            "id": "69581076-976d-434a-b354-e6ee29cc4469"
+          },
+          {
+            "content": "Issue #57: Charged twice this month\n\nMy card was billed two times for a single subscription this month.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "human",
+            "name": null,
+            "id": "8279c669-9dba-48d2-add0-ee9f4f70a46f"
+          },
+          {
+            "content": [
+              {
+                "text": "I'll help you with this billing issue. Let me search for relevant documentation and then respond appropriately.",
+                "type": "text"
+              },
+              {
+                "id": "toolu_01VZsJamtpLpi77kdo5xjZeR",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "query": "charged twice double billing subscription"
+                },
+                "name": "search_docs",
+                "type": "tool_use"
+              }
+            ],
+            "additional_kwargs": {},
+            "response_metadata": {
+              "id": "msg_011Ce1ffk3VqKJNirkvdt8Xv",
+              "container": null,
+              "model": "claude-sonnet-4-5-20250929",
+              "stop_details": null,
+              "stop_reason": "tool_use",
+              "stop_sequence": null,
+              "usage": {
+                "cache_creation": {
+                  "ephemeral_1h_input_tokens": 0,
+                  "ephemeral_5m_input_tokens": 0
+                },
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "inference_geo": "not_available",
+                "input_tokens": 869,
+                "output_tokens": 79,
+                "output_tokens_details": null,
+                "server_tool_use": null,
+                "service_tier": "standard"
+              },
+              "model_name": "claude-sonnet-4-5-20250929",
+              "model_provider": "anthropic"
+            },
+            "type": "ai",
+            "name": null,
+            "id": "lc_run--019ffd98-dff7-7c73-972c-43b21a292c35-0",
+            "tool_calls": [
+              {
+                "name": "search_docs",
+                "args": {
+                  "query": "charged twice double billing subscription"
+                },
+                "id": "toolu_01VZsJamtpLpi77kdo5xjZeR",
+                "type": "tool_call"
+              }
+            ],
+            "invalid_tool_calls": [],
+            "usage_metadata": {
+              "input_tokens": 869,
+              "output_tokens": 79,
+              "total_tokens": 948,
+              "input_token_details": {
+                "cache_read": 0,
+                "cache_creation": 0,
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 0
+              }
+            }
+          },
+          {
+            "content": "Password reset: open Settings > Security and click Reset Password. A reset link is emailed and expires in one hour. If the link errors, it has usually expired - request a fresh one.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "search_docs",
+            "id": "8c17dff7-bb61-4f06-b8c9-f9d56010f11e",
+            "tool_call_id": "toolu_01VZsJamtpLpi77kdo5xjZeR",
+            "artifact": null,
+            "status": "success"
+          },
+          {
+            "content": [
+              {
+                "id": "toolu_01ENqKnxzi2EEKcHBpY2it48",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "query": "billing duplicate charge refund"
+                },
+                "name": "search_docs",
+                "type": "tool_use"
+              }
+            ],
+            "additional_kwargs": {},
+            "response_metadata": {
+              "id": "msg_011Ce1ffu8h1bhg9KGKhbaJ2",
+              "container": null,
+              "model": "claude-sonnet-4-5-20250929",
+              "stop_details": null,
+              "stop_reason": "tool_use",
+              "stop_sequence": null,
+              "usage": {
+                "cache_creation": {
+                  "ephemeral_1h_input_tokens": 0,
+                  "ephemeral_5m_input_tokens": 0
+                },
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "inference_geo": "not_available",
+                "input_tokens": 998,
+                "output_tokens": 57,
+                "output_tokens_details": null,
+                "server_tool_use": null,
+                "service_tier": "standard"
+              },
+              "model_name": "claude-sonnet-4-5-20250929",
+              "model_provider": "anthropic"
+            },
+            "type": "ai",
+            "name": null,
+            "id": "lc_run--019ffd98-e892-7d71-81ea-db2ff9a1d0e3-0",
+            "tool_calls": [
+              {
+                "name": "search_docs",
+                "args": {
+                  "query": "billing duplicate charge refund"
+                },
+                "id": "toolu_01ENqKnxzi2EEKcHBpY2it48",
+                "type": "tool_call"
+              }
+            ],
+            "invalid_tool_calls": [],
+            "usage_metadata": {
+              "input_tokens": 998,
+              "output_tokens": 57,
+              "total_tokens": 1055,
+              "input_token_details": {
+                "cache_read": 0,
+                "cache_creation": 0,
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 0
+              }
+            }
+          },
+          {
+            "content": "Billing: invoices are issued monthly. A duplicate charge is refunded within five business days to the original payment method. Ask the user for the invoice id before escalating.",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "search_docs",
+            "id": "16486b72-8c2a-4553-ae99-031a57524088",
+            "tool_call_id": "toolu_01ENqKnxzi2EEKcHBpY2it48",
+            "artifact": null,
+            "status": "success"
+          },
+          {
+            "content": [
+              {
+                "text": "Perfect! Now I'll label this issue and post a helpful reply.",
+                "type": "text"
+              },
+              {
+                "id": "toolu_015YbFQNbLNjgLcMqDMajLuq",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "issue_id": "57",
+                  "label": "billing"
+                },
+                "name": "label_issue",
+                "type": "tool_use"
+              },
+              {
+                "id": "toolu_012NCxtcQkXugbnJQQdXpPVf",
+                "caller": {
+                  "type": "direct"
+                },
+                "input": {
+                  "issue_id": "57",
+                  "body": "Thank you for reporting this duplicate charge issue. We apologize for the inconvenience.\n\nTo help resolve this quickly, could you please provide your invoice ID? Once we have that information, we can process a refund to your original payment method within five business days.\n\nWe'll escalate this to our billing team right away."
+                },
+                "name": "post_reply",
+                "type": "tool_use"
+              }
+            ],
+            "additional_kwargs": {},
+            "response_metadata": {
+              "id": "msg_011Ce1fg1ST7nLPi6DTZksDw",
+              "container": null,
+              "model": "claude-sonnet-4-5-20250929",
+              "stop_details": null,
+              "stop_reason": "tool_use",
+              "stop_sequence": null,
+              "usage": {
+                "cache_creation": {
+                  "ephemeral_1h_input_tokens": 0,
+                  "ephemeral_5m_input_tokens": 0
+                },
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "inference_geo": "not_available",
+                "input_tokens": 1102,
+                "output_tokens": 208,
+                "output_tokens_details": null,
+                "server_tool_use": null,
+                "service_tier": "standard"
+              },
+              "model_name": "claude-sonnet-4-5-20250929",
+              "model_provider": "anthropic"
+            },
+            "type": "ai",
+            "name": null,
+            "id": "lc_run--019ffd98-ee14-7763-b687-9d0bbb5a99b7-0",
+            "tool_calls": [
+              {
+                "name": "label_issue",
+                "args": {
+                  "issue_id": "57",
+                  "label": "billing"
+                },
+                "id": "toolu_015YbFQNbLNjgLcMqDMajLuq",
+                "type": "tool_call"
+              },
+              {
+                "name": "post_reply",
+                "args": {
+                  "issue_id": "57",
+                  "body": "Thank you for reporting this duplicate charge issue. We apologize for the inconvenience.\n\nTo help resolve this quickly, could you please provide your invoice ID? Once we have that information, we can process a refund to your original payment method within five business days.\n\nWe'll escalate this to our billing team right away."
+                },
+                "id": "toolu_012NCxtcQkXugbnJQQdXpPVf",
+                "type": "tool_call"
+              }
+            ],
+            "invalid_tool_calls": [],
+            "usage_metadata": {
+              "input_tokens": 1102,
+              "output_tokens": 208,
+              "total_tokens": 1310,
+              "input_token_details": {
+                "cache_read": 0,
+                "cache_creation": 0,
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 0
+              }
+            }
+          },
+          {
+            "content": "labeled issue #57 as billing",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "label_issue",
+            "id": "a66cea04-0e24-4f60-a42d-8a7dc6beeaf1",
+            "tool_call_id": "toolu_015YbFQNbLNjgLcMqDMajLuq",
+            "artifact": null,
+            "status": "success"
+          },
+          {
+            "content": "posted reply to issue #57",
+            "additional_kwargs": {},
+            "response_metadata": {},
+            "type": "tool",
+            "name": "post_reply",
+            "id": "480a481a-6875-4235-a7a8-5d613aca0d12",
+            "tool_call_id": "toolu_012NCxtcQkXugbnJQQdXpPVf",
+            "artifact": null,
+            "status": "success"
+          }
+        ]
+      },
+      "response": {
+        "generations": [
+          [
+            {
+              "text": "I've labeled issue #57 as \"billing\", requested the invoice ID from the user, and informed them that duplicate charges are refunded within five business days per our documentation.",
+              "generation_info": null,
+              "type": "ChatGeneration",
+              "message": {
+                "content": "I've labeled issue #57 as \"billing\", requested the invoice ID from the user, and informed them that duplicate charges are refunded within five business days per our documentation.",
+                "additional_kwargs": {},
+                "response_metadata": {
+                  "id": "msg_011Ce1fgGnwBNvXMEdNSfqw3",
+                  "container": null,
+                  "model": "claude-sonnet-4-5-20250929",
+                  "stop_details": null,
+                  "stop_reason": "end_turn",
+                  "stop_sequence": null,
+                  "usage": {
+                    "cache_creation": {
+                      "ephemeral_1h_input_tokens": 0,
+                      "ephemeral_5m_input_tokens": 0
+                    },
+                    "cache_creation_input_tokens": 0,
+                    "cache_read_input_tokens": 0,
+                    "inference_geo": "not_available",
+                    "input_tokens": 1386,
+                    "output_tokens": 39,
+                    "output_tokens_details": null,
+                    "server_tool_use": null,
+                    "service_tier": "standard"
+                  },
+                  "model_name": "claude-sonnet-4-5-20250929",
+                  "model_provider": "anthropic"
+                },
+                "type": "ai",
+                "name": null,
+                "id": "lc_run--019ffd98-fc1d-7770-9661-5daeb5ca4884-0"
+              }
+            }
+          ]
+        ],
+        "llm_output": {
+          "id": "msg_011Ce1fgGnwBNvXMEdNSfqw3",
+          "container": null,
+          "model": "claude-sonnet-4-5-20250929",
+          "stop_details": null,
+          "stop_reason": "end_turn",
+          "stop_sequence": null,
+          "usage": {
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 0,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "inference_geo": "not_available",
+            "input_tokens": 1386,
+            "output_tokens": 39,
+            "output_tokens_details": null,
+            "server_tool_use": null,
+            "service_tier": "standard"
+          },
+          "model_name": "claude-sonnet-4-5-20250929"
+        },
+        "run": null,
+        "type": "LLMResult"
+      },
+      "request_hash": "sha256:0d32bf074dd9dd568feec506e9f224ad10096342d2b7d24538ce4f07904f95cc",
+      "usage": null,
+      "cost_usd": null
+    },
+    {
+      "seq": 17,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 7,
+      "thread_id": null,
+      "checkpoint_ns": "agent:849c1df6-432c-4cbd-9d0b-42a3d1cf6632"
+    },
+    {
+      "seq": 18,
+      "parent_seq": null,
+      "started_at": null,
+      "latency_ms": null,
+      "type": "graph_node",
+      "node": "agent",
+      "step": 7,
+      "thread_id": null,
+      "checkpoint_ns": "agent:849c1df6-432c-4cbd-9d0b-42a3d1cf6632"
+    }
+  ],
+  "metadata": {}
+}

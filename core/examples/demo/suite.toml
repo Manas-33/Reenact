@@ -1,0 +1,72 @@
+# The issue-triage demo eval suite, over the committed baseline recordings.
+# Run offline:  reenact eval suite.toml
+# Gate a run:   reenact ci suite.toml --baseline baseline.json
+
+[[scenario]]
+name = "triage-42"
+cassette = "scenarios/baseline/issue-42.json"
+
+  [[scenario.check]]
+  type = "called_tool"
+  name = "search_docs"
+
+  [[scenario.check]]
+  type = "called_tool"
+  name = "label_issue"
+
+  [[scenario.check]]
+  type = "called_tool"
+  name = "post_reply"
+
+  [[scenario.check]]
+  type = "no_mutating_tool_reexecuted"
+
+  [[scenario.check]]
+  type = "answer_contains"
+  value = "password"
+
+[[scenario]]
+name = "triage-57"
+cassette = "scenarios/baseline/issue-57.json"
+
+  [[scenario.check]]
+  type = "called_tool"
+  name = "search_docs"
+
+  [[scenario.check]]
+  type = "called_tool"
+  name = "label_issue"
+
+  [[scenario.check]]
+  type = "called_tool"
+  name = "post_reply"
+
+  [[scenario.check]]
+  type = "no_mutating_tool_reexecuted"
+
+  [[scenario.check]]
+  type = "answer_contains"
+  value = "billing"
+
+[[scenario]]
+name = "triage-63"
+cassette = "scenarios/baseline/issue-63.json"
+
+  [[scenario.check]]
+  type = "called_tool"
+  name = "search_docs"
+
+  [[scenario.check]]
+  type = "called_tool"
+  name = "label_issue"
+
+  [[scenario.check]]
+  type = "called_tool"
+  name = "post_reply"
+
+  [[scenario.check]]
+  type = "no_mutating_tool_reexecuted"
+
+  [[scenario.check]]
+  type = "answer_contains"
+  value = "429"
