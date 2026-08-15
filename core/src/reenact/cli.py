@@ -168,8 +168,10 @@ def eval_suite(
 
 def _render_diff(diff: RegressionDiff) -> None:
     typer.echo(diff.summary())
-    for delta in diff.regressions:
+    for delta in diff.blocking_regressions:
         typer.echo(f"  regressed: {delta.check} {delta.detail} ({delta.scenario})")
+    for delta in diff.advisory_regressions:
+        typer.echo(f"  advisory:  {delta.check} {delta.detail} ({delta.scenario})")
     for delta in diff.improvements:
         typer.echo(f"  improved:  {delta.check} {delta.detail} ({delta.scenario})")
     for delta in diff.new_checks:

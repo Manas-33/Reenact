@@ -14,6 +14,7 @@ from reenact.evals.baseline import (
 from reenact.evals.check import (
     Check,
     CheckResult,
+    CriterionLevel,
     RunView,
     answer_contains,
     answer_matches,
@@ -47,6 +48,7 @@ __all__ = [
     "CheckDelta",
     "CheckResult",
     "Criterion",
+    "CriterionLevel",
     "CriterionVerdict",
     "DeltaKind",
     "EvalReport",

@@ -31,7 +31,7 @@ from weakref import WeakKeyDictionary
 from pydantic import BaseModel, ConfigDict, ValidationError
 
 from reenact.evals._text import clip, response_text
-from reenact.evals.check import Check, CheckResult, RunView
+from reenact.evals.check import Check, CheckResult, CriterionLevel, RunView
 from reenact.evals.judge import DEFAULT_MAX_TOKENS, DEFAULT_MODEL, render_trajectory
 
 STRUCTURED_SYSTEM = (
@@ -55,13 +55,16 @@ class Criterion(BaseModel):
     """A yes/no quality question about a trajectory, answered with evidence.
 
     ``id`` is the stable key a check is named for (so it matches across a baseline
-    diff); ``question`` is the yes/no prompt the evaluator answers.
+    diff); ``question`` is the yes/no prompt the evaluator answers. ``level`` marks
+    whether a regression on this criterion blocks the gate (``BLOCKING``, the
+    default) or is only a reported warning (``ADVISORY``).
     """
 
     model_config = ConfigDict(extra="forbid")
 
     id: str
     question: str
+    level: CriterionLevel = CriterionLevel.BLOCKING
 
 
 class CriterionVerdict(BaseModel):
@@ -148,17 +151,23 @@ def _verdict_to_result(
     verdict: CriterionVerdict | None,
     valid_seqs: set[int],
 ) -> CheckResult:
-    """Turn one criterion's verdict into a soft assertion (a ``CheckResult``)."""
+    """Turn one criterion's verdict into a soft assertion (a ``CheckResult``).
+
+    The criterion's ``level`` rides onto the result, so an advisory criterion's
+    pass->fail is reported by the gate but never blocks it.
+    """
     if verdict is None:
         return CheckResult(
             name=label,
             passed=False,
+            level=criterion.level,
             message=f"no verdict returned for criterion {criterion.id!r}",
         )
     if verdict.passed and not _grounded(verdict, valid_seqs):
         return CheckResult(
             name=label,
             passed=False,
+            level=criterion.level,
             message=(
                 "claimed pass without citing a real trajectory step "
                 f"(evidence: {clip(verdict.evidence)!r}) - downgraded to fail"
@@ -172,6 +181,7 @@ def _verdict_to_result(
     return CheckResult(
         name=label,
         passed=verdict.passed,
+        level=criterion.level,
         message=f"{criterion.id} {verb} ({detail}){reason}",
     )
 

@@ -11,7 +11,7 @@ from typing import Any
 from typer.testing import CliRunner
 
 from reenact.cli import app
-from reenact.evals import Baseline, diff_baselines
+from reenact.evals import Baseline, CriterionLevel, diff_baselines
 from reenact.evals.baseline import BaselineCheck, BaselineScenario
 from reenact.record import hash_request, redact
 from reenact.schema import LLMCallEvent, SideEffect, ToolCallEvent, Trajectory
@@ -22,6 +22,10 @@ runner = CliRunner()
 
 def _check(name: str, passed: bool, score: float | None = None) -> BaselineCheck:
     return BaselineCheck(name=name, passed=passed, score=score)
+
+
+def _advisory(name: str, passed: bool) -> BaselineCheck:
+    return BaselineCheck(name=name, passed=passed, level=CriterionLevel.ADVISORY)
 
 
 def _scenario(name: str, *checks: BaselineCheck) -> BaselineScenario:
@@ -78,6 +82,42 @@ def test_new_check_is_reported_but_does_not_gate() -> None:
     diff = diff_baselines(base, now)
     assert not diff.regressed
     assert [d.check for d in diff.new_checks] == ["b"]
+
+
+# --- blocking vs advisory levels ---------------------------------------------
+
+
+def test_advisory_regression_is_reported_but_does_not_gate() -> None:
+    base = _baseline(_scenario("s", _advisory("criterion:tone", True)))
+    now = _baseline(_scenario("s", _advisory("criterion:tone", False)))
+    diff = diff_baselines(base, now)
+    assert not diff.regressed  # an advisory flip never blocks the merge
+    assert not diff.blocking_regressions
+    assert [d.check for d in diff.advisory_regressions] == ["criterion:tone"]
+    assert "no regressions across 1 scenario(s)" in diff.summary()
+    assert "1 advisory warning(s): criterion:tone pass->fail" in diff.summary()
+
+
+def test_blocking_and_advisory_regressions_are_distinguished() -> None:
+    base = _baseline(
+        _scenario(
+            "s", _check("called_tool('x')", True), _advisory("criterion:tone", True)
+        )
+    )
+    now = _baseline(
+        _scenario(
+            "s", _check("called_tool('x')", False), _advisory("criterion:tone", False)
+        )
+    )
+    diff = diff_baselines(base, now)
+    assert diff.regressed  # the blocking one gates
+    assert [d.check for d in diff.blocking_regressions] == ["called_tool('x')"]
+    assert [d.check for d in diff.advisory_regressions] == ["criterion:tone"]
+    # The gate headline counts only the blocking regression; the advisory tails it.
+    assert diff.summary().startswith(
+        "1/1 scenarios regressed: called_tool('x') pass->fail"
+    )
+    assert "1 advisory warning(s)" in diff.summary()
 
 
 def test_summary_counts_regressed_scenarios() -> None:

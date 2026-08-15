@@ -13,11 +13,14 @@ from typing import Any
 
 from reenact.evals import (
     FAITHFULNESS,
+    Baseline,
     Criterion,
+    CriterionLevel,
     Scenario,
     StructuredEvaluator,
     called_tool,
     run_scenario,
+    run_suite,
     structured_eval,
 )
 from reenact.evals.check import RunView
@@ -250,6 +253,50 @@ def test_mixes_with_hard_assertions_in_a_scenario() -> None:
         "called_tool('get_weather')",
         "criterion:grounded",
     ]
+
+
+# --- blocking vs advisory levels ---------------------------------------------
+
+
+def test_criterion_defaults_to_blocking() -> None:
+    assert Criterion(id="x", question="?").level is CriterionLevel.BLOCKING
+    result = structured_eval(
+        _StubClient(_verdicts_json({"id": "x", "passed": True, "evidence": "[1]"})),
+        [Criterion(id="x", question="?")],
+    )[0](RunView(_weather_run()))
+    assert result.level is CriterionLevel.BLOCKING
+
+
+def test_advisory_criterion_carries_its_level() -> None:
+    client = _StubClient(
+        _verdicts_json({"id": "tone", "passed": False, "evidence": ""})
+    )
+    criterion = Criterion(
+        id="tone", question="Polite tone?", level=CriterionLevel.ADVISORY
+    )
+    result = structured_eval(client, [criterion])[0](RunView(_weather_run()))
+    # The level rides onto the CheckResult, so the gate can warn without blocking.
+    assert result.level is CriterionLevel.ADVISORY
+    assert not result.passed
+
+
+def test_advisory_level_survives_into_the_baseline() -> None:
+    # The full seam: criterion level -> CheckResult -> Baseline.from_report, so the
+    # committed baseline records which checks only warn.
+    client = _StubClient(
+        _verdicts_json({"id": "tone", "passed": True, "evidence": "[1]"})
+    )
+    scenario = Scenario(
+        name="weather",
+        trajectory=_weather_run(),
+        checks=structured_eval(
+            client, [Criterion(id="tone", question="?", level=CriterionLevel.ADVISORY)]
+        ),
+    )
+    baseline = Baseline.from_report(run_suite([scenario]))
+    recorded = baseline.scenarios[0].checks[0]
+    assert recorded.name == "criterion:tone"
+    assert recorded.level is CriterionLevel.ADVISORY
 
 
 def test_faithfulness_is_a_criterion() -> None:

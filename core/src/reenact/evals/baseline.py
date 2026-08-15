@@ -13,19 +13,26 @@ from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
 
+from reenact.evals.check import CriterionLevel
 from reenact.evals.runner import EvalReport
 
 DEFAULT_SCORE_TOLERANCE = 0.05
 
 
 class BaselineCheck(BaseModel):
-    """One check's recorded outcome in a baseline."""
+    """One check's recorded outcome in a baseline.
+
+    ``level`` defaults to blocking, so a baseline committed before advisory
+    criteria existed (no ``level`` key) loads as every check blocking - the gate
+    behaves exactly as it did before.
+    """
 
     model_config = ConfigDict(extra="forbid")
 
     name: str
     passed: bool
     score: float | None = None
+    level: CriterionLevel = CriterionLevel.BLOCKING
 
 
 class BaselineScenario(BaseModel):
@@ -51,7 +58,10 @@ class Baseline(BaseModel):
                     name=scenario.name,
                     checks=[
                         BaselineCheck(
-                            name=check.name, passed=check.passed, score=check.score
+                            name=check.name,
+                            passed=check.passed,
+                            score=check.score,
+                            level=check.level,
                         )
                         for check in scenario.checks
                     ],
@@ -88,6 +98,7 @@ class CheckDelta(BaseModel):
     check: str
     kind: DeltaKind
     detail: str
+    level: CriterionLevel = CriterionLevel.BLOCKING
 
 
 def _change(prior: BaselineCheck, current: BaselineCheck) -> str:
@@ -130,7 +141,18 @@ class RegressionDiff(BaseModel):
 
     @property
     def regressions(self) -> list[CheckDelta]:
+        """Every regressed check, blocking or advisory - the full report."""
         return [d for d in self.deltas if d.kind is DeltaKind.REGRESSION]
+
+    @property
+    def blocking_regressions(self) -> list[CheckDelta]:
+        """The regressions that fail the gate."""
+        return [d for d in self.regressions if d.level is CriterionLevel.BLOCKING]
+
+    @property
+    def advisory_regressions(self) -> list[CheckDelta]:
+        """Regressions that are reported as warnings but never gate."""
+        return [d for d in self.regressions if d.level is CriterionLevel.ADVISORY]
 
     @property
     def improvements(self) -> list[CheckDelta]:
@@ -142,27 +164,46 @@ class RegressionDiff(BaseModel):
 
     @property
     def regressed_scenarios(self) -> list[str]:
+        """Scenarios with a *blocking* regression - the ones that fail the gate."""
         ordered: list[str] = []
-        for delta in self.regressions:
+        for delta in self.blocking_regressions:
             if delta.scenario not in ordered:
                 ordered.append(delta.scenario)
         return ordered
 
     @property
     def regressed(self) -> bool:
-        return bool(self.regressions)
+        """Whether the gate fails: a *blocking* regression.
+
+        Advisory regressions are reported (see :attr:`advisory_regressions`) but
+        never gate, so a shaky criterion can warn without flaking the merge.
+        """
+        return bool(self.blocking_regressions)
 
     def summary(self) -> str:
-        """A one-line headline in the launch voice."""
-        if not self.regressed:
-            return f"no regressions across {self.scenario_total} scenario(s)"
-        details = "; ".join(
-            f"{d.check} {d.detail} in {d.scenario}" for d in self.regressions
+        """A one-line headline in the launch voice.
+
+        Leads with the blocking regressions (what fails the gate); any advisory
+        regressions are appended as a clearly non-gating warning tail.
+        """
+        if self.blocking_regressions:
+            details = "; ".join(
+                f"{d.check} {d.detail} in {d.scenario}"
+                for d in self.blocking_regressions
+            )
+            head = (
+                f"{len(self.regressed_scenarios)}/{self.scenario_total} "
+                f"scenarios regressed: {details}"
+            )
+        else:
+            head = f"no regressions across {self.scenario_total} scenario(s)"
+        if not self.advisory_regressions:
+            return head
+        warned = "; ".join(
+            f"{d.check} {d.detail} in {d.scenario}" for d in self.advisory_regressions
         )
-        return (
-            f"{len(self.regressed_scenarios)}/{self.scenario_total} "
-            f"scenarios regressed: {details}"
-        )
+        n_advisory = len(self.advisory_regressions)
+        return f"{head} | {n_advisory} advisory warning(s): {warned}"
 
 
 def diff_baselines(
@@ -193,6 +234,7 @@ def diff_baselines(
                         check=check.name,
                         kind=DeltaKind.NEW,
                         detail="new",
+                        level=check.level,
                     )
                 )
                 continue
@@ -204,6 +246,7 @@ def diff_baselines(
                         check=check.name,
                         kind=kind,
                         detail=_change(prior, check),
+                        level=check.level,
                     )
                 )
     return RegressionDiff(deltas=deltas, scenario_total=len(current.scenarios))

@@ -15,12 +15,27 @@ read-only would be re-run live.
 
 import re
 from collections.abc import Callable
+from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict
 
 from reenact.evals._text import clip, extract_text
 from reenact.replay import Player, ReplayMode, ReplayPolicy
 from reenact.schema import LLMCallEvent, SideEffect, ToolCallEvent, Trajectory
+
+
+class CriterionLevel(StrEnum):
+    """Whether a failed or regressed check blocks the gate, or only warns.
+
+    Hard assertions are always ``BLOCKING`` (the default). A structured criterion
+    may be marked ``ADVISORY`` so a shaky quality signal surfaces to a human -
+    reported in the diff and the PR comment - without ever flaking the merge gate;
+    calibration (a later rung) is what promotes a criterion to blocking or demotes
+    it to advisory.
+    """
+
+    BLOCKING = "blocking"
+    ADVISORY = "advisory"
 
 
 class RunView:
@@ -61,7 +76,10 @@ class CheckResult(BaseModel):
     """The outcome of one check: did it pass, and why.
 
     ``score`` is unset for a boolean assertion; the LLM judge (a later rung) fills
-    it with a graded value. Serializable, so a CI baseline can store it and diff.
+    it with a graded value. ``level`` decides whether a regression on this check
+    blocks the gate (the default) or is only an advisory warning - hard assertions
+    leave it ``BLOCKING``; a structured criterion may set it ``ADVISORY``.
+    Serializable, so a CI baseline can store it and diff.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -70,6 +88,7 @@ class CheckResult(BaseModel):
     passed: bool
     message: str = ""
     score: float | None = None
+    level: CriterionLevel = CriterionLevel.BLOCKING
 
 
 # A check is a plain function from a run view to its result.
