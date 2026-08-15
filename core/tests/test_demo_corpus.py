@@ -8,12 +8,31 @@ keeps the false-positive rate at zero.
 """
 
 from pathlib import Path
+from typing import Any
 
 from demo.suites import demo_scenarios
 
-from reenact.evals import Baseline, diff_baselines, load_baseline, run_suite
+from reenact.evals import (
+    Baseline,
+    diff_baselines,
+    load_baseline,
+    run_scenario,
+    run_suite,
+)
 
 DEMO = Path(__file__).resolve().parent.parent / "examples" / "demo"
+
+
+class _StubClient:
+    """A keyless evaluator client: every criterion comes back unanswered."""
+
+    class _Messages:
+        @staticmethod
+        def create(**_kwargs: Any) -> dict[str, Any]:
+            return {"content": [{"type": "text", "text": "[]"}]}
+
+    def __init__(self) -> None:
+        self.messages = self._Messages()
 
 
 def _baseline_of(set_name: str) -> Baseline:
@@ -55,3 +74,16 @@ def test_model_swap_is_benign() -> None:
     # uninstalled; this is the specificity the FPR floor protects.
     diff = diff_baselines(_baseline_of("baseline"), _baseline_of("model-swap"))
     assert not diff.regressed
+
+
+def test_criteria_wire_into_the_demo_suite() -> None:
+    # A non-None client turns on the structured criteria (the fuzzy-quality half
+    # that replaced the scalar judge); they run as named soft-assertion checks
+    # beside the structural ones. The stub answers no criterion, so each is a
+    # fail-closed "no verdict" - we assert only that they are wired and named.
+    scenario = demo_scenarios("baseline", judge_client=_StubClient())[0]
+    names = [c.name for c in run_scenario(scenario).checks]
+    assert "called_tool('search_docs')" in names  # structural checks still there
+    assert "criterion:correct_label" in names
+    assert "criterion:reply_grounded" in names
+    assert "criterion:faithful" in names

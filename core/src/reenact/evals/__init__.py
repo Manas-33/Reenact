@@ -36,7 +36,9 @@ from reenact.evals.structured import (
     FAITHFULNESS,
     Criterion,
     CriterionVerdict,
+    PairwiseVerdict,
     StructuredEvaluator,
+    pairwise,
     structured_eval,
 )
 from reenact.evals.suite import SuiteConfigError, load_suite
@@ -53,6 +55,7 @@ __all__ = [
     "DeltaKind",
     "EvalReport",
     "JudgeVerdict",
+    "PairwiseVerdict",
     "RegressionDiff",
     "RunView",
     "Scenario",
@@ -68,6 +71,7 @@ __all__ = [
     "load_baseline",
     "load_suite",
     "no_mutating_tool_reexecuted",
+    "pairwise",
     "render_trajectory",
     "replays_clean",
     "run_scenario",

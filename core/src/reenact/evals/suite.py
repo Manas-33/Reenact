@@ -3,8 +3,9 @@
 A suite file lists scenarios; each names a cassette and a set of checks, written
 as plain tables so the whole thing lives in git next to the recordings it gates.
 Check specs are resolved to the Check factories from this package. A ``judge``
-check additionally needs a runtime client, injected by the caller (the CLI) and
-never stored in the config - the config carries only the rubric and threshold.
+check and any ``[[scenario.criterion]]`` additionally need a runtime client,
+injected by the caller (the CLI) and never stored in the config - the config
+carries only the rubric / question, threshold, and level.
 """
 
 import tomllib
@@ -13,6 +14,7 @@ from typing import Any, cast
 
 from reenact.evals.check import (
     Check,
+    CriterionLevel,
     answer_contains,
     answer_matches,
     called_tool,
@@ -23,6 +25,7 @@ from reenact.evals.check import (
 )
 from reenact.evals.judge import DEFAULT_THRESHOLD, judged
 from reenact.evals.scenario import Scenario
+from reenact.evals.structured import Criterion, structured_eval
 
 
 class SuiteConfigError(ValueError):
@@ -95,6 +98,45 @@ def _build_check(spec: dict[str, Any], *, judge_client: Any, ctx: str) -> Check:
     raise SuiteConfigError(f"{ctx}: unknown check type {kind!r}")
 
 
+def _build_criterion(spec: dict[str, Any], ctx: str) -> Criterion:
+    """Resolve one ``[[scenario.criterion]]`` table to a :class:`Criterion`."""
+    level_raw = spec.get("level", CriterionLevel.BLOCKING.value)
+    if not isinstance(level_raw, str):
+        raise SuiteConfigError(f"{ctx}: 'level' must be a string")
+    try:
+        level = CriterionLevel(level_raw)
+    except ValueError as exc:
+        raise SuiteConfigError(
+            f"{ctx}: 'level' must be 'blocking' or 'advisory'"
+        ) from exc
+    return Criterion(
+        id=_req_str(spec, "id", ctx),
+        question=_req_str(spec, "question", ctx),
+        level=level,
+    )
+
+
+def _criterion_checks(
+    table: dict[str, Any], *, judge_client: Any, ctx: str
+) -> list[Check]:
+    """Build the structured-evaluator checks for a scenario's criteria (if any)."""
+    raw_criteria = table.get("criterion", [])
+    if not isinstance(raw_criteria, list):
+        raise SuiteConfigError(f"{ctx}: 'criterion' must be an array of tables")
+    criteria = [
+        _build_criterion(_table(raw, f"{ctx}.criterion[{i}]"), f"{ctx}.criterion[{i}]")
+        for i, raw in enumerate(cast(list[Any], raw_criteria))
+    ]
+    if not criteria:
+        return []
+    if judge_client is None:
+        raise SuiteConfigError(
+            f"{ctx}: a [[scenario.criterion]] needs a judge client, but none is "
+            "available (set ANTHROPIC_API_KEY and install the anthropic SDK)"
+        )
+    return structured_eval(judge_client, criteria)
+
+
 def load_suite(path: str | Path, *, judge_client: Any = None) -> list[Scenario]:
     """Load a TOML suite file into a list of runnable scenarios.
 
@@ -132,6 +174,7 @@ def load_suite(path: str | Path, *, judge_client: Any = None) -> list[Scenario]:
             )
             for i, raw_check in enumerate(cast(list[Any], raw_checks))
         ]
+        checks.extend(_criterion_checks(table, judge_client=judge_client, ctx=ctx))
         scenarios.append(
             Scenario.from_cassette(cassette, checks, name=_opt_name(table))
         )

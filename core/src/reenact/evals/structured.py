@@ -25,6 +25,7 @@ the mechanism is green with no key; calibrating the criteria against human label
 import json
 import re
 from collections.abc import Iterable
+from enum import StrEnum
 from typing import Any, cast
 from weakref import WeakKeyDictionary
 
@@ -33,6 +34,7 @@ from pydantic import BaseModel, ConfigDict, ValidationError
 from reenact.evals._text import clip, response_text
 from reenact.evals.check import Check, CheckResult, CriterionLevel, RunView
 from reenact.evals.judge import DEFAULT_MAX_TOKENS, DEFAULT_MODEL, render_trajectory
+from reenact.schema import Trajectory
 
 STRUCTURED_SYSTEM = (
     "You are a strict evaluator of an AI agent's multi-step trajectory. You are "
@@ -277,3 +279,75 @@ def structured_eval(
         temperature=temperature,
     )
     return evaluator.checks()
+
+
+class PairwiseVerdict(StrEnum):
+    """How a new run compares to a baseline run on one criterion."""
+
+    WORSE = "worse"
+    SAME = "same"
+    BETTER = "better"
+
+
+PAIRWISE_SYSTEM = (
+    "You are a strict evaluator comparing two runs of an AI agent - a baseline run "
+    "(A) and a new run (B) - on a single criterion. Decide whether B is WORSE, the "
+    "SAME as, or BETTER than A on that criterion. Judge only that criterion, and "
+    "prefer 'same' unless there is a clear difference. Respond with ONLY a JSON "
+    'object of the form {"comparison": "worse|same|better", "reasoning": "<one '
+    'sentence>"}. Do not output anything else.'
+)
+
+
+class _PairwiseReply(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    comparison: PairwiseVerdict
+    reasoning: str = ""
+
+
+def _parse_pairwise(text: str) -> _PairwiseReply:
+    """Take the first ``{`` through the last ``}`` and validate the comparison."""
+    start = text.find("{")
+    end = text.rfind("}")
+    if start == -1 or end <= start:
+        raise ValueError("no JSON object in pairwise reply")
+    return _PairwiseReply.model_validate(json.loads(text[start : end + 1]))
+
+
+def pairwise(
+    client: Any,
+    baseline_traj: Trajectory,
+    new_traj: Trajectory,
+    criterion: Criterion,
+    *,
+    model: str = DEFAULT_MODEL,
+    max_tokens: int = DEFAULT_MAX_TOKENS,
+    temperature: float = 0.0,
+) -> PairwiseVerdict:
+    """Compare a new run to a baseline run on one criterion: worse, same, or better.
+
+    Relative rather than absolute: a model is far more consistent at "is B worse
+    than A?" than at scoring either alone, which is what a gate on a borderline
+    quality call actually needs. An unparseable or invalid reply fails closed to
+    ``WORSE`` - the conservative direction for a gate - so a garbled comparison
+    blocks rather than silently passing, the same posture as the judge and the
+    structured evaluator.
+    """
+    prompt = (
+        f"Criterion: {criterion.question}\n\n"
+        f"=== Run A (baseline) ===\n{render_trajectory(baseline_traj)}\n\n"
+        f"=== Run B (new) ===\n{render_trajectory(new_traj)}\n\n"
+        "Is run B worse, the same, or better than run A on this criterion?"
+    )
+    response = client.messages.create(
+        model=model,
+        max_tokens=max_tokens,
+        temperature=temperature,
+        system=PAIRWISE_SYSTEM,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    try:
+        return _parse_pairwise(response_text(response)).comparison
+    except (ValueError, ValidationError):
+        return PairwiseVerdict.WORSE

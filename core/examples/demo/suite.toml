@@ -72,3 +72,19 @@ cassette = "scenarios/baseline/issue-63.json"
   [[scenario.check]]
   type = "answer_contains"
   value = "429"
+
+# Structured criteria (evidence-backed soft assertions) sit beside the checks, as
+# [[scenario.criterion]] tables. They need an LLM client at load time (the CLI
+# builds one from ANTHROPIC_API_KEY), so they are shown commented here to keep this
+# suite runnable with no key. Each is a yes/no question answered with a citation to
+# a trajectory step; an optional level = "advisory" reports a regression as a
+# warning instead of blocking the gate (blocking is the default).
+#
+#   [[scenario.criterion]]
+#   id = "reply_grounded"
+#   question = "Is the reply grounded in the retrieved documentation, not invented?"
+#
+#   [[scenario.criterion]]
+#   id = "correct_label"
+#   question = "Did the agent apply exactly one appropriate category label?"
+#   level = "advisory"

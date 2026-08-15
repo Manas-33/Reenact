@@ -16,9 +16,11 @@ from reenact.evals import (
     Baseline,
     Criterion,
     CriterionLevel,
+    PairwiseVerdict,
     Scenario,
     StructuredEvaluator,
     called_tool,
+    pairwise,
     run_scenario,
     run_suite,
     structured_eval,
@@ -342,3 +344,48 @@ def test_verdicts_parse_when_wrapped_in_prose() -> None:
     )
     check = structured_eval(client, [Criterion(id="a", question="?")])[0]
     assert check(RunView(_weather_run())).passed
+
+
+# --- pairwise ----------------------------------------------------------------
+
+
+def _pairwise(text: str) -> PairwiseVerdict:
+    client = _StubClient(text)
+    return pairwise(
+        client,
+        _weather_run(),
+        _weather_run(),
+        Criterion(id="quality", question="Which run triaged better?"),
+    )
+
+
+def test_pairwise_returns_worse_same_better() -> None:
+    assert _pairwise('{"comparison": "worse", "reasoning": "B dropped a step"}') is (
+        PairwiseVerdict.WORSE
+    )
+    assert _pairwise('{"comparison": "same", "reasoning": "no difference"}') is (
+        PairwiseVerdict.SAME
+    )
+    assert _pairwise('{"comparison": "better", "reasoning": "B is clearer"}') is (
+        PairwiseVerdict.BETTER
+    )
+
+
+def test_pairwise_prompt_shows_both_runs() -> None:
+    client = _StubClient('{"comparison": "same"}')
+    pairwise(
+        client,
+        _weather_run(),
+        _weather_run(),
+        Criterion(id="q", question="Which is better?"),
+    )
+    content = client.messages.calls[0]["messages"][0]["content"]
+    assert "Run A (baseline)" in content
+    assert "Run B (new)" in content
+    assert "Which is better?" in content
+
+
+def test_pairwise_fails_closed_to_worse() -> None:
+    # A garbled or invalid comparison blocks (WORSE), never silently passes.
+    assert _pairwise("not json at all") is PairwiseVerdict.WORSE
+    assert _pairwise('{"comparison": "sideways"}') is PairwiseVerdict.WORSE

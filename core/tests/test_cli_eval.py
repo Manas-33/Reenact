@@ -9,10 +9,11 @@ exercised here.
 from pathlib import Path
 from typing import Any
 
+import pytest
 from typer.testing import CliRunner
 
 from reenact.cli import app
-from reenact.evals import load_suite, run_suite
+from reenact.evals import CriterionLevel, SuiteConfigError, load_suite, run_suite
 from reenact.record import hash_request, redact
 from reenact.schema import LLMCallEvent, SideEffect, ToolCallEvent, Trajectory
 from reenact.store import load_cassette, save_cassette
@@ -199,6 +200,90 @@ def test_load_suite_wires_judge_client(tmp_path: Path) -> None:
     report = run_suite(scenarios)
     assert report.passed
     assert report.scenarios[0].checks[0].score == 0.9
+
+
+# --- suite loader (structured criteria) --------------------------------------
+
+
+def test_load_suite_wires_criteria(tmp_path: Path) -> None:
+    _weather_cassette(tmp_path / "weather.json")
+    suite = tmp_path / "suite.toml"
+    suite.write_text(
+        '[[scenario]]\nname = "weather"\ncassette = "weather.json"\n'
+        '[[scenario.criterion]]\nid = "grounded"\n'
+        'question = "Is the answer grounded?"\n'
+        '[[scenario.criterion]]\nid = "tone"\nquestion = "Polite?"\n'
+        'level = "advisory"\n',
+        encoding="utf-8",
+    )
+    stub = _StubJudgeClient(
+        '[{"id": "grounded", "passed": true, "evidence": "[2]"},'
+        ' {"id": "tone", "passed": true, "evidence": "[2]"}]'
+    )
+    report = run_suite(load_suite(suite, judge_client=stub))
+    assert report.passed
+    checks = report.scenarios[0].checks
+    assert [c.name for c in checks] == ["criterion:grounded", "criterion:tone"]
+    # The level authored in config rides onto the result.
+    levels = {c.name: c.level for c in checks}
+    assert levels["criterion:grounded"] is CriterionLevel.BLOCKING
+    assert levels["criterion:tone"] is CriterionLevel.ADVISORY
+
+
+def test_load_suite_criterion_without_client_errors(tmp_path: Path) -> None:
+    _weather_cassette(tmp_path / "weather.json")
+    suite = tmp_path / "suite.toml"
+    suite.write_text(
+        '[[scenario]]\ncassette = "weather.json"\n'
+        '[[scenario.criterion]]\nid = "x"\nquestion = "?"\n',
+        encoding="utf-8",
+    )
+    with pytest.raises(SuiteConfigError, match="criterion"):
+        load_suite(suite)
+
+
+def test_load_suite_rejects_bad_criterion_level(tmp_path: Path) -> None:
+    _weather_cassette(tmp_path / "weather.json")
+    suite = tmp_path / "suite.toml"
+    suite.write_text(
+        '[[scenario]]\ncassette = "weather.json"\n'
+        '[[scenario.criterion]]\nid = "x"\nquestion = "?"\nlevel = "loud"\n',
+        encoding="utf-8",
+    )
+    stub = _StubJudgeClient("[]")
+    with pytest.raises(SuiteConfigError, match=r"blocking.*advisory"):
+        load_suite(suite, judge_client=stub)
+
+
+def test_eval_runs_a_criterion(tmp_path: Path, monkeypatch: Any) -> None:
+    _weather_cassette(tmp_path / "weather.json")
+    suite = tmp_path / "suite.toml"
+    suite.write_text(
+        '[[scenario]]\nname = "weather"\ncassette = "weather.json"\n'
+        '[[scenario.criterion]]\nid = "grounded"\nquestion = "Grounded?"\n',
+        encoding="utf-8",
+    )
+    stub = _StubJudgeClient('[{"id": "grounded", "passed": true, "evidence": "[2]"}]')
+    monkeypatch.setattr("reenact.cli._judge_client", lambda: stub)
+    result = runner.invoke(app, ["eval", str(suite)])
+    assert result.exit_code == 0, result.stdout
+    assert "PASS weather" in result.stdout
+
+
+def test_eval_criterion_without_client_errors(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    _weather_cassette(tmp_path / "weather.json")
+    suite = tmp_path / "suite.toml"
+    suite.write_text(
+        '[[scenario]]\ncassette = "weather.json"\n'
+        '[[scenario.criterion]]\nid = "x"\nquestion = "?"\n',
+        encoding="utf-8",
+    )
+    result = runner.invoke(app, ["eval", str(suite)])
+    assert result.exit_code == 2
+    assert "criterion" in result.stdout
 
 
 # --- reenact record ----------------------------------------------------------

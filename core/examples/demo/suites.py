@@ -10,12 +10,14 @@ from pathlib import Path
 from typing import Any
 
 from reenact.evals import (
+    FAITHFULNESS,
     Check,
+    Criterion,
     Scenario,
     answer_contains,
     called_tool,
-    judged,
     no_mutating_tool_reexecuted,
+    structured_eval,
 )
 
 SCENARIOS = Path(__file__).resolve().parent / "scenarios"
@@ -24,14 +26,27 @@ SCENARIOS = Path(__file__).resolve().parent / "scenarios"
 # clean re-record, so it never false-positives).
 _ANSWER_KEYWORD = {"42": "password", "57": "billing", "63": "429"}
 
-JUDGE_RUBRIC = (
-    "The agent correctly triaged the support issue: it searched the documentation, "
-    "applied exactly one appropriate category label (bug, billing, or api), posted "
-    "a helpful reply grounded in the docs, and gave an accurate one-sentence "
-    "summary. Score 1.0 for a complete, correct, well-grounded triage; score lower "
-    "for a missing or wrong label, a skipped step, an ungrounded or unhelpful "
-    "reply, or an inaccurate summary."
-)
+# The fuzzy-quality half, replacing the scalar judge: evidence-backed criteria,
+# each a yes/no question the model answers with a citation to a trajectory step,
+# gated per-criterion exactly like a hard assertion (no float, no threshold to
+# tune). Authored per the agent's job, not as a universal constant.
+QUALITY_CRITERIA = [
+    Criterion(
+        id="correct_label",
+        question=(
+            "Did the agent apply exactly one appropriate category label "
+            "(bug, billing, or api) matching this issue?"
+        ),
+    ),
+    Criterion(
+        id="reply_grounded",
+        question=(
+            "Is the reply the agent posted grounded in the documentation it "
+            "retrieved during the run, rather than invented?"
+        ),
+    ),
+    FAITHFULNESS,
+]
 
 
 def _checks_for(issue_id: str, judge_client: Any) -> list[Check]:
@@ -43,7 +58,7 @@ def _checks_for(issue_id: str, judge_client: Any) -> list[Check]:
         answer_contains(_ANSWER_KEYWORD[issue_id]),
     ]
     if judge_client is not None:
-        checks.append(judged(judge_client, JUDGE_RUBRIC, name="judge"))
+        checks.extend(structured_eval(judge_client, QUALITY_CRITERIA))
     return checks
 
 
@@ -52,8 +67,8 @@ def demo_scenarios(set_name: str, *, judge_client: Any = None) -> list[Scenario]
 
     The structural assertions (tool calls, mutating-tool safety, a topical keyword)
     are the gate's reliable signal. With ``judge_client`` each scenario also gets
-    the trajectory judge - a supplementary quality lens, not required to reproduce
-    the catch-rate / FPR numbers.
+    the structured criteria - evidence-backed soft assertions, a supplementary
+    quality lens that is not required to reproduce the catch-rate / FPR numbers.
     """
     base = SCENARIOS / set_name
     return [
