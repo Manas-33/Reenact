@@ -1,0 +1,53 @@
+# Composite Action wrapping the reenact CLI - runs the regression gate on a PR.
+# It sets up Python, installs reenact, and runs `reenact ci`, which replays the
+# committed scenario suite offline and fails only on a regression vs the baseline.
+# The sticky PR comment + dedicated check-run are added in a later rung; this job's
+# pass/fail already gives the merge-blocking red/green via its exit code.
+name: Reenact
+description: Regression testing for LLM agents - gate a PR on agent behavior.
+
+inputs:
+  suite:
+    description: Path to the TOML eval suite (relative to working-directory).
+    required: true
+  baseline:
+    description: Path to the committed baseline JSON to diff against.
+    required: true
+  tolerance:
+    description: Judge-score drop tolerated before it counts as a regression.
+    required: false
+    default: "0.05"
+  working-directory:
+    description: Directory to run reenact in.
+    required: false
+    default: "."
+  python-version:
+    description: Python version to set up for the run.
+    required: false
+    default: "3.12"
+  version:
+    description: >-
+      pip install spec for reenact (e.g. "reenact", "reenact==0.1.0", a
+      "git+https://..." URL, or a local path like "./core").
+    required: false
+    default: reenact
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install reenact
+      shell: bash
+      run: python -m pip install "${{ inputs.version }}"
+
+    - name: Run reenact ci
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: >-
+        reenact ci "${{ inputs.suite }}"
+        --baseline "${{ inputs.baseline }}"
+        --tolerance "${{ inputs.tolerance }}"
