@@ -1,21 +1,34 @@
-"""Rendering the regression diff into a sticky PR comment + check-run.
+"""Rendering the regression diff into a sticky PR comment + check-run, and posting it.
 
-Keyless, with a fake comment client: the render carries the hidden marker and the
-headline, a clean run and a regressed run differ, the sticky logic updates its own
-prior comment in place (never spams) and never touches a human's comment, and the
-check-run conclusion goes red only on a regression.
+Keyless throughout: a fake comment client for the render/sticky logic, and a fake
+HTTP transport for the real GitHubClient so its request shapes are checked without a
+network or a token. The render carries the hidden marker, a clean vs regressed run
+differ, the sticky logic updates its own prior comment in place (never spams) and
+never touches a human's comment, the check-run goes red only on a regression, and
+the client builds the right REST calls.
 """
 
+import json
+from pathlib import Path
+from typing import Any
+
+from typer.testing import CliRunner
+
+from reenact.cli import app
 from reenact.evals import Baseline, CriterionLevel, diff_baselines
 from reenact.evals.baseline import BaselineCheck, BaselineScenario, RegressionDiff
 from reenact.report import (
     STICKY_MARKER,
     CheckConclusion,
+    GitHubClient,
     IssueComment,
     check_run_result,
+    post_report,
     render_pr_comment,
     upsert_sticky_comment,
 )
+
+runner = CliRunner()
 
 
 def _check(
@@ -31,10 +44,13 @@ def _diff(before: BaselineCheck, after: BaselineCheck) -> RegressionDiff:
 
 
 class _FakeClient:
+    """A fake GateClient: records comment ops and check-runs, no network."""
+
     def __init__(self, comments: list[IssueComment] | None = None) -> None:
         self._comments = comments or []
         self.created: list[str] = []
         self.updated: list[tuple[int, str]] = []
+        self.check_runs: list[dict[str, str]] = []
 
     def list_comments(self) -> list[IssueComment]:
         return list(self._comments)
@@ -44,6 +60,31 @@ class _FakeClient:
 
     def update_comment(self, comment_id: int, body: str) -> None:
         self.updated.append((comment_id, body))
+
+    def create_check_run(
+        self, *, name: str, head_sha: str, conclusion: str, title: str, summary: str
+    ) -> None:
+        self.check_runs.append(
+            {"name": name, "head_sha": head_sha, "conclusion": conclusion}
+        )
+
+
+class _FakeTransport:
+    """Records each request and returns queued (status, payload) responses."""
+
+    def __init__(self, queue: list[tuple[int, object]] | None = None) -> None:
+        self.queue = queue or []
+        self.calls: list[dict[str, Any]] = []
+
+    def __call__(
+        self, method: str, url: str, headers: dict[str, str], body: bytes | None
+    ) -> tuple[int, bytes]:
+        self.calls.append(
+            {"method": method, "url": url, "headers": headers, "body": body}
+        )
+        status, payload = self.queue.pop(0) if self.queue else (200, None)
+        data = json.dumps(payload).encode("utf-8") if payload is not None else b""
+        return status, data
 
 
 # --- rendering ---------------------------------------------------------------
@@ -117,3 +158,123 @@ def test_check_run_red_on_regression_green_otherwise() -> None:
     clean = check_run_result(_diff(_check("c", True), _check("c", True)))
     assert clean.conclusion is CheckConclusion.SUCCESS
     assert "No regressions" in clean.title
+
+
+# --- post_report (whole gate result over a fake client) ----------------------
+
+
+def test_post_report_comments_and_opens_a_red_check_run() -> None:
+    client = _FakeClient()
+    diff = _diff(_check("called_tool('x')", True), _check("called_tool('x')", False))
+    action = post_report(client, diff, head_sha="abc123")
+    assert action == "created"
+    assert len(client.created) == 1
+    assert client.check_runs == [
+        {"name": "Reenact", "head_sha": "abc123", "conclusion": "failure"}
+    ]
+
+
+def test_post_report_green_check_run_when_clean() -> None:
+    client = _FakeClient([IssueComment(id=9, body=f"{STICKY_MARKER} old")])
+    diff = _diff(_check("c", True), _check("c", True))
+    action = post_report(client, diff, head_sha="def456")
+    assert action == "updated"  # edits its own prior comment
+    assert client.check_runs[0]["conclusion"] == "success"
+
+
+# --- the real GitHubClient's request shapes (fake transport) -----------------
+
+
+def test_client_list_comments_gets_and_parses() -> None:
+    transport = _FakeTransport(
+        [(200, [{"id": 5, "body": "hi"}, {"id": 6, "body": "there"}])]
+    )
+    client = GitHubClient(
+        repo="o/r", issue_number=3, token="tok", transport=transport
+    )
+    assert client.list_comments() == [
+        IssueComment(id=5, body="hi"),
+        IssueComment(id=6, body="there"),
+    ]
+    call = transport.calls[0]
+    assert call["method"] == "GET"
+    assert call["url"] == "https://api.github.com/repos/o/r/issues/3/comments"
+    assert call["headers"]["Authorization"] == "Bearer tok"
+
+
+def test_client_check_run_posts_the_right_payload() -> None:
+    transport = _FakeTransport([(201, {"id": 1})])
+    client = GitHubClient(repo="o/r", issue_number=3, token="t", transport=transport)
+    client.create_check_run(
+        name="Reenact", head_sha="abc", conclusion="failure", title="T", summary="S"
+    )
+    call = transport.calls[0]
+    assert call["method"] == "POST"
+    assert call["url"].endswith("/repos/o/r/check-runs")
+    payload = json.loads(call["body"])
+    assert payload["head_sha"] == "abc"
+    assert payload["conclusion"] == "failure"
+    assert payload["status"] == "completed"
+    assert payload["output"] == {"title": "T", "summary": "S"}
+
+
+def test_client_raises_on_api_error() -> None:
+    transport = _FakeTransport([(404, {"message": "Not Found"})])
+    client = GitHubClient(repo="o/r", issue_number=3, token="t", transport=transport)
+    try:
+        client.list_comments()
+    except RuntimeError as exc:
+        assert "404" in str(exc)
+    else:  # pragma: no cover - the call must raise
+        raise AssertionError("expected a RuntimeError on a 404")
+
+
+# --- the `reenact report` command --------------------------------------------
+
+
+def _diff_file(tmp_path: Path, *, regressed: bool) -> Path:
+    after = _check("c", not regressed)
+    diff = _diff(_check("c", True), after)
+    path = tmp_path / "diff.json"
+    path.write_text(diff.model_dump_json(), encoding="utf-8")
+    return path
+
+
+def test_report_skips_without_a_token(tmp_path: Path, monkeypatch: Any) -> None:
+    monkeypatch.delenv("GITHUB_TOKEN", raising=False)
+    monkeypatch.delenv("GITHUB_REPOSITORY", raising=False)
+    path = _diff_file(tmp_path, regressed=True)
+    result = runner.invoke(app, ["report", str(path)])
+    assert result.exit_code == 0
+    assert "skipping" in result.stdout
+
+
+def test_report_posts_on_the_happy_path(tmp_path: Path, monkeypatch: Any) -> None:
+    posted: dict[str, Any] = {}
+
+    class _StubClient:
+        def __init__(self, **kwargs: Any) -> None:
+            posted["init"] = kwargs
+
+        def list_comments(self) -> list[IssueComment]:
+            return []
+
+        def create_comment(self, body: str) -> None:
+            posted["comment"] = body
+
+        def update_comment(self, comment_id: int, body: str) -> None:
+            posted["updated"] = (comment_id, body)
+
+        def create_check_run(self, **kwargs: str) -> None:
+            posted["check_run"] = kwargs
+
+    monkeypatch.setattr("reenact.cli.GitHubClient", _StubClient)
+    path = _diff_file(tmp_path, regressed=True)
+    args = ["report", str(path)]
+    args += ["--repo", "o/r", "--pr", "7", "--sha", "s", "--token", "t"]
+    result = runner.invoke(app, args)
+    assert result.exit_code == 0, result.stdout
+    assert posted["init"] == {"repo": "o/r", "issue_number": 7, "token": "t"}
+    assert STICKY_MARKER in posted["comment"]
+    assert posted["check_run"]["conclusion"] == "failure"
+    assert "check-run red" in result.stdout

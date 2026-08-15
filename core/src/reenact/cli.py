@@ -24,6 +24,7 @@ from reenact.evals import (
     save_baseline,
 )
 from reenact.replay import Player, ReplayMode
+from reenact.report import GitHubClient, post_report
 from reenact.schema import LLMCallEvent, ToolCallEvent, Trajectory
 from reenact.store import load_cassette, save_cassette
 
@@ -224,6 +225,46 @@ def ci(
     _render_diff(diff)
     if diff.regressed:
         raise typer.Exit(1)
+
+
+@app.command()
+def report(
+    diff: Path = typer.Argument(
+        ...,
+        exists=True,
+        dir_okay=False,
+        help="The regression diff JSON written by `ci --json`.",
+    ),
+    repo: str | None = typer.Option(
+        None, "--repo", envvar="GITHUB_REPOSITORY", help="owner/name of the repo."
+    ),
+    pr: int | None = typer.Option(
+        None, "--pr", help="Pull-request (issue) number to comment on."
+    ),
+    sha: str | None = typer.Option(
+        None, "--sha", envvar="GITHUB_SHA", help="Head commit SHA for the check-run."
+    ),
+    token: str | None = typer.Option(
+        None, "--token", envvar="GITHUB_TOKEN", help="GitHub API token."
+    ),
+) -> None:
+    """Post a regression diff to a PR: a sticky comment and a merge-gating check-run.
+
+    Reads the diff JSON from ``ci --json``. Repo/sha/token default from the standard
+    ``GITHUB_*`` env vars an Action provides. Best-effort: if the token, repo, or PR
+    number is missing it prints a note and skips, so a local run never crashes.
+    """
+    parsed = RegressionDiff.model_validate_json(diff.read_text(encoding="utf-8"))
+    if not (token and repo and pr):
+        typer.echo(
+            "report: need a token, repo, and --pr to post - skipping "
+            "(set GITHUB_TOKEN + GITHUB_REPOSITORY and pass --pr)"
+        )
+        return
+    client = GitHubClient(repo=repo, issue_number=pr, token=token)
+    action = post_report(client, parsed, head_sha=sha or "")
+    verdict = "red" if parsed.regressed else "green"
+    typer.echo(f"report: {action} sticky comment; check-run {verdict}")
 
 
 def _load_module_from_path(path: Path) -> Any:
