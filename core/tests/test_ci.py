@@ -11,7 +11,7 @@ from typing import Any
 from typer.testing import CliRunner
 
 from reenact.cli import app
-from reenact.evals import Baseline, CriterionLevel, diff_baselines
+from reenact.evals import Baseline, CriterionLevel, RegressionDiff, diff_baselines
 from reenact.evals.baseline import BaselineCheck, BaselineScenario
 from reenact.record import hash_request, redact
 from reenact.schema import LLMCallEvent, SideEffect, ToolCallEvent, Trajectory
@@ -233,6 +233,26 @@ def test_ci_detects_a_seeded_regression(tmp_path: Path) -> None:
     assert result.exit_code == 1
     assert "scenarios regressed" in result.stdout
     assert "pass->fail" in result.stdout
+
+
+def test_ci_writes_diff_json(tmp_path: Path) -> None:
+    cassette = tmp_path / "weather.json"
+    _weather_cassette(cassette)
+    suite = _write_suite(tmp_path)
+    baseline = tmp_path / "baseline.json"
+    runner.invoke(app, ["eval", str(suite), "--write-baseline", str(baseline)])
+
+    # Seed a regression and capture the diff JSON; it must be written even on exit 1.
+    _weather_cassette(cassette, answer="It is sunny in Paris.")
+    diff_json = tmp_path / "diff.json"
+    result = runner.invoke(
+        app,
+        ["ci", str(suite), "--baseline", str(baseline), "--json", str(diff_json)],
+    )
+    assert result.exit_code == 1
+    restored = RegressionDiff.model_validate_json(diff_json.read_text(encoding="utf-8"))
+    assert restored.regressed
+    assert restored.regressed_scenarios == ["weather"]
 
 
 def test_ci_missing_baseline_errors(tmp_path: Path) -> None:

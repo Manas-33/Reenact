@@ -199,6 +199,12 @@ def ci(
         "--tolerance",
         help="Score drop tolerated before it counts as a regression.",
     ),
+    json_out: Path | None = typer.Option(
+        None,
+        "--json",
+        dir_okay=False,
+        help="Also write the regression diff as JSON here (for the Action to post).",
+    ),
 ) -> None:
     """Run the suite and fail only if it regressed against a committed baseline.
 
@@ -212,6 +218,9 @@ def ci(
         Baseline.from_report(report),
         score_tolerance=tolerance,
     )
+    if json_out is not None:
+        # Written before the exit so the Action can post a comment even on a fail.
+        json_out.write_text(diff.model_dump_json(indent=2) + "\n", encoding="utf-8")
     _render_diff(diff)
     if diff.regressed:
         raise typer.Exit(1)
