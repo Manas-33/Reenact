@@ -171,13 +171,15 @@ def judged(
     threshold: float = DEFAULT_THRESHOLD,
     model: str = DEFAULT_MODEL,
     max_tokens: int = DEFAULT_MAX_TOKENS,
+    temperature: float = 0.0,
     name: str | None = None,
 ) -> Check:
     """A check that scores the trajectory against ``rubric`` with an LLM judge.
 
     Passes iff the judged score is at least ``threshold``. A reply the judge
     cannot be parsed from fails the check (score unknown) rather than raising, so a
-    garbled judgment blocks a merge instead of silently passing.
+    garbled judgment blocks a merge instead of silently passing. ``temperature``
+    defaults to 0 so a judge used as a gate scores as reproducibly as it can.
     """
     label = name or f"judge: {clip(rubric, 60)}"
 
@@ -190,6 +192,7 @@ def judged(
         response = client.messages.create(
             model=model,
             max_tokens=max_tokens,
+            temperature=temperature,
             system=JUDGE_SYSTEM,
             messages=[{"role": "user", "content": prompt}],
         )

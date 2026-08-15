@@ -1,0 +1,94 @@
+{
+  "scenarios": [
+    {
+      "name": "triage-42",
+      "checks": [
+        {
+          "name": "called_tool('search_docs')",
+          "passed": true,
+          "score": null
+        },
+        {
+          "name": "called_tool('label_issue')",
+          "passed": false,
+          "score": null
+        },
+        {
+          "name": "called_tool('post_reply')",
+          "passed": true,
+          "score": null
+        },
+        {
+          "name": "no_mutating_tool_reexecuted",
+          "passed": true,
+          "score": null
+        },
+        {
+          "name": "answer_contains('password')",
+          "passed": true,
+          "score": null
+        }
+      ]
+    },
+    {
+      "name": "triage-57",
+      "checks": [
+        {
+          "name": "called_tool('search_docs')",
+          "passed": true,
+          "score": null
+        },
+        {
+          "name": "called_tool('label_issue')",
+          "passed": false,
+          "score": null
+        },
+        {
+          "name": "called_tool('post_reply')",
+          "passed": true,
+          "score": null
+        },
+        {
+          "name": "no_mutating_tool_reexecuted",
+          "passed": true,
+          "score": null
+        },
+        {
+          "name": "answer_contains('billing')",
+          "passed": true,
+          "score": null
+        }
+      ]
+    },
+    {
+      "name": "triage-63",
+      "checks": [
+        {
+          "name": "called_tool('search_docs')",
+          "passed": true,
+          "score": null
+        },
+        {
+          "name": "called_tool('label_issue')",
+          "passed": false,
+          "score": null
+        },
+        {
+          "name": "called_tool('post_reply')",
+          "passed": true,
+          "score": null
+        },
+        {
+          "name": "no_mutating_tool_reexecuted",
+          "passed": true,
+          "score": null
+        },
+        {
+          "name": "answer_contains('429')",
+          "passed": true,
+          "score": null
+        }
+      ]
+    }
+  ]
+}

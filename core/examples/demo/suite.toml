@@ -1,6 +1,8 @@
 # The issue-triage demo eval suite, over the committed baseline recordings.
-# Run offline:  reenact eval suite.toml
-# Gate a run:   reenact ci suite.toml --baseline baseline.json
+# Assertions only, so it runs offline with no key:
+#   reenact eval suite.toml
+#   reenact ci suite.toml --baseline baseline.json
+# The judge-scored version (catch rate + FPR) lives in the regression bench.
 
 [[scenario]]
 name = "triage-42"
