@@ -53,3 +53,20 @@ def extract_text(response: dict[str, Any]) -> str:
                             texts.append(text)
         return "".join(texts)
     return ""
+
+
+def response_text(response: Any) -> str:
+    """Pull the reply text from a judge/evaluator client's response.
+
+    The client is duck-typed (the same rule as the SDK recorders), so the reply is
+    either an SDK object exposing ``model_dump`` or a plain dict. Either way the
+    text is read through :func:`extract_text`. Raises ``TypeError`` on a shape that
+    is neither - a broken client should fail loudly, not score silently.
+    """
+    if hasattr(response, "model_dump"):
+        body: Any = response.model_dump(mode="json")
+        if isinstance(body, dict):
+            return extract_text(cast(dict[str, Any], body))
+    if isinstance(response, dict):
+        return extract_text(cast(dict[str, Any], response))
+    raise TypeError("client returned an unreadable response")

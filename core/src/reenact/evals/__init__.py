@@ -31,13 +31,23 @@ from reenact.evals.runner import (
     run_suite,
 )
 from reenact.evals.scenario import Scenario
+from reenact.evals.structured import (
+    FAITHFULNESS,
+    Criterion,
+    CriterionVerdict,
+    StructuredEvaluator,
+    structured_eval,
+)
 from reenact.evals.suite import SuiteConfigError, load_suite
 
 __all__ = [
+    "FAITHFULNESS",
     "Baseline",
     "Check",
     "CheckDelta",
     "CheckResult",
+    "Criterion",
+    "CriterionVerdict",
     "DeltaKind",
     "EvalReport",
     "JudgeVerdict",
@@ -45,6 +55,7 @@ __all__ = [
     "RunView",
     "Scenario",
     "ScenarioResult",
+    "StructuredEvaluator",
     "SuiteConfigError",
     "answer_contains",
     "answer_matches",
@@ -60,5 +71,6 @@ __all__ = [
     "run_scenario",
     "run_suite",
     "save_baseline",
+    "structured_eval",
     "tool_call_count",
 ]

@@ -19,7 +19,7 @@ from typing import Any, cast
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
-from reenact.evals._text import clip, extract_text
+from reenact.evals._text import clip, extract_text, response_text
 from reenact.evals.check import Check, CheckResult, RunView
 from reenact.schema import LLMCallEvent, ToolCallEvent, Trajectory
 
@@ -138,17 +138,6 @@ def render_trajectory(trajectory: Trajectory) -> str:
     return "\n".join(lines)
 
 
-def _response_text(response: Any) -> str:
-    """Pull the reply text from a judge client's response (object or dict)."""
-    if hasattr(response, "model_dump"):
-        body: Any = response.model_dump(mode="json")
-        if isinstance(body, dict):
-            return extract_text(cast(dict[str, Any], body))
-    if isinstance(response, dict):
-        return extract_text(cast(dict[str, Any], response))
-    raise TypeError("judge client returned an unreadable response")
-
-
 def _parse_verdict(text: str) -> JudgeVerdict:
     """Extract and validate the JSON verdict from the judge's reply text.
 
@@ -196,7 +185,7 @@ def judged(
             system=JUDGE_SYSTEM,
             messages=[{"role": "user", "content": prompt}],
         )
-        text = _response_text(response)
+        text = response_text(response)
         try:
             verdict = _parse_verdict(text)
         except (ValueError, ValidationError) as exc:
