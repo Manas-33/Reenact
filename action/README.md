@@ -50,3 +50,18 @@ Posting needs a token with `pull-requests: write` (the sticky comment) and
 `checks: write` (the check-run). Grant them in the workflow's `permissions:` block as
 shown above. With no `token`, the gate still runs and sets the job's pass/fail - it
 just does not comment.
+
+## Make the check block merges
+
+By default a failing check only *reports* - GitHub still lets you merge. To make a
+regression actually block the merge, mark the Reenact check as a **required status
+check** on your default branch:
+
+- open **Settings -> Rules -> Rulesets** (or the classic **Branch protection rules**),
+- target the default branch - a ruleset that targets nothing shows "does not target any
+  resources" and has no effect,
+- require the **`Reenact`** check (or the `gate` job) to pass, and set the rule to
+  **Active**.
+
+With no required check, the gate still posts its comment and turns the job red or green
+- it just does not stop a merge.
