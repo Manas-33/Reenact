@@ -53,6 +53,7 @@ from reenact.evals.structured import (
 from reenact.evals.suggest import (
     CheckSuggestion,
     render_suite_toml,
+    suggest_criteria,
     suggest_structural,
 )
 from reenact.evals.suite import SuiteConfigError, load_suite
@@ -101,6 +102,7 @@ __all__ = [
     "save_baseline",
     "save_label_set",
     "structured_eval",
+    "suggest_criteria",
     "suggest_structural",
     "tool_call_count",
 ]

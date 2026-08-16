@@ -8,23 +8,35 @@ recorded trajectory and proposes checks - a `called_tool` per tool it used, the
 `suite.toml` the author reviews and prunes. Everything is a *suggestion*: nothing
 here gates, so a poor guess costs one line to delete, never a bad merge.
 
-The derivation is deterministic and needs no model - pure trajectory inspection,
-offline and free. The keyword guess is the one heuristic: it proposes a word that
-appears in *both* the first user message and the final answer (a topical anchor,
-not incidental phrasing), preferring a distinctive code like `429` and otherwise
-the longest such word, and abstains entirely when nothing overlaps rather than
-guessing wrong. Rendered output round-trips through
+The structural derivation is deterministic and needs no model - pure trajectory
+inspection, offline and free. The keyword guess is the one heuristic: it proposes a
+word that appears in *both* the first user message and the final answer (a topical
+anchor, not incidental phrasing), preferring a distinctive code like `429` and
+otherwise the longest such word, and abstains entirely when nothing overlaps rather
+than guessing wrong. Rendered output round-trips through
 :func:`~reenact.evals.suite.load_suite`.
+
+An optional second layer (:func:`suggest_criteria`) proposes evidence-based quality
+*criteria* with the author's own model client - the one part that costs a call, on
+the author's key. It is fail-open: a garbled reply yields no criteria, and the caller
+skips it entirely without a client, so the structural suite is always produced.
+Proposed criteria render commented-out (accepting one is uncommenting it).
 """
 
 from __future__ import annotations
 
+import json
 import re
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 from typing import Any, cast
 
-from reenact.evals.check import RunView
+from pydantic import BaseModel, ConfigDict, ValidationError
+
+from reenact.evals._text import response_text
+from reenact.evals.check import CriterionLevel, RunView
+from reenact.evals.judge import DEFAULT_MAX_TOKENS, DEFAULT_MODEL, render_trajectory
+from reenact.evals.structured import Criterion
 from reenact.schema import LLMCallEvent, SideEffect, ToolCallEvent, Trajectory
 
 
@@ -305,6 +317,96 @@ def suggest_structural(trajectory: Trajectory) -> list[CheckSuggestion]:
     return suggestions
 
 
+# --- optional AI quality-criteria layer --------------------------------------
+
+_MAX_CRITERIA = 4
+
+SUGGEST_CRITERIA_SYSTEM = (
+    "You help an engineer set up regression tests for an AI agent. Given ONE "
+    "recorded run - its task, the ordered steps it took, and its final answer - "
+    "propose a short list of yes/no quality criteria a good run must satisfy, the "
+    "kind a reviewer checks to catch a regression. Each must be answerable from the "
+    "trajectory with evidence (a cited step), phrased as a yes/no question. Favour "
+    "groundedness (is the answer supported by what the agent retrieved?), the "
+    "correctness of key decisions (right category, label, or action), and task "
+    "completion. Do NOT restate which tools were called - that is covered by "
+    "separate assertions. Respond with ONLY a JSON array of 2-4 objects, each of "
+    'the form {"id": "<snake_case>", "question": "<yes/no question>"}. Nothing else.'
+)
+
+
+class _ProposedCriterion(BaseModel):
+    """One criterion parsed from the proposer's reply (extra keys tolerated)."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    id: str
+    question: str
+
+
+def _parse_criteria(text: str) -> list[Criterion]:
+    """Parse the proposer's reply (first ``[`` .. last ``]``) into criteria.
+
+    Defensive like the judge and structured evaluator: a reply with no array, or an
+    item that fails validation or is empty/duplicate, contributes nothing rather than
+    raising - so a garbled proposal simply yields no criteria (fail-open).
+    """
+    start = text.find("[")
+    end = text.rfind("]")
+    if start == -1 or end <= start:
+        return []
+    try:
+        data = json.loads(text[start : end + 1])
+    except json.JSONDecodeError:
+        return []
+    if not isinstance(data, list):
+        return []
+    criteria: list[Criterion] = []
+    seen: set[str] = set()
+    for item in cast(list[Any], data):
+        if not isinstance(item, dict):
+            continue
+        try:
+            proposed = _ProposedCriterion.model_validate(item)
+        except ValidationError:
+            continue
+        cid = proposed.id.strip()
+        question = proposed.question.strip()
+        if not cid or not question or cid in seen:
+            continue
+        seen.add(cid)
+        criteria.append(Criterion(id=cid, question=question))
+    return criteria[:_MAX_CRITERIA]
+
+
+def suggest_criteria(
+    client: Any,
+    trajectory: Trajectory,
+    *,
+    model: str = DEFAULT_MODEL,
+    max_tokens: int = DEFAULT_MAX_TOKENS,
+    temperature: float = 0.0,
+) -> list[Criterion]:
+    """Propose evidence-based quality criteria from a run, using ``client``.
+
+    Renders the trajectory and asks the model for a small set of yes/no criteria.
+    The client is duck-typed (the same rule as the judge): it calls
+    ``client.messages.create(...)`` and reads the reply, importing no SDK. A reply
+    that does not parse yields ``[]`` - the caller renders them commented, so nothing
+    here ever gates. Raises only if the client itself does; the CLI treats that as
+    best-effort and falls back to structural checks.
+    """
+    prompt = f"{render_trajectory(trajectory)}\n\nPropose the quality criteria."
+    response = client.messages.create(
+        model=model,
+        max_tokens=max_tokens,
+        temperature=temperature,
+        system=SUGGEST_CRITERIA_SYSTEM,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return _parse_criteria(response_text(response))
+
+
 # --- TOML rendering ----------------------------------------------------------
 
 
@@ -326,7 +428,20 @@ def _check_body(suggestion: CheckSuggestion) -> list[str]:
     return lines
 
 
-_CRITERION_FOOTER = [
+def _criterion_body(criterion: Criterion) -> list[str]:
+    """The raw (un-indented, un-commented) TOML lines for one criterion table."""
+    lines = [
+        "[[scenario.criterion]]",
+        f'id = "{_toml_str(criterion.id)}"',
+        f'question = "{_toml_str(criterion.question)}"',
+    ]
+    if criterion.level is not CriterionLevel.BLOCKING:
+        lines.append(f'level = "{criterion.level.value}"')
+    return lines
+
+
+# Shown when no criteria were proposed (no client/key): an illustrative example.
+_CRITERION_EXAMPLE = [
     "",
     "# Quality criteria (evidence-backed, need your API key at eval time) sit beside",
     "# the checks as [[scenario.criterion]] tables. Review before trusting; uncomment",
@@ -339,15 +454,21 @@ _CRITERION_FOOTER = [
 
 
 def render_suite_toml(
-    name: str, cassette: str, suggestions: Iterable[CheckSuggestion]
+    name: str,
+    cassette: str,
+    suggestions: Iterable[CheckSuggestion],
+    *,
+    criteria: Iterable[Criterion] = (),
 ) -> str:
     """Render suggestions into a candidate `suite.toml`.
 
     One `[[scenario]]` naming ``cassette`` (resolved relative to the suite file at
-    load time, so keep the two together), the active checks under a "keep what
-    applies" header, commented alternatives, and a commented criterion placeholder.
+    load time, so keep the two together) and the active checks under a "keep what
+    applies" header. Any proposed ``criteria`` render commented-out (accepting one is
+    uncommenting it); with none, a short illustrative placeholder is shown instead.
     The active tables load cleanly through
-    :func:`~reenact.evals.suite.load_suite`; commented lines are ignored.
+    :func:`~reenact.evals.suite.load_suite`; commented lines are ignored, so the
+    suggested suite loads with no client.
     """
     out: list[str] = [
         f"# Suggested by `reenact suggest` from {cassette}.",
@@ -365,5 +486,16 @@ def render_suite_toml(
         previous_rationale = suggestion.rationale
         prefix = "  " if suggestion.active else "  # "
         out.extend(f"{prefix}{line}" for line in _check_body(suggestion))
-    out.extend(_CRITERION_FOOTER)
+
+    proposed = list(criteria)
+    if proposed:
+        out.append("")
+        out.append("# Quality criteria proposed from the transcript - evidence-backed,")
+        out.append("# and they need your API key at eval time. Review before trusting;")
+        out.append("# uncomment to enable.")
+        for criterion in proposed:
+            out.append("")
+            out.extend(f"  # {line}" for line in _criterion_body(criterion))
+    else:
+        out.extend(_CRITERION_EXAMPLE)
     return "\n".join(out) + "\n"

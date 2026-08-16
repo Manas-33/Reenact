@@ -14,9 +14,11 @@ from typer.testing import CliRunner
 from reenact.cli import app
 from reenact.evals import (
     CheckSuggestion,
+    Criterion,
     load_suite,
     render_suite_toml,
     run_suite,
+    suggest_criteria,
     suggest_structural,
 )
 from reenact.schema import LLMCallEvent, SideEffect, ToolCallEvent, Trajectory
@@ -69,6 +71,41 @@ def _types(suggestions: list[CheckSuggestion]) -> list[str]:
 
 def _named(suggestions: list[CheckSuggestion], type_: str) -> list[CheckSuggestion]:
     return [s for s in suggestions if s.type == type_]
+
+
+class _StubResponse:
+    def __init__(self, text: str) -> None:
+        self._text = text
+
+    def model_dump(self, *, mode: str = "python") -> dict[str, Any]:
+        return {"content": [{"type": "text", "text": self._text}]}
+
+
+class _RecordingMessages:
+    def __init__(self, text: str) -> None:
+        self._text = text
+        self.calls = 0
+
+    def create(self, **_kwargs: Any) -> _StubResponse:
+        self.calls += 1
+        return _StubResponse(self._text)
+
+
+class _StubProposer:
+    """A duck-typed model client that returns a canned proposal and counts calls."""
+
+    def __init__(self, text: str) -> None:
+        self.messages = _RecordingMessages(text)
+
+
+class _RaisingMessages:
+    def create(self, **_kwargs: Any) -> Any:
+        raise RuntimeError("boom")
+
+
+class _RaisingProposer:
+    def __init__(self) -> None:
+        self.messages = _RaisingMessages()
 
 
 # --- structural rules --------------------------------------------------------
@@ -258,3 +295,110 @@ def test_suggest_writes_with_output_flag(tmp_path: Path) -> None:
     # What it wrote is a runnable suite.
     report = run_suite(load_suite(out))
     assert report.passed
+
+
+# --- B2: optional AI quality-criteria layer ----------------------------------
+
+CRITERIA_JSON = (
+    '[{"id": "reply_grounded", "question": "Is the reply grounded in the docs?"},'
+    ' {"id": "correct_label", "question": "Is the applied label appropriate?"}]'
+)
+
+
+def test_suggest_criteria_parses_and_calls_once() -> None:
+    stub = _StubProposer(CRITERIA_JSON)
+    traj = _traj("hi", "bye", [("search_docs", SideEffect.READ_ONLY)])
+    criteria = suggest_criteria(stub, traj)
+    assert [c.id for c in criteria] == ["reply_grounded", "correct_label"]
+    assert stub.messages.calls == 1  # a single batched call
+
+
+def test_suggest_criteria_ignores_a_garbled_reply() -> None:
+    traj = _traj("hi", "bye", [])
+    assert suggest_criteria(_StubProposer("sorry, no JSON here"), traj) == []
+    assert suggest_criteria(_StubProposer("[]"), traj) == []
+
+
+def test_suggest_criteria_drops_invalid_and_duplicate_items() -> None:
+    reply = (
+        '[{"id": "ok", "question": "Good?"},'
+        ' {"id": "ok", "question": "duplicate id"},'  # dropped: duplicate id
+        ' {"id": "missing_q"},'  # dropped: no question
+        ' {"question": "no id"},'  # dropped: no id
+        ' "not an object"]'  # dropped: not a table
+    )
+    criteria = suggest_criteria(_StubProposer(reply), _traj("hi", "bye", []))
+    assert [c.id for c in criteria] == ["ok"]
+
+
+def test_render_includes_commented_criteria_and_round_trips(tmp_path: Path) -> None:
+    cassette = tmp_path / "run.json"
+    traj = _traj(
+        "Password reset is broken",
+        "Reset your password via a new link.",
+        [("search_docs", SideEffect.READ_ONLY), ("post_reply", SideEffect.MUTATING)],
+    )
+    save_cassette(traj, cassette)
+    criteria = [Criterion(id="reply_grounded", question="Grounded in the docs?")]
+    body = render_suite_toml(
+        "run", str(cassette), suggest_structural(traj), criteria=criteria
+    )
+    assert "proposed from the transcript" in body
+    assert "reply_grounded" in body
+    # Every criterion line is commented, so the suite still loads with no client.
+    criterion_lines = [ln for ln in body.splitlines() if "scenario.criterion" in ln]
+    assert criterion_lines and all(
+        ln.lstrip().startswith("#") for ln in criterion_lines
+    )
+    suite = tmp_path / "suite.toml"
+    suite.write_text(body, encoding="utf-8")
+    assert run_suite(load_suite(suite)).passed
+
+
+def test_suggest_cli_proposes_criteria_with_a_client(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    cassette = tmp_path / "run.json"
+    save_cassette(_traj("hi", "bye", [("search_docs", SideEffect.READ_ONLY)]), cassette)
+    stub = _StubProposer('[{"id": "grounded", "question": "Grounded?"}]')
+    monkeypatch.setattr("reenact.cli._judge_client", lambda: stub)
+    result = runner.invoke(app, ["suggest", str(cassette)])
+    assert result.exit_code == 0, result.stdout
+    assert "proposed from the transcript" in result.stdout
+    assert "grounded" in result.stdout
+    assert stub.messages.calls == 1
+
+
+def test_suggest_cli_without_a_client_is_structural_only(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    cassette = tmp_path / "run.json"
+    save_cassette(_traj("hi", "bye", [("search_docs", SideEffect.READ_ONLY)]), cassette)
+    monkeypatch.setattr("reenact.cli._judge_client", lambda: None)
+    result = runner.invoke(app, ["suggest", str(cassette)])
+    assert result.exit_code == 0, result.stdout
+    assert 'type = "called_tool"' in result.stdout
+    # The illustrative example is shown, not real proposals.
+    assert "sit beside" in result.stdout
+
+
+def test_suggest_cli_no_ai_flag_skips_the_client(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    cassette = tmp_path / "run.json"
+    save_cassette(_traj("hi", "bye", [("search_docs", SideEffect.READ_ONLY)]), cassette)
+    stub = _StubProposer('[{"id": "grounded", "question": "Grounded?"}]')
+    monkeypatch.setattr("reenact.cli._judge_client", lambda: stub)
+    result = runner.invoke(app, ["suggest", str(cassette), "--no-ai"])
+    assert result.exit_code == 0, result.stdout
+    assert stub.messages.calls == 0  # the client is never consulted
+    assert "proposed from the transcript" not in result.stdout  # no AI proposals
+
+
+def test_suggest_cli_survives_a_client_error(tmp_path: Path, monkeypatch: Any) -> None:
+    cassette = tmp_path / "run.json"
+    save_cassette(_traj("hi", "bye", [("search_docs", SideEffect.READ_ONLY)]), cassette)
+    monkeypatch.setattr("reenact.cli._judge_client", lambda: _RaisingProposer())
+    result = runner.invoke(app, ["suggest", str(cassette)])
+    assert result.exit_code == 0, result.stdout
+    assert 'type = "called_tool"' in result.stdout  # structural still emitted

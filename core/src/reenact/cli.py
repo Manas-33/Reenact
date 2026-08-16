@@ -14,6 +14,7 @@ import typer
 from reenact import __version__
 from reenact.evals import (
     Baseline,
+    Criterion,
     EvalReport,
     RegressionDiff,
     Scenario,
@@ -24,6 +25,7 @@ from reenact.evals import (
     render_suite_toml,
     run_suite,
     save_baseline,
+    suggest_criteria,
     suggest_structural,
 )
 from reenact.replay import Player, ReplayMode
@@ -339,6 +341,31 @@ def record(
     typer.echo(f"wrote {output} ({len(trajectory.events)} event(s))")
 
 
+def _suggest_criteria(trajectory: Trajectory, *, no_ai: bool) -> list[Criterion]:
+    """Best-effort quality criteria for `suggest`, or ``[]`` if unavailable.
+
+    The structural half never needs this; the AI half is opt-out (``--no-ai``) and
+    fail-open: with no client (no key/SDK) or if the call fails, it returns ``[]`` and
+    a note goes to stderr, so the structural suite is still emitted on stdout.
+    """
+    if no_ai:
+        return []
+    client = _judge_client()
+    if client is None:
+        typer.echo(
+            "note: no model client (set ANTHROPIC_API_KEY) - structural checks only",
+            err=True,
+        )
+        return []
+    try:
+        return suggest_criteria(client, trajectory)
+    except Exception:  # best-effort: the AI layer must never fail the command
+        typer.echo(
+            "note: quality-criteria suggestion failed - structural only", err=True
+        )
+        return []
+
+
 @app.command()
 def suggest(
     cassette: Path = typer.Argument(
@@ -354,19 +381,26 @@ def suggest(
         dir_okay=False,
         help="Write the candidate suite here instead of printing it.",
     ),
+    no_ai: bool = typer.Option(
+        False,
+        "--no-ai",
+        help="Skip the optional AI quality-criteria layer (structural checks only).",
+    ),
 ) -> None:
     """Propose an eval suite from a recording, for you to review and prune.
 
     Inspects the trajectory and emits a candidate ``suite.toml``: a ``called_tool``
     check per tool the agent used, ``no_mutating_tool_reexecuted`` when it touched a
-    mutating tool, and an ``answer_contains`` keyword guessed from the run.
-    Everything is a suggestion - keep what applies, delete the rest. Prints to
-    stdout (never clobbers) unless ``-o`` is given. No key, no network.
+    mutating tool, and an ``answer_contains`` keyword guessed from the run. If a model
+    client is available (``ANTHROPIC_API_KEY``) and ``--no-ai`` is not set, it also
+    proposes commented quality criteria. Everything is a suggestion - keep what
+    applies, delete the rest. Prints to stdout (never clobbers) unless ``-o`` is given.
     """
     trajectory = load_cassette(cassette)
     suggestions = suggest_structural(trajectory)
+    criteria = _suggest_criteria(trajectory, no_ai=no_ai)
     name = trajectory.name or cassette.stem
-    body = render_suite_toml(name, str(cassette), suggestions)
+    body = render_suite_toml(name, str(cassette), suggestions, criteria=criteria)
     if output is not None:
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(body, encoding="utf-8")
