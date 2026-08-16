@@ -82,6 +82,9 @@ WORKFLOW_TEMPLATE = """\
 # Gates pull requests with Reenact: replays the committed scenario suite offline
 # ($0, no key) and fails the check only on a regression versus the baseline, then
 # posts a sticky PR comment and a merge-gating check-run.
+#
+# Pre-launch: reenact installs from git and the action tracks main. Once reenact
+# is on PyPI, drop the version line (default installs from PyPI) and pin a tag.
 name: Reenact
 on: pull_request
 
@@ -95,11 +98,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # TODO: replace `your-org` with the published reenact action ref (pin a tag).
-      - uses: your-org/reenact/action@v1
+      - uses: Manas-33/Reenact/action@main
         with:
           suite: evals/suite.toml
           baseline: evals/baseline.json
+          version: "git+https://github.com/Manas-33/Reenact.git#subdirectory=core"
           token: ${{ github.token }}
 """
 

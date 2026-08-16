@@ -94,10 +94,13 @@ def test_workflow_parses_and_wires_the_action(tmp_path: Path) -> None:
     steps = cast(list[dict[str, Any]], cast(dict[str, Any], jobs["gate"])["steps"])
     action_step = next(step for step in steps if "with" in step)
     uses = cast(str, action_step["uses"])
-    assert "reenact" in uses and "action" in uses
+    assert "reenact" in uses.lower() and "action" in uses
     inputs = cast(dict[str, Any], action_step["with"])
     assert inputs["suite"] == "evals/suite.toml"
     assert inputs["baseline"] == "evals/baseline.json"
+    # The action ref and install source are baked in - no placeholder to fill.
+    assert "your-org" not in uses
+    assert "reenact" in str(inputs.get("version", "")).lower()
 
 
 # --- CLI ---------------------------------------------------------------------
