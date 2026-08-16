@@ -1,6 +1,6 @@
 {
   "schema_version": 0,
-  "id": "demo-baseline-63",
+  "id": "demo-tool-schema-63",
   "name": "triage-63",
   "created_at": "2024-01-01T00:00:00Z",
   "events": [
@@ -21,7 +21,7 @@
             "response_metadata": {},
             "type": "system",
             "name": null,
-            "id": "24e24fdc-814d-44f0-90f0-2f4467438a28"
+            "id": "329b35a5-ecdb-4320-bac7-ecc6a26cc203"
           },
           {
             "content": "Issue #63: Getting 429 errors from the API\n\nAll of a sudden every request to the API fails with a 429.",
@@ -29,7 +29,7 @@
             "response_metadata": {},
             "type": "human",
             "name": null,
-            "id": "7dc3d662-2552-403e-ad1c-0b2be18d94fc"
+            "id": "f4e9bd35-258c-4a32-b1cd-86614e8a8e88"
           }
         ]
       },
@@ -37,17 +37,17 @@
         "generations": [
           [
             {
-              "text": "I'll help you triage this issue. Let me search the documentation for information about 429 errors and API rate limiting.",
+              "text": "I'll help you triage this issue. Let me search for relevant documentation about 429 errors and API rate limiting.",
               "generation_info": null,
               "type": "ChatGeneration",
               "message": {
                 "content": [
                   {
-                    "text": "I'll help you triage this issue. Let me search the documentation for information about 429 errors and API rate limiting.",
+                    "text": "I'll help you triage this issue. Let me search for relevant documentation about 429 errors and API rate limiting.",
                     "type": "text"
                   },
                   {
-                    "id": "toolu_01CHTqR6Z5jYigimRyoCaHxX",
+                    "id": "toolu_01FjxE68kvNzL4WDNLJpxNup",
                     "caller": {
                       "type": "direct"
                     },
@@ -60,7 +60,7 @@
                 ],
                 "additional_kwargs": {},
                 "response_metadata": {
-                  "id": "msg_011Ce1fgQ9T1ESgH2ziZGxd8",
+                  "id": "msg_011Ce1fnjkpzGuzf5vrjVh5U",
                   "container": null,
                   "model": "claude-sonnet-4-5-20250929",
                   "stop_details": null,
@@ -75,7 +75,7 @@
                     "cache_read_input_tokens": 0,
                     "inference_geo": "not_available",
                     "input_tokens": 873,
-                    "output_tokens": 85,
+                    "output_tokens": 84,
                     "output_tokens_details": null,
                     "server_tool_use": null,
                     "service_tier": "standard"
@@ -85,13 +85,13 @@
                 },
                 "type": "ai",
                 "name": null,
-                "id": "lc_run--019ffd99-031b-7b72-8edd-14d237890233-0"
+                "id": "lc_run--019ffd9a-52f7-71b2-a152-51851ef9c2d4-0"
               }
             }
           ]
         ],
         "llm_output": {
-          "id": "msg_011Ce1fgQ9T1ESgH2ziZGxd8",
+          "id": "msg_011Ce1fnjkpzGuzf5vrjVh5U",
           "container": null,
           "model": "claude-sonnet-4-5-20250929",
           "stop_details": null,
@@ -106,7 +106,7 @@
             "cache_read_input_tokens": 0,
             "inference_geo": "not_available",
             "input_tokens": 873,
-            "output_tokens": 85,
+            "output_tokens": 84,
             "output_tokens_details": null,
             "server_tool_use": null,
             "service_tier": "standard"
@@ -116,7 +116,7 @@
         "run": null,
         "type": "LLMResult"
       },
-      "request_hash": "sha256:26ba031fe55458d702fbfa9a18122418518c733a67f008f8d1bca79558b330fc",
+      "request_hash": "sha256:427fa2492ce90adf84dc57bc2bac754d3d78e3d8a97a097743b02e357f5fedef",
       "usage": null,
       "cost_usd": null
     },
@@ -129,7 +129,7 @@
       "node": "agent",
       "step": 1,
       "thread_id": null,
-      "checkpoint_ns": "agent:a41f039d-37f1-ab1a-e856-6f9579716191"
+      "checkpoint_ns": "agent:822a3ee1-1de1-840c-ced4-5b50add40b7b"
     },
     {
       "seq": 2,
@@ -140,7 +140,7 @@
       "node": "agent",
       "step": 1,
       "thread_id": null,
-      "checkpoint_ns": "agent:a41f039d-37f1-ab1a-e856-6f9579716191"
+      "checkpoint_ns": "agent:822a3ee1-1de1-840c-ced4-5b50add40b7b"
     },
     {
       "seq": 3,
@@ -159,7 +159,7 @@
         "type": "tool",
         "name": "search_docs",
         "id": null,
-        "tool_call_id": "toolu_01CHTqR6Z5jYigimRyoCaHxX",
+        "tool_call_id": "toolu_01FjxE68kvNzL4WDNLJpxNup",
         "artifact": null,
         "status": "success"
       },
@@ -174,7 +174,7 @@
       "node": "tools",
       "step": 2,
       "thread_id": null,
-      "checkpoint_ns": "tools:1e447c91-fe28-56fb-7c6d-40ff444ee4be"
+      "checkpoint_ns": "tools:28316f20-d428-39bb-e780-24af6e1b81fa"
     },
     {
       "seq": 5,
@@ -193,7 +193,7 @@
             "response_metadata": {},
             "type": "system",
             "name": null,
-            "id": "24e24fdc-814d-44f0-90f0-2f4467438a28"
+            "id": "329b35a5-ecdb-4320-bac7-ecc6a26cc203"
           },
           {
             "content": "Issue #63: Getting 429 errors from the API\n\nAll of a sudden every request to the API fails with a 429.",
@@ -201,16 +201,16 @@
             "response_metadata": {},
             "type": "human",
             "name": null,
-            "id": "7dc3d662-2552-403e-ad1c-0b2be18d94fc"
+            "id": "f4e9bd35-258c-4a32-b1cd-86614e8a8e88"
           },
           {
             "content": [
               {
-                "text": "I'll help you triage this issue. Let me search the documentation for information about 429 errors and API rate limiting.",
+                "text": "I'll help you triage this issue. Let me search for relevant documentation about 429 errors and API rate limiting.",
                 "type": "text"
               },
               {
-                "id": "toolu_01CHTqR6Z5jYigimRyoCaHxX",
+                "id": "toolu_01FjxE68kvNzL4WDNLJpxNup",
                 "caller": {
                   "type": "direct"
                 },
@@ -223,7 +223,7 @@
             ],
             "additional_kwargs": {},
             "response_metadata": {
-              "id": "msg_011Ce1fgQ9T1ESgH2ziZGxd8",
+              "id": "msg_011Ce1fnjkpzGuzf5vrjVh5U",
               "container": null,
               "model": "claude-sonnet-4-5-20250929",
               "stop_details": null,
@@ -238,7 +238,7 @@
                 "cache_read_input_tokens": 0,
                 "inference_geo": "not_available",
                 "input_tokens": 873,
-                "output_tokens": 85,
+                "output_tokens": 84,
                 "output_tokens_details": null,
                 "server_tool_use": null,
                 "service_tier": "standard"
@@ -248,22 +248,22 @@
             },
             "type": "ai",
             "name": null,
-            "id": "lc_run--019ffd99-031b-7b72-8edd-14d237890233-0",
+            "id": "lc_run--019ffd9a-52f7-71b2-a152-51851ef9c2d4-0",
             "tool_calls": [
               {
                 "name": "search_docs",
                 "args": {
                   "query": "429 error API rate limiting"
                 },
-                "id": "toolu_01CHTqR6Z5jYigimRyoCaHxX",
+                "id": "toolu_01FjxE68kvNzL4WDNLJpxNup",
                 "type": "tool_call"
               }
             ],
             "invalid_tool_calls": [],
             "usage_metadata": {
               "input_tokens": 873,
-              "output_tokens": 85,
-              "total_tokens": 958,
+              "output_tokens": 84,
+              "total_tokens": 957,
               "input_token_details": {
                 "cache_read": 0,
                 "cache_creation": 0,
@@ -278,8 +278,8 @@
             "response_metadata": {},
             "type": "tool",
             "name": "search_docs",
-            "id": "02a64f33-0dc6-429c-bbc6-b890b22471f6",
-            "tool_call_id": "toolu_01CHTqR6Z5jYigimRyoCaHxX",
+            "id": "bee86370-8444-4782-a03e-97b3f2e1044c",
+            "tool_call_id": "toolu_01FjxE68kvNzL4WDNLJpxNup",
             "artifact": null,
             "status": "success"
           }
@@ -299,7 +299,7 @@
                     "type": "text"
                   },
                   {
-                    "id": "toolu_01VeQiVHWv6Af9Qbiii6ivfL",
+                    "id": "toolu_01M2miouCy44wCJNnNN9cbVD",
                     "caller": {
                       "type": "direct"
                     },
@@ -307,11 +307,11 @@
                       "issue_id": "63",
                       "label": "api"
                     },
-                    "name": "label_issue",
+                    "name": "set_label",
                     "type": "tool_use"
                   },
                   {
-                    "id": "toolu_01XZSvsbvaqyuQuKdMWfAUty",
+                    "id": "toolu_01Siviuja1M2zjWUVwjr5YL9",
                     "caller": {
                       "type": "direct"
                     },
@@ -325,7 +325,7 @@
                 ],
                 "additional_kwargs": {},
                 "response_metadata": {
-                  "id": "msg_011Ce1fgWKmf8mwE8ZCTYsuX",
+                  "id": "msg_011Ce1fnrQvPkjLHwH1KjFRs",
                   "container": null,
                   "model": "claude-sonnet-4-5-20250929",
                   "stop_details": null,
@@ -339,7 +339,7 @@
                     "cache_creation_input_tokens": 0,
                     "cache_read_input_tokens": 0,
                     "inference_geo": "not_available",
-                    "input_tokens": 1004,
+                    "input_tokens": 1003,
                     "output_tokens": 228,
                     "output_tokens_details": null,
                     "server_tool_use": null,
@@ -350,13 +350,13 @@
                 },
                 "type": "ai",
                 "name": null,
-                "id": "lc_run--019ffd99-08ba-70a2-a0e9-407424220ef2-0"
+                "id": "lc_run--019ffd9a-58f8-7701-b873-ef518179595f-0"
               }
             }
           ]
         ],
         "llm_output": {
-          "id": "msg_011Ce1fgWKmf8mwE8ZCTYsuX",
+          "id": "msg_011Ce1fnrQvPkjLHwH1KjFRs",
           "container": null,
           "model": "claude-sonnet-4-5-20250929",
           "stop_details": null,
@@ -370,7 +370,7 @@
             "cache_creation_input_tokens": 0,
             "cache_read_input_tokens": 0,
             "inference_geo": "not_available",
-            "input_tokens": 1004,
+            "input_tokens": 1003,
             "output_tokens": 228,
             "output_tokens_details": null,
             "server_tool_use": null,
@@ -381,7 +381,7 @@
         "run": null,
         "type": "LLMResult"
       },
-      "request_hash": "sha256:96a99ec6ba3895c7cc6ae6ce307a8c6d1ec16150d358aed35139ff4ce63c606b",
+      "request_hash": "sha256:944a8ea940082a6f1058a49151e60d80c8ce8b52e89ab47dc7453be2e681f79b",
       "usage": null,
       "cost_usd": null
     },
@@ -394,7 +394,7 @@
       "node": "agent",
       "step": 3,
       "thread_id": null,
-      "checkpoint_ns": "agent:25889b00-fe20-8f96-1575-80c332ad4d81"
+      "checkpoint_ns": "agent:a37b5a1d-eeb5-3593-602d-fe5eb2d424d3"
     },
     {
       "seq": 7,
@@ -405,7 +405,7 @@
       "node": "agent",
       "step": 3,
       "thread_id": null,
-      "checkpoint_ns": "agent:25889b00-fe20-8f96-1575-80c332ad4d81"
+      "checkpoint_ns": "agent:a37b5a1d-eeb5-3593-602d-fe5eb2d424d3"
     },
     {
       "seq": 8,
@@ -413,7 +413,7 @@
       "started_at": null,
       "latency_ms": null,
       "type": "tool_call",
-      "name": "label_issue",
+      "name": "set_label",
       "arguments": {
         "input": "{'issue_id': '63', 'label': 'api'}"
       },
@@ -422,13 +422,13 @@
         "additional_kwargs": {},
         "response_metadata": {},
         "type": "tool",
-        "name": "label_issue",
+        "name": "set_label",
         "id": null,
-        "tool_call_id": "toolu_01VeQiVHWv6Af9Qbiii6ivfL",
+        "tool_call_id": "toolu_01M2miouCy44wCJNnNN9cbVD",
         "artifact": null,
         "status": "success"
       },
-      "side_effect": "mutating"
+      "side_effect": "unknown"
     },
     {
       "seq": 9,
@@ -447,7 +447,7 @@
         "type": "tool",
         "name": "post_reply",
         "id": null,
-        "tool_call_id": "toolu_01XZSvsbvaqyuQuKdMWfAUty",
+        "tool_call_id": "toolu_01Siviuja1M2zjWUVwjr5YL9",
         "artifact": null,
         "status": "success"
       },
@@ -462,7 +462,7 @@
       "node": "tools",
       "step": 4,
       "thread_id": null,
-      "checkpoint_ns": "tools:be5b8ab6-9fab-e046-f9bd-5d73da9f38a4"
+      "checkpoint_ns": "tools:202abd7f-33b6-448d-fb4d-0776d9b72fa5"
     },
     {
       "seq": 11,
@@ -481,7 +481,7 @@
             "response_metadata": {},
             "type": "system",
             "name": null,
-            "id": "24e24fdc-814d-44f0-90f0-2f4467438a28"
+            "id": "329b35a5-ecdb-4320-bac7-ecc6a26cc203"
           },
           {
             "content": "Issue #63: Getting 429 errors from the API\n\nAll of a sudden every request to the API fails with a 429.",
@@ -489,16 +489,16 @@
             "response_metadata": {},
             "type": "human",
             "name": null,
-            "id": "7dc3d662-2552-403e-ad1c-0b2be18d94fc"
+            "id": "f4e9bd35-258c-4a32-b1cd-86614e8a8e88"
           },
           {
             "content": [
               {
-                "text": "I'll help you triage this issue. Let me search the documentation for information about 429 errors and API rate limiting.",
+                "text": "I'll help you triage this issue. Let me search for relevant documentation about 429 errors and API rate limiting.",
                 "type": "text"
               },
               {
-                "id": "toolu_01CHTqR6Z5jYigimRyoCaHxX",
+                "id": "toolu_01FjxE68kvNzL4WDNLJpxNup",
                 "caller": {
                   "type": "direct"
                 },
@@ -511,7 +511,7 @@
             ],
             "additional_kwargs": {},
             "response_metadata": {
-              "id": "msg_011Ce1fgQ9T1ESgH2ziZGxd8",
+              "id": "msg_011Ce1fnjkpzGuzf5vrjVh5U",
               "container": null,
               "model": "claude-sonnet-4-5-20250929",
               "stop_details": null,
@@ -526,7 +526,7 @@
                 "cache_read_input_tokens": 0,
                 "inference_geo": "not_available",
                 "input_tokens": 873,
-                "output_tokens": 85,
+                "output_tokens": 84,
                 "output_tokens_details": null,
                 "server_tool_use": null,
                 "service_tier": "standard"
@@ -536,22 +536,22 @@
             },
             "type": "ai",
             "name": null,
-            "id": "lc_run--019ffd99-031b-7b72-8edd-14d237890233-0",
+            "id": "lc_run--019ffd9a-52f7-71b2-a152-51851ef9c2d4-0",
             "tool_calls": [
               {
                 "name": "search_docs",
                 "args": {
                   "query": "429 error API rate limiting"
                 },
-                "id": "toolu_01CHTqR6Z5jYigimRyoCaHxX",
+                "id": "toolu_01FjxE68kvNzL4WDNLJpxNup",
                 "type": "tool_call"
               }
             ],
             "invalid_tool_calls": [],
             "usage_metadata": {
               "input_tokens": 873,
-              "output_tokens": 85,
-              "total_tokens": 958,
+              "output_tokens": 84,
+              "total_tokens": 957,
               "input_token_details": {
                 "cache_read": 0,
                 "cache_creation": 0,
@@ -566,8 +566,8 @@
             "response_metadata": {},
             "type": "tool",
             "name": "search_docs",
-            "id": "02a64f33-0dc6-429c-bbc6-b890b22471f6",
-            "tool_call_id": "toolu_01CHTqR6Z5jYigimRyoCaHxX",
+            "id": "bee86370-8444-4782-a03e-97b3f2e1044c",
+            "tool_call_id": "toolu_01FjxE68kvNzL4WDNLJpxNup",
             "artifact": null,
             "status": "success"
           },
@@ -578,7 +578,7 @@
                 "type": "text"
               },
               {
-                "id": "toolu_01VeQiVHWv6Af9Qbiii6ivfL",
+                "id": "toolu_01M2miouCy44wCJNnNN9cbVD",
                 "caller": {
                   "type": "direct"
                 },
@@ -586,11 +586,11 @@
                   "issue_id": "63",
                   "label": "api"
                 },
-                "name": "label_issue",
+                "name": "set_label",
                 "type": "tool_use"
               },
               {
-                "id": "toolu_01XZSvsbvaqyuQuKdMWfAUty",
+                "id": "toolu_01Siviuja1M2zjWUVwjr5YL9",
                 "caller": {
                   "type": "direct"
                 },
@@ -604,7 +604,7 @@
             ],
             "additional_kwargs": {},
             "response_metadata": {
-              "id": "msg_011Ce1fgWKmf8mwE8ZCTYsuX",
+              "id": "msg_011Ce1fnrQvPkjLHwH1KjFRs",
               "container": null,
               "model": "claude-sonnet-4-5-20250929",
               "stop_details": null,
@@ -618,7 +618,7 @@
                 "cache_creation_input_tokens": 0,
                 "cache_read_input_tokens": 0,
                 "inference_geo": "not_available",
-                "input_tokens": 1004,
+                "input_tokens": 1003,
                 "output_tokens": 228,
                 "output_tokens_details": null,
                 "server_tool_use": null,
@@ -629,15 +629,15 @@
             },
             "type": "ai",
             "name": null,
-            "id": "lc_run--019ffd99-08ba-70a2-a0e9-407424220ef2-0",
+            "id": "lc_run--019ffd9a-58f8-7701-b873-ef518179595f-0",
             "tool_calls": [
               {
-                "name": "label_issue",
+                "name": "set_label",
                 "args": {
                   "issue_id": "63",
                   "label": "api"
                 },
-                "id": "toolu_01VeQiVHWv6Af9Qbiii6ivfL",
+                "id": "toolu_01M2miouCy44wCJNnNN9cbVD",
                 "type": "tool_call"
               },
               {
@@ -646,15 +646,15 @@
                   "issue_id": "63",
                   "body": "Hi! A 429 error indicates you've exceeded the API rate limit of 100 requests per minute per key. \n\nTo resolve this:\n- Implement exponential backoff and retry logic in your code\n- Reduce your request frequency to stay under 100 requests/minute\n- Consider batching requests if possible\n\nThe rate limit should reset after a minute, so you can retry your requests with appropriate delays."
                 },
-                "id": "toolu_01XZSvsbvaqyuQuKdMWfAUty",
+                "id": "toolu_01Siviuja1M2zjWUVwjr5YL9",
                 "type": "tool_call"
               }
             ],
             "invalid_tool_calls": [],
             "usage_metadata": {
-              "input_tokens": 1004,
+              "input_tokens": 1003,
               "output_tokens": 228,
-              "total_tokens": 1232,
+              "total_tokens": 1231,
               "input_token_details": {
                 "cache_read": 0,
                 "cache_creation": 0,
@@ -668,9 +668,9 @@
             "additional_kwargs": {},
             "response_metadata": {},
             "type": "tool",
-            "name": "label_issue",
-            "id": "52bcf6d9-0145-4b15-848f-bf0591897e97",
-            "tool_call_id": "toolu_01VeQiVHWv6Af9Qbiii6ivfL",
+            "name": "set_label",
+            "id": "b3953923-8ca0-47c0-a0e1-5f6778d423b9",
+            "tool_call_id": "toolu_01M2miouCy44wCJNnNN9cbVD",
             "artifact": null,
             "status": "success"
           },
@@ -680,8 +680,8 @@
             "response_metadata": {},
             "type": "tool",
             "name": "post_reply",
-            "id": "058026b7-a04a-4976-8d51-f35d47e69bc4",
-            "tool_call_id": "toolu_01XZSvsbvaqyuQuKdMWfAUty",
+            "id": "9a9bbb79-5acf-47b5-b798-82aee58ea133",
+            "tool_call_id": "toolu_01Siviuja1M2zjWUVwjr5YL9",
             "artifact": null,
             "status": "success"
           }
@@ -691,14 +691,14 @@
         "generations": [
           [
             {
-              "text": "I've triaged issue #63 by labeling it as \"api\", searching the documentation for rate limit information, and posting a reply explaining that the 429 error is due to exceeding the 100 requests per minute limit with guidance on how to resolve it.",
+              "text": "I've labeled this as an \"api\" issue and posted a reply explaining that the 429 errors are due to exceeding the rate limit of 100 requests per minute, with guidance on implementing exponential backoff and reducing request frequency.",
               "generation_info": null,
               "type": "ChatGeneration",
               "message": {
-                "content": "I've triaged issue #63 by labeling it as \"api\", searching the documentation for rate limit information, and posting a reply explaining that the 429 error is due to exceeding the 100 requests per minute limit with guidance on how to resolve it.",
+                "content": "I've labeled this as an \"api\" issue and posted a reply explaining that the 429 errors are due to exceeding the rate limit of 100 requests per minute, with guidance on implementing exponential backoff and reducing request frequency.",
                 "additional_kwargs": {},
                 "response_metadata": {
-                  "id": "msg_011Ce1fgqQEeqCKNuXWkidNf",
+                  "id": "msg_011Ce1foAzcwpRfchvFA3FRS",
                   "container": null,
                   "model": "claude-sonnet-4-5-20250929",
                   "stop_details": null,
@@ -712,8 +712,8 @@
                     "cache_creation_input_tokens": 0,
                     "cache_read_input_tokens": 0,
                     "inference_geo": "not_available",
-                    "input_tokens": 1308,
-                    "output_tokens": 59,
+                    "input_tokens": 1307,
+                    "output_tokens": 53,
                     "output_tokens_details": null,
                     "server_tool_use": null,
                     "service_tier": "standard"
@@ -723,13 +723,13 @@
                 },
                 "type": "ai",
                 "name": null,
-                "id": "lc_run--019ffd99-19da-7281-95ed-81fd15354f9b-0"
+                "id": "lc_run--019ffd9a-69a7-79e1-ae14-bf907d5e7f3d-0"
               }
             }
           ]
         ],
         "llm_output": {
-          "id": "msg_011Ce1fgqQEeqCKNuXWkidNf",
+          "id": "msg_011Ce1foAzcwpRfchvFA3FRS",
           "container": null,
           "model": "claude-sonnet-4-5-20250929",
           "stop_details": null,
@@ -743,8 +743,8 @@
             "cache_creation_input_tokens": 0,
             "cache_read_input_tokens": 0,
             "inference_geo": "not_available",
-            "input_tokens": 1308,
-            "output_tokens": 59,
+            "input_tokens": 1307,
+            "output_tokens": 53,
             "output_tokens_details": null,
             "server_tool_use": null,
             "service_tier": "standard"
@@ -754,7 +754,7 @@
         "run": null,
         "type": "LLMResult"
       },
-      "request_hash": "sha256:c909a9fcd9612db849856e2ffa6730e74bdca2a4dfc4e9b233e7a5309be79231",
+      "request_hash": "sha256:8bb827075e26d90fb1f5746e33929f829c977f61eeb903d84fcd9fed74e06cf0",
       "usage": null,
       "cost_usd": null
     },
@@ -767,7 +767,7 @@
       "node": "agent",
       "step": 5,
       "thread_id": null,
-      "checkpoint_ns": "agent:0ba57e67-1f77-80cc-aab8-abb801381c1f"
+      "checkpoint_ns": "agent:4ad2f7ea-0642-0d5c-c6b7-769f565331a5"
     },
     {
       "seq": 13,
@@ -778,7 +778,7 @@
       "node": "agent",
       "step": 5,
       "thread_id": null,
-      "checkpoint_ns": "agent:0ba57e67-1f77-80cc-aab8-abb801381c1f"
+      "checkpoint_ns": "agent:4ad2f7ea-0642-0d5c-c6b7-769f565331a5"
     }
   ],
   "metadata": {}
