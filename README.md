@@ -13,3 +13,5 @@ evaluate -> gate.
 | `core/`    | The `reenact` Python package (record, replay, evals, CLI) |
 | `action/`  | Composite GitHub Action wrapping the CLI                  |
 | `console/` | Hosted viewer and debugger (Next.js)                      |
+
+Reenact is regression testing for LLM agents.
