@@ -23,7 +23,6 @@ from reenact.report import (
     GitHubClient,
     IssueComment,
     check_run_result,
-    humanize_check,
     post_report,
     render_pr_comment,
     scenario_task,
@@ -48,6 +47,22 @@ def _diff(
 ) -> RegressionDiff:
     base = Baseline(scenarios=[BaselineScenario(name="weather", checks=[before])])
     now = Baseline(scenarios=[BaselineScenario(name="weather", checks=[after])])
+    return diff_baselines(base, now, scenario_tasks=tasks)
+
+
+def _diff_checks(
+    scenario: str,
+    pairs: list[tuple[BaselineCheck, BaselineCheck]],
+    *,
+    tasks: dict[str, str] | None = None,
+) -> RegressionDiff:
+    """A diff for one scenario with several checks (before, after) each."""
+    base = Baseline(
+        scenarios=[BaselineScenario(name=scenario, checks=[b for b, _ in pairs])]
+    )
+    now = Baseline(
+        scenarios=[BaselineScenario(name=scenario, checks=[a for _, a in pairs])]
+    )
     return diff_baselines(base, now, scenario_tasks=tasks)
 
 
@@ -98,20 +113,54 @@ class _FakeTransport:
 # --- rendering ---------------------------------------------------------------
 
 
-def test_regressed_comment_is_a_readable_table() -> None:
+def test_regressed_comment_groups_checks_under_a_scenario() -> None:
+    diff = _diff_checks(
+        "refund-final-sale",
+        [
+            (
+                _check("did_not_call_tool('issue_refund')", True),
+                _check("did_not_call_tool('issue_refund')", False),
+            ),
+            (
+                _check("answer_contains('not eligible')", True),
+                _check("answer_contains('not eligible')", False),
+            ),
+        ],
+        tasks={"refund-final-sale": "refund for order 1002, the festival ticket"},
+    )
+    body = render_pr_comment(diff)
+    assert body.startswith(STICKY_MARKER)
+    assert "regression detected" in body
+    assert "**refund-final-sale**" in body  # scenario as a heading...
+    assert body.count("**refund-final-sale**") == 1  # ...named once, not per check
+    assert "refund for order 1002" in body  # the recorded task, surfaced
+    # A Behavior / Baseline / This PR mini-table when 2+ checks flip.
+    assert "| Behavior | Baseline | This PR |" in body
+    assert "| calls `issue_refund` | no | **yes** |" in body
+    assert "| answer mentions 'not eligible' | yes | **no** |" in body
+    assert "pass->fail" not in body  # the terse detail is gone
+    assert "—" not in body  # no em-dashes
+
+
+def test_single_flip_renders_as_a_one_liner() -> None:
     diff = _diff(
         _check("called_tool('x')", True),
         _check("called_tool('x')", False),
         tasks={"weather": "What's the weather in Paris?"},
     )
     body = render_pr_comment(diff)
-    assert body.startswith(STICKY_MARKER)
-    assert "regression detected" in body
-    assert "| Scenario | What changed |" in body  # a markdown table, not a run-on
-    assert "Stopped calling the `x` tool" in body  # plain English, not `pass->fail`
-    assert "What's the weather in Paris?" in body  # the recorded task, auto-surfaced
-    assert "pass->fail" not in body  # the terse detail is gone
-    assert "—" not in body  # no em-dashes
+    assert "**weather**" in body
+    assert "What's the weather in Paris?" in body
+    assert "- calls `x`: yes -> **no**" in body  # one line, not a table
+    assert "| Behavior |" not in body  # no mini-table for a single flip
+    assert "pass->fail" not in body
+
+
+def test_scored_check_shows_the_numbers() -> None:
+    before = BaselineCheck(name="criterion:grounded", passed=True, score=0.9)
+    after = BaselineCheck(name="criterion:grounded", passed=True, score=0.6)
+    body = render_pr_comment(_diff(before, after))  # score drop past tolerance
+    assert "criterion 'grounded': 0.90 -> **0.60**" in body
 
 
 def test_clean_and_regressed_comments_differ() -> None:
@@ -125,8 +174,8 @@ def test_clean_and_regressed_comments_differ() -> None:
 def test_comment_degrades_without_a_task() -> None:
     diff = _diff(_check("called_tool('x')", True), _check("called_tool('x')", False))
     body = render_pr_comment(diff)
-    assert "`weather`" in body  # scenario name still shown
-    assert "<br><sub>" not in body  # no task sub-line when none is available
+    assert "**weather**" in body  # scenario heading still shown
+    assert "**weather** -" not in body  # no task appended when none is available
 
 
 def test_advisory_regression_shown_as_non_blocking() -> None:
@@ -138,20 +187,6 @@ def test_advisory_regression_shown_as_non_blocking() -> None:
     # Advisory flip is a warning section, and the comment does not claim a block.
     assert "Advisory (warnings only, not blocking)" in body
     assert "no regressions" in body  # nothing blocking
-
-
-def test_humanize_check_translates_builtins_and_falls_back() -> None:
-    assert (
-        humanize_check("called_tool('label_issue')", "pass->fail")
-        == "Stopped calling the `label_issue` tool"
-    )
-    contains = humanize_check("answer_contains('429')", "pass->fail")
-    assert "no longer mentions '429'" in contains
-    criterion = humanize_check("criterion:grounded", "0.90->0.60")
-    assert "score dropped 0.90 to 0.60" in criterion
-    # anything custom falls back to the raw label, safely.
-    fallback = humanize_check("custom_thing", "pass->fail")
-    assert fallback == "`custom_thing`: pass to fail"
 
 
 def test_scenario_task_reads_clips_and_strips_prefix() -> None:
@@ -249,9 +284,7 @@ def test_client_list_comments_gets_and_parses() -> None:
     transport = _FakeTransport(
         [(200, [{"id": 5, "body": "hi"}, {"id": 6, "body": "there"}])]
     )
-    client = GitHubClient(
-        repo="o/r", issue_number=3, token="tok", transport=transport
-    )
+    client = GitHubClient(repo="o/r", issue_number=3, token="tok", transport=transport)
     assert client.list_comments() == [
         IssueComment(id=5, body="hi"),
         IssueComment(id=6, body="there"),

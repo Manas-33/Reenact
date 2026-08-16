@@ -89,41 +89,60 @@ def _arg0(args: str) -> str:
     return args.split(",")[0].strip().strip("'\"")
 
 
-def humanize_check(name: str, detail: str) -> str:
-    """A plain-English description of what a regressed check means.
+def _behavior(name: str) -> tuple[str, str, str]:
+    """A check's (behavior label, passing value, failing value) for the diff table.
 
-    Translates the built-in check labels (``called_tool('x')``,
-    ``answer_contains('x')``, a criterion or judge score drop, ...) into a sentence
-    a reviewer understands, and falls back to the raw label for anything custom, so
-    it is always safe.
+    The behavior names the dimension being compared, in plain English; the two
+    values are what the Baseline and This-PR columns show for a boolean check (a
+    scored check overrides them with its numbers). Falls back to a generic
+    pass/fail for a custom check, so it is always safe.
     """
-    change = detail.replace("->", " to ")
-    dropped = "->" in detail and detail not in ("pass->fail", "fail->pass")
     call = _CALL.match(name)
     if call:
         func, arg = call.group(1), _arg0(call.group(2))
         if func == "called_tool":
-            return f"Stopped calling the `{arg}` tool"
+            return f"calls `{arg}`", "yes", "no"
         if func == "did_not_call_tool":
-            return f"Now calls the `{arg}` tool (it should not)"
+            return f"calls `{arg}`", "no", "yes"
         if func == "answer_contains":
-            return f"Answer no longer mentions '{arg}'"
+            return f"answer mentions '{arg}'", "yes", "no"
         if func == "answer_matches":
-            return "Answer no longer matches the expected pattern"
+            return "answer matches the expected pattern", "yes", "no"
         if func == "tool_call_count":
-            return f"Calls the `{arg}` tool the wrong number of times"
+            return f"calls `{arg}` the expected number of times", "yes", "no"
     if name.startswith("criterion:"):
-        crit = name.split(":", 1)[1]
-        if dropped:
-            return f"Quality criterion '{crit}' score dropped {change}"
-        return f"Quality criterion '{crit}' no longer holds"
+        return f"criterion '{name.split(':', 1)[1]}'", "yes", "no"
     if name == "replays_clean":
-        return "The recording no longer replays cleanly"
+        return "recording replays cleanly", "yes", "no"
     if name == "no_mutating_tool_reexecuted":
-        return "A mutating tool would be re-run on replay"
-    if dropped:
-        return f"Quality score dropped {change}"
-    return f"`{name}`: {change}"
+        return "mutating tools stay substituted", "yes", "no"
+    return f"`{name}`", "pass", "fail"
+
+
+def _scores(detail: str) -> tuple[str, str] | None:
+    """The (baseline, current) numbers for a score-drop detail like ``0.91->0.62``."""
+    parts = detail.split("->")
+    if len(parts) != 2:
+        return None
+    try:
+        float(parts[0])
+        float(parts[1])
+    except ValueError:
+        return None
+    return parts[0], parts[1]
+
+
+def _baseline_current(delta: CheckDelta) -> tuple[str, str, str]:
+    """A delta as (behavior, baseline value, this-PR value) for the diff table.
+
+    A scored check shows its actual numbers; a boolean check shows the passing value
+    (baseline) and the failing value (this PR), derived from what the check means.
+    """
+    behavior, pass_value, fail_value = _behavior(delta.check)
+    scores = _scores(delta.detail)
+    if scores is not None:
+        return behavior, scores[0], scores[1]
+    return behavior, pass_value, fail_value
 
 
 def _cell(text: str) -> str:
@@ -131,24 +150,44 @@ def _cell(text: str) -> str:
     return text.replace("|", "\\|")
 
 
-def _table(deltas: list[CheckDelta], tasks: dict[str, str]) -> list[str]:
-    rows = ["| Scenario | What changed |", "| --- | --- |"]
+def _scenario_sections(deltas: list[CheckDelta], tasks: dict[str, str]) -> list[str]:
+    """Regressed checks grouped by scenario: a heading plus a small diff table.
+
+    Each scenario becomes a heading (with its recorded task, when known); its
+    flipped checks render as a Behavior / Baseline / This PR table, or a single line
+    when only one check flipped. Grouping keeps the scenario named once instead of
+    repeating it per check.
+    """
+    grouped: dict[str, list[CheckDelta]] = {}
     for delta in deltas:
-        scenario = f"`{delta.scenario}`"
-        task = tasks.get(delta.scenario, "")
+        grouped.setdefault(delta.scenario, []).append(delta)
+
+    lines: list[str] = []
+    for scenario, group in grouped.items():
+        header = f"**{scenario}**"
+        task = tasks.get(scenario, "")
         if task:
-            scenario += f"<br><sub>{_cell(task)}</sub>"
-        changed = _cell(humanize_check(delta.check, delta.detail))
-        rows.append(f"| {scenario} | {changed} |")
-    return rows
+            header += f" - *{task}*"
+        lines += ["", header, ""]
+        if len(group) == 1:
+            behavior, baseline, current = _baseline_current(group[0])
+            lines.append(f"- {behavior}: {baseline} -> **{current}**")
+        else:
+            lines += ["| Behavior | Baseline | This PR |", "| --- | --- | --- |"]
+            for delta in group:
+                behavior, baseline, current = _baseline_current(delta)
+                lines.append(f"| {_cell(behavior)} | {baseline} | **{current}** |")
+    return lines
 
 
 def render_pr_comment(diff: RegressionDiff) -> str:
     """Render the diff as the sticky PR comment body (leads with the marker).
 
-    A regression leads with a plain-English headline and a table (each scenario,
-    its recorded task, and what changed); a clean run says so plainly. Advisory
-    warnings, improvements, and new checks follow when present.
+    A regression leads with a plain-English headline, then one section per regressed
+    scenario - the scenario (with its recorded task) as a heading, and its flipped
+    checks as a Behavior / Baseline / This PR diff (a single line when only one
+    flipped). A clean run says so plainly. Advisory warnings, improvements, and new
+    checks follow when present.
     """
     tasks = diff.scenario_tasks
     lines = [STICKY_MARKER]
@@ -159,8 +198,7 @@ def render_pr_comment(diff: RegressionDiff) -> str:
             "",
             f"This PR changed the agent's behavior. {n} of {diff.scenario_total} "
             "scenario(s) regressed, so the merge is blocked.",
-            "",
-            *_table(diff.blocking_regressions, tasks),
+            *_scenario_sections(diff.blocking_regressions, tasks),
             "",
             "If this change is intended, re-record the baseline. Otherwise it is a "
             "regression to fix before merging.",
@@ -176,8 +214,7 @@ def render_pr_comment(diff: RegressionDiff) -> str:
         lines += [
             "",
             "### Advisory (warnings only, not blocking)",
-            "",
-            *_table(diff.advisory_regressions, tasks),
+            *_scenario_sections(diff.advisory_regressions, tasks),
         ]
     if diff.improvements:
         improved = ", ".join(f"`{d.check}` in {d.scenario}" for d in diff.improvements)
