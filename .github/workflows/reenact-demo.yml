@@ -1,0 +1,25 @@
+# Gates pull requests with Reenact, using the in-repo composite action against the
+# committed issue-triage demo suite. It installs reenact from the checkout
+# (version: ./core) and runs on pull requests.
+name: Reenact demo gate
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reenact regression gate
+        uses: ./action
+        with:
+          suite: core/examples/demo/suite.toml
+          baseline: core/examples/demo/baseline.json
+          version: ./core
+          token: ${{ github.token }}

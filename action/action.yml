@@ -1,10 +1,14 @@
 # Composite Action wrapping the reenact CLI - runs the regression gate on a PR.
-# It sets up Python, installs reenact, and runs `reenact ci`, which replays the
-# committed scenario suite offline and fails only on a regression vs the baseline.
-# The sticky PR comment + dedicated check-run are added in a later rung; this job's
-# pass/fail already gives the merge-blocking red/green via its exit code.
+# It sets up Python, installs reenact, runs `reenact ci` (which replays the
+# committed scenario suite offline and fails only on a regression vs the baseline),
+# and posts a sticky PR comment + a merge-gating check-run. The `ci` step failing is
+# what turns the job red; the post step runs anyway (`if: always()`) so the PR still
+# gets its comment.
 name: Reenact
 description: Regression testing for LLM agents - gate a PR on agent behavior.
+branding:
+  icon: git-pull-request
+  color: purple
 
 inputs:
   suite:
@@ -31,6 +35,12 @@ inputs:
       "git+https://..." URL, or a local path like "./core").
     required: false
     default: reenact
+  token:
+    description: >-
+      GitHub token for posting the PR comment + check-run (e.g. ${{ github.token
+      }}). Leave empty to skip posting - the job still passes/fails on the gate.
+    required: false
+    default: ""
 
 runs:
   using: composite
@@ -45,9 +55,23 @@ runs:
       run: python -m pip install "${{ inputs.version }}"
 
     - name: Run reenact ci
+      id: ci
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       run: >-
         reenact ci "${{ inputs.suite }}"
         --baseline "${{ inputs.baseline }}"
         --tolerance "${{ inputs.tolerance }}"
+        --json "${{ runner.temp }}/reenact-diff.json"
+
+    - name: Post result to the pull request
+      if: ${{ always() && inputs.token != '' }}
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+      run: >-
+        reenact report "${{ runner.temp }}/reenact-diff.json"
+        --repo "${{ github.repository }}"
+        --sha "${{ github.event.pull_request.head.sha || github.sha }}"
+        --pr "${{ github.event.pull_request.number }}"

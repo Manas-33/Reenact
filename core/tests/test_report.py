@@ -240,6 +240,15 @@ def _diff_file(tmp_path: Path, *, regressed: bool) -> Path:
     return path
 
 
+def test_report_skips_on_missing_diff(tmp_path: Path) -> None:
+    # A config error exits `ci` before writing the diff; the post step must not crash.
+    args = ["report", str(tmp_path / "absent.json")]
+    args += ["--repo", "o/r", "--pr", "1", "--token", "t"]
+    result = runner.invoke(app, args)
+    assert result.exit_code == 0
+    assert "no diff file" in result.stdout
+
+
 def test_report_skips_without_a_token(tmp_path: Path, monkeypatch: Any) -> None:
     monkeypatch.delenv("GITHUB_TOKEN", raising=False)
     monkeypatch.delenv("GITHUB_REPOSITORY", raising=False)

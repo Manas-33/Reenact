@@ -231,7 +231,6 @@ def ci(
 def report(
     diff: Path = typer.Argument(
         ...,
-        exists=True,
         dir_okay=False,
         help="The regression diff JSON written by `ci --json`.",
     ),
@@ -254,6 +253,10 @@ def report(
     ``GITHUB_*`` env vars an Action provides. Best-effort: if the token, repo, or PR
     number is missing it prints a note and skips, so a local run never crashes.
     """
+    if not diff.is_file():
+        # e.g. a config error exited `ci` before it wrote the diff - nothing to post.
+        typer.echo(f"report: no diff file at {diff} - skipping")
+        return
     parsed = RegressionDiff.model_validate_json(diff.read_text(encoding="utf-8"))
     if not (token and repo and pr):
         typer.echo(
