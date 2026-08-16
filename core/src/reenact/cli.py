@@ -401,7 +401,14 @@ def suggest(
     suggestions = suggest_structural(trajectory)
     criteria = _suggest_criteria(trajectory, no_ai=no_ai)
     name = trajectory.name or cassette.stem
-    body = render_suite_toml(name, str(cassette), suggestions, criteria=criteria)
+    # load_suite resolves `cassette` relative to the suite file's own directory, so
+    # when writing to a file, express the path relative to that directory. Printing to
+    # stdout has no known destination, so the path is emitted as given.
+    if output is not None:
+        cassette_ref = Path(os.path.relpath(cassette, output.parent)).as_posix()
+    else:
+        cassette_ref = str(cassette)
+    body = render_suite_toml(name, cassette_ref, suggestions, criteria=criteria)
     if output is not None:
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(body, encoding="utf-8")

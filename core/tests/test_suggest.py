@@ -297,6 +297,35 @@ def test_suggest_writes_with_output_flag(tmp_path: Path) -> None:
     assert report.passed
 
 
+def test_suggest_output_path_resolves_from_a_subdir(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    # The init dovetail: `suggest evals/scenarios/run.json -o evals/suite.toml` run
+    # from the project root must write a cassette path load_suite resolves relative to
+    # the suite's own dir (i.e. "scenarios/run.json", not "evals/scenarios/run.json").
+    monkeypatch.chdir(tmp_path)
+    scenarios = tmp_path / "evals" / "scenarios"
+    scenarios.mkdir(parents=True)
+    save_cassette(
+        _traj(
+            "Password reset is broken",
+            "Reset your password via a new link.",
+            [
+                ("search_docs", SideEffect.READ_ONLY),
+                ("post_reply", SideEffect.MUTATING),
+            ],
+        ),
+        scenarios / "run.json",
+    )
+    result = runner.invoke(
+        app, ["suggest", "evals/scenarios/run.json", "-o", "evals/suite.toml"]
+    )
+    assert result.exit_code == 0, result.stdout
+    suite = tmp_path / "evals" / "suite.toml"
+    assert 'cassette = "scenarios/run.json"' in suite.read_text(encoding="utf-8")
+    assert run_suite(load_suite(suite)).passed  # resolves + runs from the suite dir
+
+
 # --- B2: optional AI quality-criteria layer ----------------------------------
 
 CRITERIA_JSON = (
