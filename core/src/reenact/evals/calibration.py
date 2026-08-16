@@ -1,12 +1,12 @@
 """Calibration: per-criterion agreement between the structured evaluator and humans.
 
-The structured evaluator (r3.6.5) answers criteria as booleans; this measures how
-often those booleans match human judgment, criterion by criterion, and turns that
-into the blocking/advisory level each criterion earns. A criterion the evaluator
-agrees with humans on (at or above a threshold) is trusted to *block* the gate; a
-noisier one is demoted to *advisory* - reported but never flaking the merge. So the
-calibration number does not just get reported, it sets the gate's behavior - the
-knob r3.6.5b left for exactly this.
+The structured evaluator answers criteria as booleans; this measures how often
+those booleans match human judgment, criterion by criterion, and turns that into
+the blocking/advisory level each criterion earns. A criterion the evaluator agrees
+with humans on (at or above a threshold) is trusted to *block* the gate; a noisier
+one is demoted to *advisory* - reported but never flaking the merge. So the
+calibration number does not just get reported, it sets the gate's behavior - what
+the per-criterion blocking/advisory level is for.
 
 Agreement is measured against the human signal two ways, always reported together:
 evaluator-vs-human (is the evaluator as good as a person?) beside human-vs-human
@@ -16,10 +16,9 @@ human-human ceiling, or above an absolute suspicious cutoff, is flagged rather t
 celebrated (don't chase a suspicious number).
 
 The evaluator is treated as just another rater, so everything is a homogeneous list
-of :class:`Label`s and one agreement routine serves both comparisons. This module is
-the mechanism, tested on synthetic labels; the real number needs a committed label
-set from a second human rater over the r3.5 demo trajectories (the external
-dependency) plus the evaluator run with a key - a later step.
+of :class:`Label`s and one agreement routine serves both comparisons. The module
+computes the number; the labels it consumes come from human raters over the demo
+trajectories plus an evaluator run.
 """
 
 from itertools import combinations

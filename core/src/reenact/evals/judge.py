@@ -9,9 +9,9 @@ score.
 
 The judge client is duck-typed, the same rule as the SDK recorders: the judge
 calls ``client.messages.create(**request)`` and reads the response, importing no
-SDK. A deterministic stub satisfies that shape in tests, so the mechanism is green
-with no key; calibrating the judge against human labels (the agreement number) is
-a later rung.
+SDK. A deterministic stub satisfies that shape in tests, so the mechanism runs
+green with no key; calibrating the judge against human labels is handled separately
+in :mod:`reenact.evals.calibration`.
 """
 
 import json

@@ -2,11 +2,10 @@
 
 The GitHub Action surfaces the gate two ways: a *sticky* PR comment updated in
 place on every run (so a PR accrues one comment, never a pile), and a check-run
-whose conclusion goes red on a regression. This module is the testable core of
-both - the markdown rendering, the find-or-create sticky logic (against a
-duck-typed client), and the pass/fail mapping. The real GitHub HTTP client and the
-action wiring are a later rung; here a fake client proves the mechanism offline,
-the same rule as the recorder and judge adapters.
+whose conclusion goes red on a regression. Rendering, the find-or-create sticky
+logic, and the pass/fail mapping work against a duck-typed client; :class:`GitHubClient`
+is the stdlib-only implementation, and its one network primitive is injectable, so
+the request shapes are exercised with a fake and no token.
 """
 
 import json
@@ -70,7 +69,7 @@ class IssueComment:
 
 
 class CommentClient(Protocol):
-    """A duck-typed GitHub issue-comment client (the real one is a later rung)."""
+    """A duck-typed GitHub issue-comment client; :class:`GitHubClient` implements it."""
 
     def list_comments(self) -> list[IssueComment]: ...
     def create_comment(self, body: str) -> None: ...

@@ -30,7 +30,7 @@ class CriterionLevel(StrEnum):
     Hard assertions are always ``BLOCKING`` (the default). A structured criterion
     may be marked ``ADVISORY`` so a shaky quality signal surfaces to a human -
     reported in the diff and the PR comment - without ever flaking the merge gate;
-    calibration (a later rung) is what promotes a criterion to blocking or demotes
+    calibration is what promotes a criterion to blocking or demotes
     it to advisory.
     """
 
@@ -75,7 +75,7 @@ class RunView:
 class CheckResult(BaseModel):
     """The outcome of one check: did it pass, and why.
 
-    ``score`` is unset for a boolean assertion; the LLM judge (a later rung) fills
+    ``score`` is unset for a boolean assertion; the LLM judge fills
     it with a graded value. ``level`` decides whether a regression on this check
     blocks the gate (the default) or is only an advisory warning - hard assertions
     leave it ``BLOCKING``; a structured criterion may set it ``ADVISORY``.

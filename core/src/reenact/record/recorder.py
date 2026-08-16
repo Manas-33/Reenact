@@ -77,8 +77,8 @@ class Recorder:
         """Capture a LangGraph node boundary as an event.
 
         The node name and checkpoint coordinates are structural, not payload, so
-        they are stored as-is. Recording ``(thread_id, step, checkpoint_ns)`` now
-        is what lets a later fork resolve the checkpoint the node ran at.
+        they are stored as-is. Recording ``(thread_id, step, checkpoint_ns)`` is
+        what lets a fork resolve the checkpoint the node ran at.
         """
         event = GraphNodeEvent(
             seq=len(self.trajectory.events),

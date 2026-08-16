@@ -81,9 +81,9 @@ class GraphNodeEvent(_EventBase):
     Records the node name plus the coordinates that address the checkpoint taken
     at that boundary: the thread, the superstep, and the checkpoint namespace.
     LangGraph does not expose the persisted checkpoint id to the callback layer -
-    it lives only in the checkpointer's state history - so a later fork resolves
-    the concrete checkpoint from ``(thread_id, step, checkpoint_ns)`` against the
-    checkpointer. This is the anchor recorded now so that fork is possible.
+    it lives only in the checkpointer's state history - so a fork resolves the
+    concrete checkpoint from ``(thread_id, step, checkpoint_ns)`` against the
+    checkpointer. That anchor is what makes a fork possible.
     """
 
     type: Literal["graph_node"] = "graph_node"

@@ -18,8 +18,8 @@ The evaluator answers every criterion in a single model call and memoizes it per
 run, so N criteria cost one judge call, not N. The client is duck-typed, the same
 rule as the judge and the SDK recorders: it calls ``client.messages.create(...)``
 and reads the reply, importing no SDK. A deterministic stub drives the tests, so
-the mechanism is green with no key; calibrating the criteria against human labels
-(the per-criterion agreement number) is a later rung.
+the mechanism runs green with no key; calibrating the criteria against human labels
+is handled separately in :mod:`reenact.evals.calibration`.
 """
 
 import json

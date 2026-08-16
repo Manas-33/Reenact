@@ -2,7 +2,7 @@
 
 This is the unit the eval runner consumes and the CI gate diffs against a
 baseline. Checks are runtime callables, so a scenario is a plain object (not a
-serializable model); the committable suite config (a later rung) builds these
+serializable model); the committable suite config builds these
 from strings.
 """
 

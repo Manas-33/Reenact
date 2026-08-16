@@ -3,7 +3,7 @@
 A scenario's checks read a :class:`RunView` over the recording; the runner just
 builds the view, evaluates each check, and aggregates the results into a
 :class:`ScenarioResult` and, over a suite, an :class:`EvalReport`. Both are
-serializable, so the CI gate (a later rung) can persist a baseline and diff a
+serializable, so the CI gate can persist a baseline and diff a
 later run against it.
 """
 
