@@ -87,6 +87,21 @@ def test_token_input_defaults_to_empty() -> None:
     assert _load()["inputs"]["token"]["default"] == ""
 
 
+def test_no_template_expressions_in_metadata() -> None:
+    # GitHub evaluates ${{ }} in action *metadata* (name/description/inputs), where the
+    # `github`/`runner` contexts don't exist - so a ${{ }} there fails to *load* the
+    # action on a real runner. PyYAML doesn't validate this, so it slipped past the
+    # other tests until the first live run. Metadata must stay expression-free; only
+    # step run/if/env/with may use ${{ }}.
+    action = _load()
+    fields = [str(action.get("name", "")), str(action.get("description", ""))]
+    for spec in cast(dict[str, Any], action["inputs"]).values():
+        fields.append(str(spec.get("description", "")))
+        fields.append(str(spec.get("default", "")))
+    for field in fields:
+        assert "${{" not in field, f"metadata has a template expression: {field!r}"
+
+
 def test_ci_step_emits_json_for_the_post_step() -> None:
     ci = next(step["run"] for step in _steps() if "reenact ci" in step.get("run", ""))
     assert "--json" in ci
