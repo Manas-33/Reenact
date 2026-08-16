@@ -37,8 +37,8 @@ inputs:
     default: reenact
   token:
     description: >-
-      GitHub token for posting the PR comment + check-run (e.g. ${{ github.token
-      }}). Leave empty to skip posting - the job still passes/fails on the gate.
+      GitHub token for posting the PR comment + check-run (pass github.token).
+      Leave empty to skip posting - the job still passes/fails on the gate.
     required: false
     default: ""
 
