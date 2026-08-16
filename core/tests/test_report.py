@@ -23,10 +23,13 @@ from reenact.report import (
     GitHubClient,
     IssueComment,
     check_run_result,
+    humanize_check,
     post_report,
     render_pr_comment,
+    scenario_task,
     upsert_sticky_comment,
 )
+from reenact.schema import LLMCallEvent, Trajectory
 
 runner = CliRunner()
 
@@ -37,10 +40,15 @@ def _check(
     return BaselineCheck(name=name, passed=passed, level=level)
 
 
-def _diff(before: BaselineCheck, after: BaselineCheck) -> RegressionDiff:
+def _diff(
+    before: BaselineCheck,
+    after: BaselineCheck,
+    *,
+    tasks: dict[str, str] | None = None,
+) -> RegressionDiff:
     base = Baseline(scenarios=[BaselineScenario(name="weather", checks=[before])])
     now = Baseline(scenarios=[BaselineScenario(name="weather", checks=[after])])
-    return diff_baselines(base, now)
+    return diff_baselines(base, now, scenario_tasks=tasks)
 
 
 class _FakeClient:
@@ -90,21 +98,35 @@ class _FakeTransport:
 # --- rendering ---------------------------------------------------------------
 
 
-def test_regressed_comment_carries_marker_and_details() -> None:
-    diff = _diff(_check("called_tool('x')", True), _check("called_tool('x')", False))
+def test_regressed_comment_is_a_readable_table() -> None:
+    diff = _diff(
+        _check("called_tool('x')", True),
+        _check("called_tool('x')", False),
+        tasks={"weather": "What's the weather in Paris?"},
+    )
     body = render_pr_comment(diff)
     assert body.startswith(STICKY_MARKER)
     assert "regression detected" in body
-    assert "these block the merge" in body
-    assert "`called_tool('x')` pass->fail - weather" in body
+    assert "| Scenario | What changed |" in body  # a markdown table, not a run-on
+    assert "Stopped calling the `x` tool" in body  # plain English, not `pass->fail`
+    assert "What's the weather in Paris?" in body  # the recorded task, auto-surfaced
+    assert "pass->fail" not in body  # the terse detail is gone
+    assert "—" not in body  # no em-dashes
 
 
 def test_clean_and_regressed_comments_differ() -> None:
     clean = render_pr_comment(_diff(_check("c", True), _check("c", True)))
     regressed = render_pr_comment(_diff(_check("c", True), _check("c", False)))
-    assert "no regressions" in clean
+    assert "no regressions" in clean and "Safe to merge" in clean
     assert "regression detected" in regressed
     assert STICKY_MARKER in clean and STICKY_MARKER in regressed
+
+
+def test_comment_degrades_without_a_task() -> None:
+    diff = _diff(_check("called_tool('x')", True), _check("called_tool('x')", False))
+    body = render_pr_comment(diff)
+    assert "`weather`" in body  # scenario name still shown
+    assert "<br><sub>" not in body  # no task sub-line when none is available
 
 
 def test_advisory_regression_shown_as_non_blocking() -> None:
@@ -113,9 +135,47 @@ def test_advisory_regression_shown_as_non_blocking() -> None:
         _check("criterion:tone", True, adv), _check("criterion:tone", False, adv)
     )
     body = render_pr_comment(diff)
-    # Advisory flip is reported as a warning, and the comment does not claim a block.
-    assert "warnings, do not block" in body
+    # Advisory flip is a warning section, and the comment does not claim a block.
+    assert "Advisory (warnings only, not blocking)" in body
     assert "no regressions" in body  # nothing blocking
+
+
+def test_humanize_check_translates_builtins_and_falls_back() -> None:
+    assert (
+        humanize_check("called_tool('label_issue')", "pass->fail")
+        == "Stopped calling the `label_issue` tool"
+    )
+    contains = humanize_check("answer_contains('429')", "pass->fail")
+    assert "no longer mentions '429'" in contains
+    criterion = humanize_check("criterion:grounded", "0.90->0.60")
+    assert "score dropped 0.90 to 0.60" in criterion
+    # anything custom falls back to the raw label, safely.
+    fallback = humanize_check("custom_thing", "pass->fail")
+    assert fallback == "`custom_thing`: pass to fail"
+
+
+def test_scenario_task_reads_clips_and_strips_prefix() -> None:
+    trajectory = Trajectory(
+        name="t",
+        events=[
+            LLMCallEvent(
+                seq=0,
+                provider="anthropic",
+                model="m",
+                request={
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": "Issue #42: Password reset link error\n\nbody",
+                        }
+                    ]
+                },
+                response={"content": [{"type": "text", "text": "ok"}]},
+                request_hash="h",
+            )
+        ],
+    )
+    assert scenario_task(trajectory) == "Password reset link error"
 
 
 # --- sticky upsert -----------------------------------------------------------

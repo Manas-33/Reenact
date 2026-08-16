@@ -16,6 +16,7 @@ from reenact.evals import (
     Baseline,
     EvalReport,
     RegressionDiff,
+    Scenario,
     SuiteConfigError,
     diff_baselines,
     load_baseline,
@@ -24,7 +25,7 @@ from reenact.evals import (
     save_baseline,
 )
 from reenact.replay import Player, ReplayMode
-from reenact.report import GitHubClient, post_report
+from reenact.report import GitHubClient, post_report, scenario_task
 from reenact.schema import LLMCallEvent, ToolCallEvent, Trajectory
 from reenact.store import load_cassette, save_cassette
 
@@ -126,14 +127,13 @@ def _render_report(report: EvalReport, suite_path: Path) -> None:
     typer.echo(f"{report.passed_count}/{report.total} scenarios passed")
 
 
-def _load_suite_or_exit(suite: Path) -> EvalReport:
-    """Load and run a suite, exiting 2 on a config error."""
+def _load_scenarios_or_exit(suite: Path) -> list[Scenario]:
+    """Load a suite into runnable scenarios, exiting 2 on a config error."""
     try:
-        scenarios = load_suite(suite, judge_client=_judge_client())
+        return load_suite(suite, judge_client=_judge_client())
     except SuiteConfigError as exc:
         typer.echo(f"error: {exc}")
         raise typer.Exit(2) from exc
-    return run_suite(scenarios)
 
 
 @app.command("eval")
@@ -158,7 +158,7 @@ def eval_suite(
     scenario fails. With ``--write-baseline`` it also records the run as the
     last-known-good snapshot the CI gate compares against.
     """
-    report = _load_suite_or_exit(suite)
+    report = run_suite(_load_scenarios_or_exit(suite))
     _render_report(report, suite)
     if write_baseline is not None:
         save_baseline(Baseline.from_report(report), write_baseline)
@@ -213,11 +213,14 @@ def ci(
     a check that went pass to fail, or a judge score that dropped past the
     tolerance, relative to the baseline. Exits 1 on a regression, else 0.
     """
-    report = _load_suite_or_exit(suite)
+    scenarios = _load_scenarios_or_exit(suite)
+    report = run_suite(scenarios)
+    tasks = {s.name: scenario_task(s.trajectory) for s in scenarios}
     diff = diff_baselines(
         load_baseline(baseline),
         Baseline.from_report(report),
         score_tolerance=tolerance,
+        scenario_tasks=tasks,
     )
     if json_out is not None:
         # Written before the exit so the Action can post a comment even on a fail.

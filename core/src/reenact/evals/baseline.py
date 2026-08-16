@@ -138,6 +138,9 @@ class RegressionDiff(BaseModel):
 
     deltas: list[CheckDelta] = []
     scenario_total: int = 0
+    # scenario name -> a short recorded task line, for a readable PR comment. Empty
+    # unless the caller (the `ci` verb) has the trajectories to fill it.
+    scenario_tasks: dict[str, str] = {}
 
     @property
     def regressions(self) -> list[CheckDelta]:
@@ -211,12 +214,15 @@ def diff_baselines(
     current: Baseline,
     *,
     score_tolerance: float = DEFAULT_SCORE_TOLERANCE,
+    scenario_tasks: dict[str, str] | None = None,
 ) -> RegressionDiff:
     """Diff a fresh run (``current``) against ``baseline``.
 
     Matches checks by (scenario name, check name). A check present now but not in
     the baseline is ``NEW`` (reported, never a gate failure); a check that
     regressed or improved is recorded; unchanged checks are omitted.
+    ``scenario_tasks`` (scenario name -> a short task line) is carried through for a
+    readable PR comment; it does not affect the diff.
     """
     prior_index = {
         (scenario.name, check.name): check
@@ -249,4 +255,8 @@ def diff_baselines(
                         level=check.level,
                     )
                 )
-    return RegressionDiff(deltas=deltas, scenario_total=len(current.scenarios))
+    return RegressionDiff(
+        deltas=deltas,
+        scenario_total=len(current.scenarios),
+        scenario_tasks=scenario_tasks or {},
+    )

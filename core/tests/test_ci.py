@@ -253,6 +253,8 @@ def test_ci_writes_diff_json(tmp_path: Path) -> None:
     restored = RegressionDiff.model_validate_json(diff_json.read_text(encoding="utf-8"))
     assert restored.regressed
     assert restored.regressed_scenarios == ["weather"]
+    # The recorded task rides into the JSON, so the Action can show it in the comment.
+    assert restored.scenario_tasks["weather"] == "What's the weather in Paris?"
 
 
 def test_ci_missing_baseline_errors(tmp_path: Path) -> None:

@@ -9,6 +9,7 @@ the request shapes are exercised with a fake and no token.
 """
 
 import json
+import re
 import urllib.error
 import urllib.request
 from collections.abc import Callable
@@ -19,43 +20,171 @@ from typing import Any, Protocol, cast
 from pydantic import BaseModel, ConfigDict
 
 from reenact.evals.baseline import CheckDelta, RegressionDiff
+from reenact.schema import LLMCallEvent, Trajectory
 
 # A hidden marker - an HTML comment, invisible in rendered markdown - that lets a
 # later run find its own previous comment and update it instead of posting a new one.
 STICKY_MARKER = "<!-- reenact-gate -->"
 
 _FOOTER = (
-    "<sub>Reenact replayed the recorded suite offline ($0, no network). It blocks "
-    "the merge only on a regression versus the committed baseline.</sub>"
+    "<sub>Reenact replayed the recorded suite offline. $0, no network. It blocks the "
+    "merge only on a regression versus the committed baseline.</sub>"
 )
 
+_TASK_MAX = 70
+_ISSUE_PREFIX = re.compile(r"^\s*(issue\s*)?#\d+:\s*", re.IGNORECASE)
+_CALL = re.compile(r"^(\w+)\((.*)\)$")
 
-def _bullets(
-    title: str, deltas: list[CheckDelta], *, with_detail: bool = True
-) -> list[str]:
-    if not deltas:
-        return []
-    lines = ["", f"**{title}**"]
+
+def _content_text(content: Any) -> str:
+    """Flatten a message ``content`` (a string or a list of blocks) to text."""
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts: list[str] = []
+        for block in cast(list[Any], content):
+            if isinstance(block, str):
+                parts.append(block)
+            elif isinstance(block, dict):
+                mapping = cast(dict[str, Any], block)
+                text = mapping.get("text")
+                if mapping.get("type") == "text" and isinstance(text, str):
+                    parts.append(text)
+        return " ".join(parts)
+    return ""
+
+
+def scenario_task(trajectory: Trajectory) -> str:
+    """A short human label for a run: the first line of its first user message.
+
+    Strips a leading issue-number prefix and clips it, so a PR comment can show
+    what each scenario is about without any extra config. Returns ``""`` if the run
+    has no usable prompt, so the comment degrades to just the scenario name.
+    """
+    for event in trajectory.events:
+        if not isinstance(event, LLMCallEvent):
+            continue
+        messages = event.request.get("messages")
+        if not isinstance(messages, list):
+            return ""
+        for message in cast(list[Any], messages):
+            if not isinstance(message, dict):
+                continue
+            mapping = cast(dict[str, Any], message)
+            role = mapping.get("role") or mapping.get("type")
+            if role not in ("user", "human"):
+                continue
+            text = _content_text(mapping.get("content")).strip()
+            if not text:
+                return ""
+            line = _ISSUE_PREFIX.sub("", text.splitlines()[0]).strip()
+            return line[:_TASK_MAX] + ("..." if len(line) > _TASK_MAX else "")
+        return ""
+    return ""
+
+
+def _arg0(args: str) -> str:
+    """The first argument of a rendered call label, unquoted (``'label_issue'`` ->
+    ``label_issue``)."""
+    return args.split(",")[0].strip().strip("'\"")
+
+
+def humanize_check(name: str, detail: str) -> str:
+    """A plain-English description of what a regressed check means.
+
+    Translates the built-in check labels (``called_tool('x')``,
+    ``answer_contains('x')``, a criterion or judge score drop, ...) into a sentence
+    a reviewer understands, and falls back to the raw label for anything custom, so
+    it is always safe.
+    """
+    change = detail.replace("->", " to ")
+    dropped = "->" in detail and detail not in ("pass->fail", "fail->pass")
+    call = _CALL.match(name)
+    if call:
+        func, arg = call.group(1), _arg0(call.group(2))
+        if func == "called_tool":
+            return f"Stopped calling the `{arg}` tool"
+        if func == "did_not_call_tool":
+            return f"Now calls the `{arg}` tool (it should not)"
+        if func == "answer_contains":
+            return f"Answer no longer mentions '{arg}'"
+        if func == "answer_matches":
+            return "Answer no longer matches the expected pattern"
+        if func == "tool_call_count":
+            return f"Calls the `{arg}` tool the wrong number of times"
+    if name.startswith("criterion:"):
+        crit = name.split(":", 1)[1]
+        if dropped:
+            return f"Quality criterion '{crit}' score dropped {change}"
+        return f"Quality criterion '{crit}' no longer holds"
+    if name == "replays_clean":
+        return "The recording no longer replays cleanly"
+    if name == "no_mutating_tool_reexecuted":
+        return "A mutating tool would be re-run on replay"
+    if dropped:
+        return f"Quality score dropped {change}"
+    return f"`{name}`: {change}"
+
+
+def _cell(text: str) -> str:
+    """Make text safe for a Markdown table cell (escape the column separator)."""
+    return text.replace("|", "\\|")
+
+
+def _table(deltas: list[CheckDelta], tasks: dict[str, str]) -> list[str]:
+    rows = ["| Scenario | What changed |", "| --- | --- |"]
     for delta in deltas:
-        detail = f" {delta.detail}" if with_detail else ""
-        lines.append(f"- `{delta.check}`{detail} - {delta.scenario}")
-    return lines
+        scenario = f"`{delta.scenario}`"
+        task = tasks.get(delta.scenario, "")
+        if task:
+            scenario += f"<br><sub>{_cell(task)}</sub>"
+        changed = _cell(humanize_check(delta.check, delta.detail))
+        rows.append(f"| {scenario} | {changed} |")
+    return rows
 
 
 def render_pr_comment(diff: RegressionDiff) -> str:
-    """Render the diff as the sticky PR comment body (leads with the marker)."""
-    heading = (
-        "Reenact - regression detected"
-        if diff.regressed
-        else "Reenact - no regressions"
-    )
-    lines = [STICKY_MARKER, f"## {heading}", "", diff.summary()]
-    lines += _bullets("Regressions (these block the merge):", diff.blocking_regressions)
-    lines += _bullets("Advisory (warnings, do not block):", diff.advisory_regressions)
-    lines += _bullets("Improvements:", diff.improvements)
-    lines += _bullets(
-        "New checks (reported, do not gate):", diff.new_checks, with_detail=False
-    )
+    """Render the diff as the sticky PR comment body (leads with the marker).
+
+    A regression leads with a plain-English headline and a table (each scenario,
+    its recorded task, and what changed); a clean run says so plainly. Advisory
+    warnings, improvements, and new checks follow when present.
+    """
+    tasks = diff.scenario_tasks
+    lines = [STICKY_MARKER]
+    if diff.regressed:
+        n = len(diff.regressed_scenarios)
+        lines += [
+            "## Reenact: regression detected",
+            "",
+            f"This PR changed the agent's behavior. {n} of {diff.scenario_total} "
+            "scenario(s) regressed, so the merge is blocked.",
+            "",
+            *_table(diff.blocking_regressions, tasks),
+            "",
+            "If this change is intended, re-record the baseline. Otherwise it is a "
+            "regression to fix before merging.",
+        ]
+    else:
+        lines += [
+            "## Reenact: no regressions",
+            "",
+            f"All {diff.scenario_total} scenario(s) match the committed baseline. "
+            "Safe to merge.",
+        ]
+    if diff.advisory_regressions:
+        lines += [
+            "",
+            "### Advisory (warnings only, not blocking)",
+            "",
+            *_table(diff.advisory_regressions, tasks),
+        ]
+    if diff.improvements:
+        improved = ", ".join(f"`{d.check}` in {d.scenario}" for d in diff.improvements)
+        lines += ["", f"Improved: {improved}."]
+    if diff.new_checks:
+        added = ", ".join(f"`{d.check}` in {d.scenario}" for d in diff.new_checks)
+        lines += ["", f"New checks (not gating): {added}."]
     lines += ["", _FOOTER]
     return "\n".join(lines)
 
