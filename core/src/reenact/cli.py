@@ -30,6 +30,7 @@ from reenact.evals import (
 )
 from reenact.replay import Player, ReplayMode
 from reenact.report import GitHubClient, post_report, scenario_task
+from reenact.scaffold import scaffold
 from reenact.schema import LLMCallEvent, ToolCallEvent, Trajectory
 from reenact.store import load_cassette, save_cassette
 
@@ -407,6 +408,43 @@ def suggest(
         typer.echo(f"wrote {output}")
     else:
         typer.echo(body)
+
+
+_NEXT_STEPS = (
+    "Next steps:",
+    "  1. edit evals/record.py - fill in how to run your agent",
+    "  2. python evals/record.py                 # records a cassette",
+    "  3. reenact suggest evals/scenarios/run.json -o evals/suite.toml  # draft checks",
+    "  4. reenact eval evals/suite.toml --write-baseline evals/baseline.json",
+    "  5. commit evals/ and .github/ - the Action gates your PRs",
+)
+
+
+@app.command()
+def init(
+    directory: Path = typer.Argument(
+        Path("."),
+        file_okay=False,
+        help="Project directory to scaffold into (default: current directory).",
+    ),
+    force: bool = typer.Option(
+        False,
+        "--force",
+        help="Overwrite existing scaffold files instead of skipping them.",
+    ),
+) -> None:
+    """Scaffold a project onto the reenact gate.
+
+    Writes a ``record.py`` template, a ``suite.toml`` skeleton, and a pull-request
+    workflow, so setup is not a blank page - you fill in only how to run your agent.
+    Existing files are skipped (never clobbered) unless ``--force`` is given.
+    """
+    for result in scaffold(directory, force=force):
+        status = "wrote" if result.written else "skipped (exists)"
+        typer.echo(f"  {status} {result.path}")
+    typer.echo("")
+    for line in _NEXT_STEPS:
+        typer.echo(line)
 
 
 if __name__ == "__main__":
