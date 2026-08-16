@@ -21,8 +21,10 @@ from reenact.evals import (
     diff_baselines,
     load_baseline,
     load_suite,
+    render_suite_toml,
     run_suite,
     save_baseline,
+    suggest_structural,
 )
 from reenact.replay import Player, ReplayMode
 from reenact.report import GitHubClient, post_report, scenario_task
@@ -335,6 +337,42 @@ def record(
     output.parent.mkdir(parents=True, exist_ok=True)
     save_cassette(trajectory, output)
     typer.echo(f"wrote {output} ({len(trajectory.events)} event(s))")
+
+
+@app.command()
+def suggest(
+    cassette: Path = typer.Argument(
+        ...,
+        exists=True,
+        dir_okay=False,
+        help="Path to a recorded cassette (JSON).",
+    ),
+    output: Path | None = typer.Option(
+        None,
+        "--output",
+        "-o",
+        dir_okay=False,
+        help="Write the candidate suite here instead of printing it.",
+    ),
+) -> None:
+    """Propose an eval suite from a recording, for you to review and prune.
+
+    Inspects the trajectory and emits a candidate ``suite.toml``: a ``called_tool``
+    check per tool the agent used, ``no_mutating_tool_reexecuted`` when it touched a
+    mutating tool, and an ``answer_contains`` keyword guessed from the run.
+    Everything is a suggestion - keep what applies, delete the rest. Prints to
+    stdout (never clobbers) unless ``-o`` is given. No key, no network.
+    """
+    trajectory = load_cassette(cassette)
+    suggestions = suggest_structural(trajectory)
+    name = trajectory.name or cassette.stem
+    body = render_suite_toml(name, str(cassette), suggestions)
+    if output is not None:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(body, encoding="utf-8")
+        typer.echo(f"wrote {output}")
+    else:
+        typer.echo(body)
 
 
 if __name__ == "__main__":

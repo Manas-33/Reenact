@@ -50,6 +50,11 @@ from reenact.evals.structured import (
     pairwise,
     structured_eval,
 )
+from reenact.evals.suggest import (
+    CheckSuggestion,
+    render_suite_toml,
+    suggest_structural,
+)
 from reenact.evals.suite import SuiteConfigError, load_suite
 
 __all__ = [
@@ -59,6 +64,7 @@ __all__ = [
     "Check",
     "CheckDelta",
     "CheckResult",
+    "CheckSuggestion",
     "Criterion",
     "CriterionAgreement",
     "CriterionLevel",
@@ -87,6 +93,7 @@ __all__ = [
     "load_suite",
     "no_mutating_tool_reexecuted",
     "pairwise",
+    "render_suite_toml",
     "render_trajectory",
     "replays_clean",
     "run_scenario",
@@ -94,5 +101,6 @@ __all__ = [
     "save_baseline",
     "save_label_set",
     "structured_eval",
+    "suggest_structural",
     "tool_call_count",
 ]
