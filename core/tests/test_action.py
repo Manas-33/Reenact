@@ -87,6 +87,14 @@ def test_token_input_defaults_to_empty() -> None:
     assert _load()["inputs"]["token"]["default"] == ""
 
 
+def test_criterion_key_wired_into_the_ci_step() -> None:
+    # A model-judged criterion needs a key at gate time; the action forwards it to the
+    # ci step's env from an input (mirroring how the token reaches the post step).
+    assert _load()["inputs"]["anthropic-api-key"]["default"] == ""
+    ci = next(s for s in _steps() if "reenact ci" in s.get("run", ""))
+    assert ci["env"]["ANTHROPIC_API_KEY"] == "${{ inputs.anthropic-api-key }}"
+
+
 def test_no_template_expressions_in_metadata() -> None:
     # GitHub evaluates ${{ }} in action *metadata* (name/description/inputs), where the
     # `github`/`runner` contexts don't exist - so a ${{ }} there fails to *load* the
@@ -116,6 +124,13 @@ def test_post_step_reports_always_and_only_with_a_token() -> None:
     assert post["env"]["GITHUB_TOKEN"] == "${{ inputs.token }}"
     # Reads the very diff the ci step wrote.
     assert "reenact-diff.json" in post["run"]
+
+
+def test_report_step_scopes_the_gate_by_name() -> None:
+    # The optional agent name reaches `reenact report`, so a matrix scopes each gate.
+    assert _load()["inputs"]["name"]["default"] == ""
+    post = next(s for s in _steps() if "reenact report" in s.get("run", ""))
+    assert "--name" in post["run"] and "inputs.name" in post["run"]
 
 
 # --- the demo gate workflow --------------------------------------------------

@@ -28,6 +28,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+# Pulls the Anthropic SDK so the judge/criteria client works out of the box - e.g.
+# a CI gate that runs an evidence-backed criterion needs `reenact[anthropic]`.
+anthropic = ["anthropic>=0.39"]
 langchain = ["langchain-core>=0.3"]
 
 [project.urls]

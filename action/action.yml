@@ -41,6 +41,18 @@ inputs:
       Leave empty to skip posting - the job still passes/fails on the gate.
     required: false
     default: ""
+  anthropic-api-key:
+    description: >-
+      Anthropic API key for suites with model-judged criteria (pass a repo secret).
+      Leave empty for assertion-only suites, which need no key.
+    required: false
+    default: ""
+  name:
+    description: >-
+      Optional agent name to scope the gate (its own PR comment + check-run) when
+      gating several agents in one repo. Leave empty for a single gate.
+    required: false
+    default: ""
 
 runs:
   using: composite
@@ -58,6 +70,8 @@ runs:
       id: ci
       shell: bash
       working-directory: ${{ inputs.working-directory }}
+      env:
+        ANTHROPIC_API_KEY: ${{ inputs.anthropic-api-key }}
       run: >-
         reenact ci "${{ inputs.suite }}"
         --baseline "${{ inputs.baseline }}"
@@ -75,3 +89,4 @@ runs:
         --repo "${{ github.repository }}"
         --sha "${{ github.event.pull_request.head.sha || github.sha }}"
         --pr "${{ github.event.pull_request.number }}"
+        --name "${{ inputs.name }}"

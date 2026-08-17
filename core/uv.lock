@@ -817,6 +817,9 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+anthropic = [
+    { name = "anthropic" },
+]
 langchain = [
     { name = "langchain-core" },
 ]
@@ -835,11 +838,12 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "anthropic", marker = "extra == 'anthropic'", specifier = ">=0.39" },
     { name = "langchain-core", marker = "extra == 'langchain'", specifier = ">=0.3" },
     { name = "pydantic", specifier = ">=2.7" },
     { name = "typer", specifier = ">=0.12" },
 ]
-provides-extras = ["langchain"]
+provides-extras = ["anthropic", "langchain"]
 
 [package.metadata.requires-dev]
 dev = [

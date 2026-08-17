@@ -277,6 +277,36 @@ def test_post_report_green_check_run_when_clean() -> None:
     assert client.check_runs[0]["conclusion"] == "success"
 
 
+def test_named_gate_scopes_the_check_run_and_comment() -> None:
+    client = _FakeClient()
+    post_report(
+        client,
+        _diff(_check("c", True), _check("c", False)),
+        head_sha="s",
+        name="support",
+    )
+    assert client.check_runs[0]["name"] == "Reenact (support)"
+    assert "<!-- reenact-gate:support -->" in client.created[0]
+
+
+def test_named_gates_do_not_clobber_each_others_comment() -> None:
+    # A support gate must not overwrite the refund gate's comment - they carry
+    # different markers, so upsert edits only its own. The whole point of a matrix.
+    refund = _FakeClient()
+    post_report(
+        refund, _diff(_check("c", True), _check("c", True)), head_sha="s", name="refund"
+    )
+    seeded = _FakeClient([IssueComment(id=1, body=refund.created[0])])
+    action = post_report(
+        seeded,
+        _diff(_check("c", True), _check("c", False)),
+        head_sha="s",
+        name="support",
+    )
+    assert action == "created"  # a new, separate comment
+    assert seeded.updated == []  # the refund comment was left untouched
+
+
 # --- the real GitHubClient's request shapes (fake transport) -----------------
 
 

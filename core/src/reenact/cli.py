@@ -255,6 +255,12 @@ def report(
     token: str | None = typer.Option(
         None, "--token", envvar="GITHUB_TOKEN", help="GitHub API token."
     ),
+    name: str = typer.Option(
+        "",
+        "--name",
+        help="Scope the gate to a named agent (its own comment + check-run), "
+        "for gating several agents in one repo.",
+    ),
 ) -> None:
     """Post a regression diff to a PR: a sticky comment and a merge-gating check-run.
 
@@ -274,7 +280,7 @@ def report(
         )
         return
     client = GitHubClient(repo=repo, issue_number=pr, token=token)
-    action = post_report(client, parsed, head_sha=sha or "")
+    action = post_report(client, parsed, head_sha=sha or "", name=name)
     verdict = "red" if parsed.regressed else "green"
     typer.echo(f"report: {action} sticky comment; check-run {verdict}")
 

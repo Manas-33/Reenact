@@ -26,6 +26,17 @@ from reenact.schema import LLMCallEvent, Trajectory
 # later run find its own previous comment and update it instead of posting a new one.
 STICKY_MARKER = "<!-- reenact-gate -->"
 
+
+def gate_marker(name: str = "") -> str:
+    """The hidden sticky-comment marker for a gate, optionally scoped to an agent.
+
+    An empty ``name`` keeps the shared default marker (one gate per repo); a name
+    scopes it (``<!-- reenact-gate:support -->``) so several agents gated in one repo
+    (a matrix) each keep their own comment instead of clobbering a single shared one.
+    """
+    return f"<!-- reenact-gate:{name} -->" if name else STICKY_MARKER
+
+
 _FOOTER = (
     "<sub>Reenact replayed the recorded suite offline. $0, no network. It blocks the "
     "merge only on a regression versus the committed baseline.</sub>"
@@ -180,17 +191,17 @@ def _scenario_sections(deltas: list[CheckDelta], tasks: dict[str, str]) -> list[
     return lines
 
 
-def render_pr_comment(diff: RegressionDiff) -> str:
+def render_pr_comment(diff: RegressionDiff, *, marker: str = STICKY_MARKER) -> str:
     """Render the diff as the sticky PR comment body (leads with the marker).
 
     A regression leads with a plain-English headline, then one section per regressed
     scenario - the scenario (with its recorded task) as a heading, and its flipped
     checks as a Behavior / Baseline / This PR diff (a single line when only one
     flipped). A clean run says so plainly. Advisory warnings, improvements, and new
-    checks follow when present.
+    checks follow when present. ``marker`` scopes the sticky comment to a named gate.
     """
     tasks = diff.scenario_tasks
-    lines = [STICKY_MARKER]
+    lines = [marker]
     if diff.regressed:
         n = len(diff.regressed_scenarios)
         lines += [
@@ -301,16 +312,26 @@ class GateClient(CommentClient, Protocol):
     ) -> None: ...
 
 
-def post_report(client: GateClient, diff: RegressionDiff, *, head_sha: str) -> str:
+def post_report(
+    client: GateClient, diff: RegressionDiff, *, head_sha: str, name: str = ""
+) -> str:
     """Post the whole gate result: the sticky comment plus the check-run.
 
     Returns ``"created"`` / ``"updated"`` for the comment. The check-run's
     conclusion (red on a blocking regression) is what a required status check reads.
+    ``name`` scopes the gate when several agents are gated in one repo: it names the
+    check-run ``Reenact (<name>)`` and gives the comment its own marker, so each
+    agent keeps a separate comment and check instead of clobbering one shared pair.
+    An empty ``name`` keeps the single-gate default (``Reenact`` + the shared marker).
     """
-    action = upsert_sticky_comment(client, render_pr_comment(diff))
+    marker = gate_marker(name)
+    check_name = f"{CHECK_RUN_NAME} ({name})" if name else CHECK_RUN_NAME
+    action = upsert_sticky_comment(
+        client, render_pr_comment(diff, marker=marker), marker=marker
+    )
     result = check_run_result(diff)
     client.create_check_run(
-        name=CHECK_RUN_NAME,
+        name=check_name,
         head_sha=head_sha,
         conclusion=result.conclusion.value,
         title=result.title,
