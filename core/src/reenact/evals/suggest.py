@@ -60,6 +60,30 @@ class CheckSuggestion:
     active: bool = True
 
 
+def _no_checks() -> list[CheckSuggestion]:
+    return []
+
+
+def _no_criteria() -> list[Criterion]:
+    return []
+
+
+@dataclass(frozen=True)
+class ScenarioSuggestion:
+    """One scenario's worth of suggestions, ready to render into a suite table.
+
+    ``cassette`` is the path string written into the table (resolved by the caller
+    relative to where the suite will live). ``checks`` are the structural
+    suggestions; ``criteria`` are optional AI-proposed quality criteria, rendered
+    commented-out.
+    """
+
+    name: str
+    cassette: str
+    checks: list[CheckSuggestion] = field(default_factory=_no_checks)
+    criteria: list[Criterion] = field(default_factory=_no_criteria)
+
+
 # --- keyword heuristic -------------------------------------------------------
 
 _TOKEN = re.compile(r"[a-z0-9]+")
@@ -453,49 +477,53 @@ _CRITERION_EXAMPLE = [
 ]
 
 
-def render_suite_toml(
-    name: str,
-    cassette: str,
-    suggestions: Iterable[CheckSuggestion],
-    *,
-    criteria: Iterable[Criterion] = (),
-) -> str:
-    """Render suggestions into a candidate `suite.toml`.
+def _scenario_block(scenario: ScenarioSuggestion) -> list[str]:
+    """The `[[scenario]]` table for one scenario: header, cassette, checks, criteria.
 
-    One `[[scenario]]` naming ``cassette`` (resolved relative to the suite file at
-    load time, so keep the two together) and the active checks under a "keep what
-    applies" header. Any proposed ``criteria`` render commented-out (accepting one is
-    uncommenting it); with none, a short illustrative placeholder is shown instead.
-    The active tables load cleanly through
-    :func:`~reenact.evals.suite.load_suite`; commented lines are ignored, so the
-    suggested suite loads with no client.
+    Checks render active (or commented for a tighter alternative); any proposed
+    criteria render commented-out, so accepting one is just uncommenting it.
     """
-    out: list[str] = [
-        f"# Suggested by `reenact suggest` from {cassette}.",
-        "# Derived from what the agent did - keep what applies, delete the rest.",
-        "",
+    out = [
         "[[scenario]]",
-        f'name = "{_toml_str(name)}"',
-        f'cassette = "{_toml_str(cassette)}"',
+        f'name = "{_toml_str(scenario.name)}"',
+        f'cassette = "{_toml_str(scenario.cassette)}"',
     ]
     previous_rationale: str | None = None
-    for suggestion in suggestions:
+    for suggestion in scenario.checks:
         out.append("")
         if suggestion.rationale and suggestion.rationale != previous_rationale:
             out.append(f"  # {suggestion.rationale}")
         previous_rationale = suggestion.rationale
         prefix = "  " if suggestion.active else "  # "
         out.extend(f"{prefix}{line}" for line in _check_body(suggestion))
-
-    proposed = list(criteria)
-    if proposed:
+    if scenario.criteria:
         out.append("")
-        out.append("# Quality criteria proposed from the transcript - evidence-backed,")
-        out.append("# and they need your API key at eval time. Review before trusting;")
-        out.append("# uncomment to enable.")
-        for criterion in proposed:
+        out.append(
+            "  # quality criteria proposed from the transcript - need your key; "
+            "uncomment to use:"
+        )
+        for criterion in scenario.criteria:
             out.append("")
             out.extend(f"  # {line}" for line in _criterion_body(criterion))
-    else:
+    return out
+
+
+def render_suite_toml(scenarios: Iterable[ScenarioSuggestion]) -> str:
+    """Render one or more scenarios into a candidate `suite.toml`.
+
+    A header comment, then one `[[scenario]]` table per scenario. When no scenario
+    proposes a criterion, a short illustrative placeholder is shown once. The active
+    tables load cleanly through :func:`~reenact.evals.suite.load_suite`; commented
+    lines are ignored, so the suggested suite loads with no client.
+    """
+    entries = list(scenarios)
+    out: list[str] = [
+        "# Suggested by `reenact suggest`.",
+        "# Derived from what the agent did - keep what applies, delete the rest.",
+    ]
+    for scenario in entries:
+        out.append("")
+        out.extend(_scenario_block(scenario))
+    if not any(scenario.criteria for scenario in entries):
         out.extend(_CRITERION_EXAMPLE)
     return "\n".join(out) + "\n"

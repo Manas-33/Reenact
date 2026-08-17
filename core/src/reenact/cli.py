@@ -18,6 +18,7 @@ from reenact.evals import (
     EvalReport,
     RegressionDiff,
     Scenario,
+    ScenarioSuggestion,
     SuiteConfigError,
     diff_baselines,
     load_baseline,
@@ -342,38 +343,23 @@ def record(
     typer.echo(f"wrote {output} ({len(trajectory.events)} event(s))")
 
 
-def _suggest_criteria(trajectory: Trajectory, *, no_ai: bool) -> list[Criterion]:
-    """Best-effort quality criteria for `suggest`, or ``[]`` if unavailable.
-
-    The structural half never needs this; the AI half is opt-out (``--no-ai``) and
-    fail-open: with no client (no key/SDK) or if the call fails, it returns ``[]`` and
-    a note goes to stderr, so the structural suite is still emitted on stdout.
-    """
-    if no_ai:
-        return []
-    client = _judge_client()
-    if client is None:
-        typer.echo(
-            "note: no model client (set ANTHROPIC_API_KEY) - structural checks only",
-            err=True,
-        )
-        return []
-    try:
-        return suggest_criteria(client, trajectory)
-    except Exception:  # best-effort: the AI layer must never fail the command
-        typer.echo(
-            "note: quality-criteria suggestion failed - structural only", err=True
-        )
-        return []
+def _collect_cassettes(paths: list[Path]) -> list[Path]:
+    """Expand any directory arguments to their ``*.json`` cassettes, in order."""
+    collected: list[Path] = []
+    for path in paths:
+        if path.is_dir():
+            collected.extend(sorted(path.glob("*.json")))
+        else:
+            collected.append(path)
+    return collected
 
 
 @app.command()
 def suggest(
-    cassette: Path = typer.Argument(
+    cassettes: list[Path] = typer.Argument(
         ...,
         exists=True,
-        dir_okay=False,
-        help="Path to a recorded cassette (JSON).",
+        help="Cassette JSON file(s), or directories of them, to draft a suite from.",
     ),
     output: Path | None = typer.Option(
         None,
@@ -388,31 +374,56 @@ def suggest(
         help="Skip the optional AI quality-criteria layer (structural checks only).",
     ),
 ) -> None:
-    """Propose an eval suite from a recording, for you to review and prune.
+    """Propose an eval suite from one or more recordings, for you to review and prune.
 
-    Inspects the trajectory and emits a candidate ``suite.toml``: a ``called_tool``
-    check per tool the agent used, ``no_mutating_tool_reexecuted`` when it touched a
-    mutating tool, and an ``answer_contains`` keyword guessed from the run. If a model
-    client is available (``ANTHROPIC_API_KEY``) and ``--no-ai`` is not set, it also
-    proposes commented quality criteria. Everything is a suggestion - keep what
-    applies, delete the rest. Prints to stdout (never clobbers) unless ``-o`` is given.
+    Each cassette (a directory expands to its ``*.json``) becomes one ``[[scenario]]``:
+    a ``called_tool`` per tool used, the mutating-tool safety check, and a guessed
+    ``answer_contains`` keyword. With a model client (``ANTHROPIC_API_KEY``, unless
+    ``--no-ai``) it also proposes commented quality criteria. Everything is a
+    suggestion - keep what applies, delete the rest. Prints to stdout (never
+    clobbers) unless ``-o`` is given.
     """
-    trajectory = load_cassette(cassette)
-    suggestions = suggest_structural(trajectory)
-    criteria = _suggest_criteria(trajectory, no_ai=no_ai)
-    name = trajectory.name or cassette.stem
-    # load_suite resolves `cassette` relative to the suite file's own directory, so
-    # when writing to a file, express the path relative to that directory. Printing to
-    # stdout has no known destination, so the path is emitted as given.
-    if output is not None:
-        cassette_ref = Path(os.path.relpath(cassette, output.parent)).as_posix()
-    else:
-        cassette_ref = str(cassette)
-    body = render_suite_toml(name, cassette_ref, suggestions, criteria=criteria)
+    paths = _collect_cassettes(cassettes)
+    if not paths:
+        raise typer.BadParameter("no cassette JSON files found")
+    client = None if no_ai else _judge_client()
+    if not no_ai and client is None:
+        typer.echo(
+            "note: no model client (set ANTHROPIC_API_KEY) - structural checks only",
+            err=True,
+        )
+    scenarios: list[ScenarioSuggestion] = []
+    for cassette in paths:
+        trajectory = load_cassette(cassette)
+        criteria: list[Criterion] = []
+        if client is not None:
+            try:
+                criteria = suggest_criteria(client, trajectory)
+            except Exception:  # best-effort: the AI layer must never fail the command
+                typer.echo(
+                    f"note: criteria suggestion failed for {cassette.name} - "
+                    "structural only",
+                    err=True,
+                )
+        # load_suite resolves `cassette` relative to the suite file's directory, so
+        # when writing to a file, express the path relative to that directory.
+        if output is not None:
+            cassette_ref = Path(os.path.relpath(cassette, output.parent)).as_posix()
+        else:
+            cassette_ref = str(cassette)
+        scenarios.append(
+            ScenarioSuggestion(
+                name=trajectory.name or cassette.stem,
+                cassette=cassette_ref,
+                checks=suggest_structural(trajectory),
+                criteria=criteria,
+            )
+        )
+    body = render_suite_toml(scenarios)
     if output is not None:
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(body, encoding="utf-8")
-        typer.echo(f"wrote {output}")
+        typer.echo(f"wrote {output} ({len(scenarios)} scenario(s))")
     else:
         typer.echo(body)
 

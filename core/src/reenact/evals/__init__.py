@@ -52,6 +52,7 @@ from reenact.evals.structured import (
 )
 from reenact.evals.suggest import (
     CheckSuggestion,
+    ScenarioSuggestion,
     render_suite_toml,
     suggest_criteria,
     suggest_structural,
@@ -80,6 +81,7 @@ __all__ = [
     "RunView",
     "Scenario",
     "ScenarioResult",
+    "ScenarioSuggestion",
     "StructuredEvaluator",
     "SuiteConfigError",
     "answer_contains",

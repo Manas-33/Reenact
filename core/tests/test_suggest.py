@@ -15,6 +15,7 @@ from reenact.cli import app
 from reenact.evals import (
     CheckSuggestion,
     Criterion,
+    ScenarioSuggestion,
     load_suite,
     render_suite_toml,
     run_suite,
@@ -71,6 +72,22 @@ def _types(suggestions: list[CheckSuggestion]) -> list[str]:
 
 def _named(suggestions: list[CheckSuggestion], type_: str) -> list[CheckSuggestion]:
     return [s for s in suggestions if s.type == type_]
+
+
+def _render_one(
+    name: str,
+    cassette: str,
+    checks: list[CheckSuggestion],
+    criteria: list[Criterion] | None = None,
+) -> str:
+    """Render a single-scenario suite (the common case in these tests)."""
+    return render_suite_toml(
+        [
+            ScenarioSuggestion(
+                name=name, cassette=cassette, checks=checks, criteria=criteria or []
+            )
+        ]
+    )
 
 
 class _StubResponse:
@@ -234,7 +251,7 @@ def test_render_round_trips_through_load_suite(tmp_path: Path) -> None:
         ],
     )
     save_cassette(traj, cassette)
-    body = render_suite_toml("run", str(cassette), suggest_structural(traj))
+    body = _render_one("run", str(cassette), suggest_structural(traj))
     suite = tmp_path / "suite.toml"
     suite.write_text(body, encoding="utf-8")
 
@@ -252,7 +269,7 @@ def test_render_round_trips_through_load_suite(tmp_path: Path) -> None:
 
 def test_render_marks_commented_and_criterion_lines() -> None:
     traj = _traj("hi", "bye", [("search_docs", SideEffect.READ_ONLY)])
-    body = render_suite_toml("t", "run.json", suggest_structural(traj))
+    body = _render_one("t", "run.json", suggest_structural(traj))
     # The tighter alternative and the criterion placeholder are commented out.
     assert '  # type = "tool_call_count"' in body
     assert "#   [[scenario.criterion]]" in body
@@ -262,7 +279,7 @@ def test_render_marks_commented_and_criterion_lines() -> None:
 def test_criterion_placeholder_is_always_commented() -> None:
     # An active criterion would need a client at load time; ours must stay inert.
     traj = _traj("hi", "bye", [("search_docs", SideEffect.READ_ONLY)])
-    body = render_suite_toml("t", "run.json", suggest_structural(traj))
+    body = _render_one("t", "run.json", suggest_structural(traj))
     criterion_lines = [ln for ln in body.splitlines() if "scenario.criterion" in ln]
     assert criterion_lines
     assert all(ln.lstrip().startswith("#") for ln in criterion_lines)
@@ -326,6 +343,31 @@ def test_suggest_output_path_resolves_from_a_subdir(
     assert run_suite(load_suite(suite)).passed  # resolves + runs from the suite dir
 
 
+def test_suggest_multiple_cassettes_into_one_suite(tmp_path: Path) -> None:
+    # Several cassettes -> one suite with a [[scenario]] each.
+    a, b = tmp_path / "a.json", tmp_path / "b.json"
+    save_cassette(_traj("hi a", "bye a", [("t", SideEffect.READ_ONLY)]), a)
+    save_cassette(_traj("hi b", "bye b", [("t", SideEffect.READ_ONLY)]), b)
+    result = runner.invoke(app, ["suggest", str(a), str(b)])
+    assert result.exit_code == 0, result.stdout
+    assert result.stdout.count("[[scenario]]") == 2
+    assert str(a) in result.stdout and str(b) in result.stdout
+
+
+def test_suggest_expands_a_directory_of_cassettes(tmp_path: Path) -> None:
+    # A directory argument expands to its *.json cassettes.
+    scenarios = tmp_path / "scenarios"
+    scenarios.mkdir()
+    for name in ("one", "two", "three"):
+        save_cassette(
+            _traj("hi", "bye", [("t", SideEffect.READ_ONLY)]),
+            scenarios / f"{name}.json",
+        )
+    result = runner.invoke(app, ["suggest", str(scenarios)])
+    assert result.exit_code == 0, result.stdout
+    assert result.stdout.count("[[scenario]]") == 3
+
+
 # --- B2: optional AI quality-criteria layer ----------------------------------
 
 CRITERIA_JSON = (
@@ -369,9 +411,7 @@ def test_render_includes_commented_criteria_and_round_trips(tmp_path: Path) -> N
     )
     save_cassette(traj, cassette)
     criteria = [Criterion(id="reply_grounded", question="Grounded in the docs?")]
-    body = render_suite_toml(
-        "run", str(cassette), suggest_structural(traj), criteria=criteria
-    )
+    body = _render_one("run", str(cassette), suggest_structural(traj), criteria)
     assert "proposed from the transcript" in body
     assert "reply_grounded" in body
     # Every criterion line is commented, so the suite still loads with no client.
