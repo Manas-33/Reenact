@@ -100,10 +100,27 @@ def _render_llm_output(response: dict[str, Any]) -> str:
     return "; ".join(calls) if calls else "(no text output)"
 
 
+# Tool results carry the evidence a grounding criterion checks against, so keep far
+# more of them than a one-line message.
+_MAX_RESULT = 800
+
+
 def _render_result(result: Any) -> str:
+    """Render a tool result for the transcript, unwrapping a LangChain ToolMessage.
+
+    LangChain records a tool result as a serialized ToolMessage - a dict whose useful
+    text is its ``content`` field, wrapped in metadata (``additional_kwargs``,
+    ``status``, ...). Rendering that raw buries the retrieved evidence in JSON noise
+    and clips it early, so a grounding criterion cannot see what the agent actually
+    retrieved. Unwrap to the ``content`` when present; otherwise show the value.
+    """
+    if isinstance(result, dict):
+        content = cast(dict[str, Any], result).get("content")
+        if isinstance(content, str):
+            return clip(content, _MAX_RESULT)
     if isinstance(result, str):
-        return clip(result)
-    return clip(json.dumps(result, sort_keys=True, default=str))
+        return clip(result, _MAX_RESULT)
+    return clip(json.dumps(result, sort_keys=True, default=str), _MAX_RESULT)
 
 
 def render_trajectory(trajectory: Trajectory) -> str:
