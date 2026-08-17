@@ -123,14 +123,23 @@ def _render_report(report: EvalReport, suite_path: Path) -> None:
     typer.echo(f"suite {suite_path} ({report.total} scenario(s))")
     for scenario in report.scenarios:
         passed_checks = sum(1 for check in scenario.checks if check.passed)
-        status = "PASS" if scenario.passed else "FAIL"
+        ok = scenario.passed
+        status = typer.style(
+            "PASS" if ok else "FAIL",
+            fg=typer.colors.GREEN if ok else typer.colors.RED,
+            bold=True,
+        )
         typer.echo(
             f"  {status} {scenario.name} "
             f"({passed_checks}/{len(scenario.checks)} checks)"
         )
         for check in scenario.failures:
-            typer.echo(f"    - {check.name}: {check.message}")
-    typer.echo(f"{report.passed_count}/{report.total} scenarios passed")
+            typer.secho(f"    - {check.name}: {check.message}", fg=typer.colors.RED)
+    typer.secho(
+        f"{report.passed_count}/{report.total} scenarios passed",
+        fg=typer.colors.GREEN if report.passed else typer.colors.RED,
+        bold=True,
+    )
 
 
 def _load_scenarios_or_exit(suite: Path) -> list[Scenario]:
@@ -138,7 +147,7 @@ def _load_scenarios_or_exit(suite: Path) -> list[Scenario]:
     try:
         return load_suite(suite, judge_client=_judge_client())
     except SuiteConfigError as exc:
-        typer.echo(f"error: {exc}")
+        typer.secho(f"error: {exc}", fg=typer.colors.RED, bold=True)
         raise typer.Exit(2) from exc
 
 
@@ -174,15 +183,30 @@ def eval_suite(
 
 
 def _render_diff(diff: RegressionDiff) -> None:
-    typer.echo(diff.summary())
+    typer.secho(
+        diff.summary(),
+        fg=typer.colors.RED if diff.regressed else typer.colors.GREEN,
+        bold=True,
+    )
     for delta in diff.blocking_regressions:
-        typer.echo(f"  regressed: {delta.check} {delta.detail} ({delta.scenario})")
+        typer.secho(
+            f"  regressed: {delta.check} {delta.detail} ({delta.scenario})",
+            fg=typer.colors.RED,
+        )
     for delta in diff.advisory_regressions:
-        typer.echo(f"  advisory:  {delta.check} {delta.detail} ({delta.scenario})")
+        typer.secho(
+            f"  advisory:  {delta.check} {delta.detail} ({delta.scenario})",
+            fg=typer.colors.YELLOW,
+        )
     for delta in diff.improvements:
-        typer.echo(f"  improved:  {delta.check} {delta.detail} ({delta.scenario})")
+        typer.secho(
+            f"  improved:  {delta.check} {delta.detail} ({delta.scenario})",
+            fg=typer.colors.GREEN,
+        )
     for delta in diff.new_checks:
-        typer.echo(f"  new:       {delta.check} ({delta.scenario})")
+        typer.secho(
+            f"  new:       {delta.check} ({delta.scenario})", fg=typer.colors.CYAN
+        )
 
 
 @app.command()
