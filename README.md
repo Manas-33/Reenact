@@ -7,6 +7,8 @@ agent worse - offline, at $0, with no API key.
 Think VCR.py, but for full multi-step agent trajectories: record -> replay ->
 evaluate -> gate.
 
+![reenact replays a recorded agent run offline: a model swap turns the gate red, reverting turns it green - no key, no network, $0](docs/demo.gif)
+
 ![Reenact comments on a pull request when an agent regresses](docs/pr-comment.png)
 
 Reenact captures a full trajectory - every LLM call, tool call, and MCP call, with
@@ -21,6 +23,23 @@ against a committed baseline.
 ```bash
 pip install reenact
 ```
+
+## Getting started
+
+`reenact init` scaffolds the harness - a `record.py` template, a suite skeleton, and a
+pull-request workflow - then `reenact suggest` drafts the suite from your first
+recording, so you never start the checks from a blank file.
+
+![reenact init scaffolds the harness, suggest drafts the suite from a recording, and eval writes the baseline](docs/getting-started.gif)
+
+```bash
+reenact init                     # scaffold evals/ + the PR workflow
+# add reenact.recording(client) to your agent, then run it once to record a scenario
+reenact suggest evals/scenarios/run.json -o evals/suite.toml   # draft the checks
+reenact eval evals/suite.toml --write-baseline evals/baseline.json
+```
+
+The sections below explain each piece.
 
 ## Record a run
 
