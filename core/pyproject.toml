@@ -1,6 +1,6 @@
 [project]
 name = "reenact"
-version = "0.0.1"
+version = "0.1.0"
 description = "Regression testing for LLM agents - record agent runs, replay them deterministically, and gate regressions in CI."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -16,8 +16,9 @@ keywords = [
     "testing",
 ]
 classifiers = [
-    "Development Status :: 1 - Planning",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Testing",
     "Topic :: Software Development :: Quality Assurance",
@@ -34,7 +35,8 @@ anthropic = ["anthropic>=0.39"]
 langchain = ["langchain-core>=0.3"]
 
 [project.urls]
-Homepage = "https://reenact.dev"
+Homepage = "https://github.com/Manas-33/Reenact"
+Issues = "https://github.com/Manas-33/Reenact/issues"
 
 [project.scripts]
 reenact = "reenact.cli:app"
