@@ -1,6 +1,6 @@
 {
   "schema_version": 0,
-  "id": "demo-baseline-42",
+  "id": "demo-tool-schema-42",
   "name": "triage-42",
   "created_at": "2024-01-01T00:00:00Z",
   "events": [
@@ -21,7 +21,7 @@
             "response_metadata": {},
             "type": "system",
             "name": null,
-            "id": "ba7395f3-5a77-4891-bf5f-d6ad26f6bd08"
+            "id": "6ba8e967-756f-4ae9-950d-79f7ccd849e7"
           },
           {
             "content": "Issue #42: Password reset link doesn't work\n\nI click the reset link in my email but it just shows an error page.",
@@ -29,7 +29,7 @@
             "response_metadata": {},
             "type": "human",
             "name": null,
-            "id": "6f9f8aa3-533a-48f7-b793-87634220f102"
+            "id": "c47e4604-ddc9-4f8b-b7e9-9f17f3e2eb06"
           }
         ]
       },
@@ -47,7 +47,7 @@
                     "type": "text"
                   },
                   {
-                    "id": "toolu_01FdtMgjy8Zw9mfvaifZhTGW",
+                    "id": "toolu_01YHGPTcBverJeYy6wWouh4P",
                     "caller": {
                       "type": "direct"
                     },
@@ -60,7 +60,7 @@
                 ],
                 "additional_kwargs": {},
                 "response_metadata": {
-                  "id": "msg_011Ce1ff93aMV5pRNY8GHPo3",
+                  "id": "msg_011Ce1fmXbZYHUj1DmLap18j",
                   "container": null,
                   "model": "claude-sonnet-4-5-20250929",
                   "stop_details": null,
@@ -85,13 +85,13 @@
                 },
                 "type": "ai",
                 "name": null,
-                "id": "lc_run--019ffd98-bfb0-7733-b0b0-5ae099a4e09e-0"
+                "id": "lc_run--019ffd9a-12c0-7363-bc22-4a11b3052a1f-0"
               }
             }
           ]
         ],
         "llm_output": {
-          "id": "msg_011Ce1ff93aMV5pRNY8GHPo3",
+          "id": "msg_011Ce1fmXbZYHUj1DmLap18j",
           "container": null,
           "model": "claude-sonnet-4-5-20250929",
           "stop_details": null,
@@ -116,7 +116,7 @@
         "run": null,
         "type": "LLMResult"
       },
-      "request_hash": "sha256:23752cc3f970865d0394c27c019b24d83f2ad6533c09f00fe967d848d2622475",
+      "request_hash": "sha256:8dc4dd20fd0745371f533f439ed0c3351405ef557c2c465c768a9202819109c9",
       "usage": null,
       "cost_usd": null
     },
@@ -129,7 +129,7 @@
       "node": "agent",
       "step": 1,
       "thread_id": null,
-      "checkpoint_ns": "agent:37368821-0ede-87a9-a32a-c66b75a18fbb"
+      "checkpoint_ns": "agent:2467a806-d9df-9653-2e4b-869f8d31b31c"
     },
     {
       "seq": 2,
@@ -140,7 +140,7 @@
       "node": "agent",
       "step": 1,
       "thread_id": null,
-      "checkpoint_ns": "agent:37368821-0ede-87a9-a32a-c66b75a18fbb"
+      "checkpoint_ns": "agent:2467a806-d9df-9653-2e4b-869f8d31b31c"
     },
     {
       "seq": 3,
@@ -159,7 +159,7 @@
         "type": "tool",
         "name": "search_docs",
         "id": null,
-        "tool_call_id": "toolu_01FdtMgjy8Zw9mfvaifZhTGW",
+        "tool_call_id": "toolu_01YHGPTcBverJeYy6wWouh4P",
         "artifact": null,
         "status": "success"
       },
@@ -174,7 +174,7 @@
       "node": "tools",
       "step": 2,
       "thread_id": null,
-      "checkpoint_ns": "tools:7ef80172-9271-42a1-aa99-2b4c625826b2"
+      "checkpoint_ns": "tools:71834caf-efe7-bcc2-0591-43454e503beb"
     },
     {
       "seq": 5,
@@ -193,7 +193,7 @@
             "response_metadata": {},
             "type": "system",
             "name": null,
-            "id": "ba7395f3-5a77-4891-bf5f-d6ad26f6bd08"
+            "id": "6ba8e967-756f-4ae9-950d-79f7ccd849e7"
           },
           {
             "content": "Issue #42: Password reset link doesn't work\n\nI click the reset link in my email but it just shows an error page.",
@@ -201,7 +201,7 @@
             "response_metadata": {},
             "type": "human",
             "name": null,
-            "id": "6f9f8aa3-533a-48f7-b793-87634220f102"
+            "id": "c47e4604-ddc9-4f8b-b7e9-9f17f3e2eb06"
           },
           {
             "content": [
@@ -210,7 +210,7 @@
                 "type": "text"
               },
               {
-                "id": "toolu_01FdtMgjy8Zw9mfvaifZhTGW",
+                "id": "toolu_01YHGPTcBverJeYy6wWouh4P",
                 "caller": {
                   "type": "direct"
                 },
@@ -223,7 +223,7 @@
             ],
             "additional_kwargs": {},
             "response_metadata": {
-              "id": "msg_011Ce1ff93aMV5pRNY8GHPo3",
+              "id": "msg_011Ce1fmXbZYHUj1DmLap18j",
               "container": null,
               "model": "claude-sonnet-4-5-20250929",
               "stop_details": null,
@@ -248,14 +248,14 @@
             },
             "type": "ai",
             "name": null,
-            "id": "lc_run--019ffd98-bfb0-7733-b0b0-5ae099a4e09e-0",
+            "id": "lc_run--019ffd9a-12c0-7363-bc22-4a11b3052a1f-0",
             "tool_calls": [
               {
                 "name": "search_docs",
                 "args": {
                   "query": "password reset link error"
                 },
-                "id": "toolu_01FdtMgjy8Zw9mfvaifZhTGW",
+                "id": "toolu_01YHGPTcBverJeYy6wWouh4P",
                 "type": "tool_call"
               }
             ],
@@ -278,8 +278,8 @@
             "response_metadata": {},
             "type": "tool",
             "name": "search_docs",
-            "id": "8999e861-bd63-4a41-8193-2d5bcd1e5114",
-            "tool_call_id": "toolu_01FdtMgjy8Zw9mfvaifZhTGW",
+            "id": "864814dd-cf88-4628-b77b-baef0ab82a1c",
+            "tool_call_id": "toolu_01YHGPTcBverJeYy6wWouh4P",
             "artifact": null,
             "status": "success"
           }
@@ -289,17 +289,17 @@
         "generations": [
           [
             {
-              "text": "Now let me label this issue and post a helpful reply.",
+              "text": "Now let me apply the appropriate label and post a helpful reply.",
               "generation_info": null,
               "type": "ChatGeneration",
               "message": {
                 "content": [
                   {
-                    "text": "Now let me label this issue and post a helpful reply.",
+                    "text": "Now let me apply the appropriate label and post a helpful reply.",
                     "type": "text"
                   },
                   {
-                    "id": "toolu_01DiYNqFe95KgpaCj7BxeANz",
+                    "id": "toolu_017fFrpzeURkBjGJwr21bNBb",
                     "caller": {
                       "type": "direct"
                     },
@@ -307,17 +307,17 @@
                       "issue_id": "42",
                       "label": "bug"
                     },
-                    "name": "label_issue",
+                    "name": "set_label",
                     "type": "tool_use"
                   },
                   {
-                    "id": "toolu_01Wsdbo5YD8n4w8tZwe4SVrj",
+                    "id": "toolu_01L5qnnqeZrYMoFrUuVvjnRS",
                     "caller": {
                       "type": "direct"
                     },
                     "input": {
                       "issue_id": "42",
-                      "body": "Thanks for reporting this! Password reset links expire after one hour for security reasons. If you're seeing an error page, the link has likely expired.\n\nPlease try requesting a new password reset link by going to Settings > Security and clicking Reset Password. You'll receive a fresh link via email that should work.\n\nIf you continue to experience issues with a newly generated link, please let us know and we'll investigate further."
+                      "body": "Thanks for reporting this issue. Password reset links expire after one hour for security reasons. If you're seeing an error page, the link has likely expired.\n\nPlease try requesting a new password reset link by going to Settings > Security and clicking Reset Password. You'll receive a fresh link via email that should work.\n\nIf you continue to experience issues with a newly generated link, please let us know and we'll investigate further."
                     },
                     "name": "post_reply",
                     "type": "tool_use"
@@ -325,7 +325,7 @@
                 ],
                 "additional_kwargs": {},
                 "response_metadata": {
-                  "id": "msg_011Ce1ffH4H4thRvGsnxmYSH",
+                  "id": "msg_011Ce1fmeQ62P9W4DSraagPF",
                   "container": null,
                   "model": "claude-sonnet-4-5-20250929",
                   "stop_details": null,
@@ -340,7 +340,7 @@
                     "cache_read_input_tokens": 0,
                     "inference_geo": "not_available",
                     "input_tokens": 1004,
-                    "output_tokens": 223,
+                    "output_tokens": 225,
                     "output_tokens_details": null,
                     "server_tool_use": null,
                     "service_tier": "standard"
@@ -350,13 +350,13 @@
                 },
                 "type": "ai",
                 "name": null,
-                "id": "lc_run--019ffd98-c7a9-7010-8ed4-c076a73f9021-0"
+                "id": "lc_run--019ffd9a-191c-7db1-b7eb-db2ae025d3e8-0"
               }
             }
           ]
         ],
         "llm_output": {
-          "id": "msg_011Ce1ffH4H4thRvGsnxmYSH",
+          "id": "msg_011Ce1fmeQ62P9W4DSraagPF",
           "container": null,
           "model": "claude-sonnet-4-5-20250929",
           "stop_details": null,
@@ -371,7 +371,7 @@
             "cache_read_input_tokens": 0,
             "inference_geo": "not_available",
             "input_tokens": 1004,
-            "output_tokens": 223,
+            "output_tokens": 225,
             "output_tokens_details": null,
             "server_tool_use": null,
             "service_tier": "standard"
@@ -381,7 +381,7 @@
         "run": null,
         "type": "LLMResult"
       },
-      "request_hash": "sha256:a92627e64670e3290fa16fde78025556c20d05928da9b9a8119be4fc8199fac1",
+      "request_hash": "sha256:abb82ef247987d67abfe35132a4f5bc090cca3cfc0507641915632c2340e746c",
       "usage": null,
       "cost_usd": null
     },
@@ -394,7 +394,7 @@
       "node": "agent",
       "step": 3,
       "thread_id": null,
-      "checkpoint_ns": "agent:b44887f8-f185-e2e3-edf5-9b418f33fffc"
+      "checkpoint_ns": "agent:6faa6f82-91cf-b2f6-e23b-3d1299896b31"
     },
     {
       "seq": 7,
@@ -405,7 +405,7 @@
       "node": "agent",
       "step": 3,
       "thread_id": null,
-      "checkpoint_ns": "agent:b44887f8-f185-e2e3-edf5-9b418f33fffc"
+      "checkpoint_ns": "agent:6faa6f82-91cf-b2f6-e23b-3d1299896b31"
     },
     {
       "seq": 8,
@@ -413,7 +413,7 @@
       "started_at": null,
       "latency_ms": null,
       "type": "tool_call",
-      "name": "label_issue",
+      "name": "set_label",
       "arguments": {
         "input": "{'issue_id': '42', 'label': 'bug'}"
       },
@@ -422,13 +422,13 @@
         "additional_kwargs": {},
         "response_metadata": {},
         "type": "tool",
-        "name": "label_issue",
+        "name": "set_label",
         "id": null,
-        "tool_call_id": "toolu_01DiYNqFe95KgpaCj7BxeANz",
+        "tool_call_id": "toolu_017fFrpzeURkBjGJwr21bNBb",
         "artifact": null,
         "status": "success"
       },
-      "side_effect": "mutating"
+      "side_effect": "unknown"
     },
     {
       "seq": 9,
@@ -438,7 +438,7 @@
       "type": "tool_call",
       "name": "post_reply",
       "arguments": {
-        "input": "{'issue_id': '42', 'body': \"Thanks for reporting this! Password reset links expire after one hour for security reasons. If you're seeing an error page, the link has likely expired.\\n\\nPlease try requesting a new password reset link by going to Settings > Security and clicking Reset Password. You'll receive a fresh link via email that should work.\\n\\nIf you continue to experience issues with a newly generated link, please let us know and we'll investigate further.\"}"
+        "input": "{'issue_id': '42', 'body': \"Thanks for reporting this issue. Password reset links expire after one hour for security reasons. If you're seeing an error page, the link has likely expired.\\n\\nPlease try requesting a new password reset link by going to Settings > Security and clicking Reset Password. You'll receive a fresh link via email that should work.\\n\\nIf you continue to experience issues with a newly generated link, please let us know and we'll investigate further.\"}"
       },
       "result": {
         "content": "posted reply to issue #42",
@@ -447,7 +447,7 @@
         "type": "tool",
         "name": "post_reply",
         "id": null,
-        "tool_call_id": "toolu_01Wsdbo5YD8n4w8tZwe4SVrj",
+        "tool_call_id": "toolu_01L5qnnqeZrYMoFrUuVvjnRS",
         "artifact": null,
         "status": "success"
       },
@@ -462,7 +462,7 @@
       "node": "tools",
       "step": 4,
       "thread_id": null,
-      "checkpoint_ns": "tools:d733bbdd-2fdd-6c4b-b713-0d11be82db48"
+      "checkpoint_ns": "tools:007f4da6-5b19-c85c-b87a-476b540ce0ba"
     },
     {
       "seq": 11,
@@ -481,7 +481,7 @@
             "response_metadata": {},
             "type": "system",
             "name": null,
-            "id": "ba7395f3-5a77-4891-bf5f-d6ad26f6bd08"
+            "id": "6ba8e967-756f-4ae9-950d-79f7ccd849e7"
           },
           {
             "content": "Issue #42: Password reset link doesn't work\n\nI click the reset link in my email but it just shows an error page.",
@@ -489,7 +489,7 @@
             "response_metadata": {},
             "type": "human",
             "name": null,
-            "id": "6f9f8aa3-533a-48f7-b793-87634220f102"
+            "id": "c47e4604-ddc9-4f8b-b7e9-9f17f3e2eb06"
           },
           {
             "content": [
@@ -498,7 +498,7 @@
                 "type": "text"
               },
               {
-                "id": "toolu_01FdtMgjy8Zw9mfvaifZhTGW",
+                "id": "toolu_01YHGPTcBverJeYy6wWouh4P",
                 "caller": {
                   "type": "direct"
                 },
@@ -511,7 +511,7 @@
             ],
             "additional_kwargs": {},
             "response_metadata": {
-              "id": "msg_011Ce1ff93aMV5pRNY8GHPo3",
+              "id": "msg_011Ce1fmXbZYHUj1DmLap18j",
               "container": null,
               "model": "claude-sonnet-4-5-20250929",
               "stop_details": null,
@@ -536,14 +536,14 @@
             },
             "type": "ai",
             "name": null,
-            "id": "lc_run--019ffd98-bfb0-7733-b0b0-5ae099a4e09e-0",
+            "id": "lc_run--019ffd9a-12c0-7363-bc22-4a11b3052a1f-0",
             "tool_calls": [
               {
                 "name": "search_docs",
                 "args": {
                   "query": "password reset link error"
                 },
-                "id": "toolu_01FdtMgjy8Zw9mfvaifZhTGW",
+                "id": "toolu_01YHGPTcBverJeYy6wWouh4P",
                 "type": "tool_call"
               }
             ],
@@ -566,19 +566,19 @@
             "response_metadata": {},
             "type": "tool",
             "name": "search_docs",
-            "id": "8999e861-bd63-4a41-8193-2d5bcd1e5114",
-            "tool_call_id": "toolu_01FdtMgjy8Zw9mfvaifZhTGW",
+            "id": "864814dd-cf88-4628-b77b-baef0ab82a1c",
+            "tool_call_id": "toolu_01YHGPTcBverJeYy6wWouh4P",
             "artifact": null,
             "status": "success"
           },
           {
             "content": [
               {
-                "text": "Now let me label this issue and post a helpful reply.",
+                "text": "Now let me apply the appropriate label and post a helpful reply.",
                 "type": "text"
               },
               {
-                "id": "toolu_01DiYNqFe95KgpaCj7BxeANz",
+                "id": "toolu_017fFrpzeURkBjGJwr21bNBb",
                 "caller": {
                   "type": "direct"
                 },
@@ -586,17 +586,17 @@
                   "issue_id": "42",
                   "label": "bug"
                 },
-                "name": "label_issue",
+                "name": "set_label",
                 "type": "tool_use"
               },
               {
-                "id": "toolu_01Wsdbo5YD8n4w8tZwe4SVrj",
+                "id": "toolu_01L5qnnqeZrYMoFrUuVvjnRS",
                 "caller": {
                   "type": "direct"
                 },
                 "input": {
                   "issue_id": "42",
-                  "body": "Thanks for reporting this! Password reset links expire after one hour for security reasons. If you're seeing an error page, the link has likely expired.\n\nPlease try requesting a new password reset link by going to Settings > Security and clicking Reset Password. You'll receive a fresh link via email that should work.\n\nIf you continue to experience issues with a newly generated link, please let us know and we'll investigate further."
+                  "body": "Thanks for reporting this issue. Password reset links expire after one hour for security reasons. If you're seeing an error page, the link has likely expired.\n\nPlease try requesting a new password reset link by going to Settings > Security and clicking Reset Password. You'll receive a fresh link via email that should work.\n\nIf you continue to experience issues with a newly generated link, please let us know and we'll investigate further."
                 },
                 "name": "post_reply",
                 "type": "tool_use"
@@ -604,7 +604,7 @@
             ],
             "additional_kwargs": {},
             "response_metadata": {
-              "id": "msg_011Ce1ffH4H4thRvGsnxmYSH",
+              "id": "msg_011Ce1fmeQ62P9W4DSraagPF",
               "container": null,
               "model": "claude-sonnet-4-5-20250929",
               "stop_details": null,
@@ -619,7 +619,7 @@
                 "cache_read_input_tokens": 0,
                 "inference_geo": "not_available",
                 "input_tokens": 1004,
-                "output_tokens": 223,
+                "output_tokens": 225,
                 "output_tokens_details": null,
                 "server_tool_use": null,
                 "service_tier": "standard"
@@ -629,32 +629,32 @@
             },
             "type": "ai",
             "name": null,
-            "id": "lc_run--019ffd98-c7a9-7010-8ed4-c076a73f9021-0",
+            "id": "lc_run--019ffd9a-191c-7db1-b7eb-db2ae025d3e8-0",
             "tool_calls": [
               {
-                "name": "label_issue",
+                "name": "set_label",
                 "args": {
                   "issue_id": "42",
                   "label": "bug"
                 },
-                "id": "toolu_01DiYNqFe95KgpaCj7BxeANz",
+                "id": "toolu_017fFrpzeURkBjGJwr21bNBb",
                 "type": "tool_call"
               },
               {
                 "name": "post_reply",
                 "args": {
                   "issue_id": "42",
-                  "body": "Thanks for reporting this! Password reset links expire after one hour for security reasons. If you're seeing an error page, the link has likely expired.\n\nPlease try requesting a new password reset link by going to Settings > Security and clicking Reset Password. You'll receive a fresh link via email that should work.\n\nIf you continue to experience issues with a newly generated link, please let us know and we'll investigate further."
+                  "body": "Thanks for reporting this issue. Password reset links expire after one hour for security reasons. If you're seeing an error page, the link has likely expired.\n\nPlease try requesting a new password reset link by going to Settings > Security and clicking Reset Password. You'll receive a fresh link via email that should work.\n\nIf you continue to experience issues with a newly generated link, please let us know and we'll investigate further."
                 },
-                "id": "toolu_01Wsdbo5YD8n4w8tZwe4SVrj",
+                "id": "toolu_01L5qnnqeZrYMoFrUuVvjnRS",
                 "type": "tool_call"
               }
             ],
             "invalid_tool_calls": [],
             "usage_metadata": {
               "input_tokens": 1004,
-              "output_tokens": 223,
-              "total_tokens": 1227,
+              "output_tokens": 225,
+              "total_tokens": 1229,
               "input_token_details": {
                 "cache_read": 0,
                 "cache_creation": 0,
@@ -668,9 +668,9 @@
             "additional_kwargs": {},
             "response_metadata": {},
             "type": "tool",
-            "name": "label_issue",
-            "id": "c32c161f-1634-4767-8d2f-1acc524d6d6b",
-            "tool_call_id": "toolu_01DiYNqFe95KgpaCj7BxeANz",
+            "name": "set_label",
+            "id": "bca48900-310d-44f7-bf47-1a92e059352d",
+            "tool_call_id": "toolu_017fFrpzeURkBjGJwr21bNBb",
             "artifact": null,
             "status": "success"
           },
@@ -680,8 +680,8 @@
             "response_metadata": {},
             "type": "tool",
             "name": "post_reply",
-            "id": "c1bcc8cd-ea3f-4cfb-84d7-728e82a996d9",
-            "tool_call_id": "toolu_01Wsdbo5YD8n4w8tZwe4SVrj",
+            "id": "4ef7a74b-36e7-4c00-8852-ed8fcc57bc2a",
+            "tool_call_id": "toolu_01L5qnnqeZrYMoFrUuVvjnRS",
             "artifact": null,
             "status": "success"
           }
@@ -691,14 +691,14 @@
         "generations": [
           [
             {
-              "text": "I've triaged issue #42 by labeling it as a bug, searching the documentation for password reset guidance, and posting a reply explaining that the link likely expired and instructing the user to request a new one.",
+              "text": "I've triaged issue #42 by labeling it as a bug, searching the documentation for password reset guidance, and posting a reply explaining that the link likely expired and instructing the user how to request a new one.",
               "generation_info": null,
               "type": "ChatGeneration",
               "message": {
-                "content": "I've triaged issue #42 by labeling it as a bug, searching the documentation for password reset guidance, and posting a reply explaining that the link likely expired and instructing the user to request a new one.",
+                "content": "I've triaged issue #42 by labeling it as a bug, searching the documentation for password reset guidance, and posting a reply explaining that the link likely expired and instructing the user how to request a new one.",
                 "additional_kwargs": {},
                 "response_metadata": {
-                  "id": "msg_011Ce1ffbxKyn8PByAqR3x98",
+                  "id": "msg_011Ce1fmyPqmsok3Xenm3oSN",
                   "container": null,
                   "model": "claude-sonnet-4-5-20250929",
                   "stop_details": null,
@@ -712,8 +712,8 @@
                     "cache_creation_input_tokens": 0,
                     "cache_read_input_tokens": 0,
                     "inference_geo": "not_available",
-                    "input_tokens": 1303,
-                    "output_tokens": 48,
+                    "input_tokens": 1305,
+                    "output_tokens": 49,
                     "output_tokens_details": null,
                     "server_tool_use": null,
                     "service_tier": "standard"
@@ -723,13 +723,13 @@
                 },
                 "type": "ai",
                 "name": null,
-                "id": "lc_run--019ffd98-d8a6-7762-82d3-7b33c24b307b-0"
+                "id": "lc_run--019ffd9a-2a1b-7763-8805-7c4f4fe48939-0"
               }
             }
           ]
         ],
         "llm_output": {
-          "id": "msg_011Ce1ffbxKyn8PByAqR3x98",
+          "id": "msg_011Ce1fmyPqmsok3Xenm3oSN",
           "container": null,
           "model": "claude-sonnet-4-5-20250929",
           "stop_details": null,
@@ -743,8 +743,8 @@
             "cache_creation_input_tokens": 0,
             "cache_read_input_tokens": 0,
             "inference_geo": "not_available",
-            "input_tokens": 1303,
-            "output_tokens": 48,
+            "input_tokens": 1305,
+            "output_tokens": 49,
             "output_tokens_details": null,
             "server_tool_use": null,
             "service_tier": "standard"
@@ -754,7 +754,7 @@
         "run": null,
         "type": "LLMResult"
       },
-      "request_hash": "sha256:d89e33acc6cb44b780baa685f0764f9c3107b0061ba5eb859d0f4f9e9db1087e",
+      "request_hash": "sha256:d6e9c9283af55f5b00f9480ee261ca6b1d9733cfa76e9c78acadea730f346372",
       "usage": null,
       "cost_usd": null
     },
@@ -767,7 +767,7 @@
       "node": "agent",
       "step": 5,
       "thread_id": null,
-      "checkpoint_ns": "agent:933f82f5-f83b-09be-558d-a62f55ef6115"
+      "checkpoint_ns": "agent:6ce3e08d-dfeb-f94a-a1b4-6ab708e6e501"
     },
     {
       "seq": 13,
@@ -778,7 +778,7 @@
       "node": "agent",
       "step": 5,
       "thread_id": null,
-      "checkpoint_ns": "agent:933f82f5-f83b-09be-558d-a62f55ef6115"
+      "checkpoint_ns": "agent:6ce3e08d-dfeb-f94a-a1b4-6ab708e6e501"
     }
   ],
   "metadata": {}
